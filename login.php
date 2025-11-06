@@ -1,6 +1,32 @@
 <?php
-// require_once "./components/navbar.php";
+session_start();
+require_once "connection.php";
+
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $sql = "select * from users where email = :email and password = :password";
+    $loginStmt = $con->prepare($sql);
+    $loginStmt->bindParam(':email', $email);
+    $loginStmt->bindParam(':password', $password);
+
+    $loginStmt->execute();
+    $loginUser = $loginStmt->fetch(PDO::FETCH_ASSOC);
+
+    if($loginUser) {
+        $_SESSION['user_login'] = true;
+        $_SESSION['username'] = $loginUser['email'];
+        $_SESSION['userid'] = $loginUser['id'];
+        header("Location: index.php?id=" . $_SESSION['userid']);
+        die;
+    } else {
+        header("Location: login.php?error=Your entered credintials do not match our records.");
+        die;
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,9 +41,15 @@
         <div class="form-container log-in">
             <form action="" method="post" id="login-form">
                 <h1>Log In</h1>
+
+                <?php if(isset($_GET['error'])) { ?>
+                    <div class="error">
+                        <?php echo $_GET['error']; ?>
+                    </div>
+                <?php } ?>
             
-                <input type="text" name="emailLogin" id="emailLogin" placeholder="Email">
-                <input type="password" name="passwordLogin" id="passwordLogin" placeholder="Password">
+                <input type="text" name="email" id="email" placeholder="Email">
+                <input type="password" name="password" id="password" placeholder="Password">
 
                 <div class="additional-info">
                     <div class="remember-me">

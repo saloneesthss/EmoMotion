@@ -1,6 +1,37 @@
 <?php
-// require_once "./components/navbar.php";
+session_start();
+require_once "connection.php";
+
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $retypePassword = $_POST['retype-password'];
+
+    if ($password !== $retypePassword) {
+        header("Location: signup.php?error=Passwords do not match.");
+        die;
+    }
+
+    $insertSql = "insert into users (name, email, password) values (:name, :email, :password)";
+    $insertStmt = $con->prepare($insertSql);
+    $insertStmt->bindParam(':name', $name);
+    $insertStmt->bindParam(':email', $email);
+    $insertStmt->bindParam(':password', $password);
+
+    if($insertStmt->execute()) {
+        $_SESSION['user_login'] = true;
+        $_SESSION['username'] = $email;
+        $_SESSION['userid'] = $con->lastInsertId();
+        header("Location: index.php?id=" . $_SESSION['userid']);
+        die;
+    } else {
+        header("Location: signup.php?error=Something went wrong. Please try again.");
+        die;
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +52,12 @@
                         Existing user?
                     </a>
                 </div> 
+
+                <?php if(isset($_GET['error'])) { ?>
+                    <div class="error">
+                        <?php echo $_GET['error']; ?>
+                    </div>
+                <?php } ?>
 
                 <input type="text" name="name" id="name" placeholder="Name">
                 <input type="email" name="email" id="email" placeholder="Email">
