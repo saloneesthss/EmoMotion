@@ -1,0 +1,99 @@
+.main {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10rem;
+    background: linear-gradient(#f1c0c0, #9D8DF1);
+}
+
+.main-image {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10rem;
+}
+
+.main-image img {
+    width: 100%;
+    height: 95vmin;
+    object-fit: contain;
+    margin-top: 3rem;
+}
+
+.main-image div {
+    padding: 4.75rem;
+}
+
+.main-text {
+    font-family: 'Poppins', sans-serif;
+    color: #2B2B2B;
+    margin-left: 8rem;
+    margin-top: 3rem;
+}
+
+.main-text p {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.main-text .txt1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #021e39;
+    margin-bottom: 4rem;
+}
+
+.main-text .txt2 {
+    font-size: 1.25rem;
+    margin-top: 2.25rem;
+    font-weight: 600;
+    color: #062541;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.txt2 i {
+    padding-top: 7px;
+}
+
+.buttons {
+    margin-top: 1rem;
+    margin-left: 2rem;
+}
+
+.signup {
+    border: none;
+    color: #222936;
+    background: transparent;
+    padding: 0.7rem 1.15rem;
+    margin-right: 2rem;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.login {
+    padding: 0.7rem 1.15rem;
+    border: none;
+    border-radius: 1.5rem;
+    background-color: #222936;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.signup:hover {
+    border-radius: 1.5rem;
+    background-color: #222936;
+    color: white;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.login:hover {
+    border: 1.15px solid #222936;
+    background-color: #ad9ff0;
+    color: #222936;
+    transition: background-color 0.3s ease-in-out;
+}

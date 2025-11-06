@@ -1,0 +1,102 @@
+body {
+    background-image: url('../assets/images/login-background.avif');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Poppins';
+}
+
+.container {
+    background: linear-gradient(#c37394, #563ed3);
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 30%;
+    max-width: 100%;
+    min-height: 90%;
+    padding: 0 4rem;
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#login-form h1 {
+    text-align: center;
+    color: #062541;
+    padding-top: 2rem;
+}
+
+#login-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    gap: 1rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #062541;
+    color: #062541;
+    font-size: 14px;
+    border-radius: 2px;
+}
+
+#login-form input::placeholder {
+    color: #062541;
+    font-size: 15px;
+}
+
+.headline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.headline a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.signup, .signup-google {
+    width: 100%;
+    font-size: 15px;
+    color: white;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 24px;
+    background-color: #0a2842;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.or {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.signup-google img {
+    width: 1rem;
+    margin-right: 5px;
+}
+
+.headline div {
+    font-size: 14px;
+    text-align: center;
+    color: black;
+}
+
+.form-container a {
+    color: black;
+}
+
+.form-container a:hover {
+    color: #150663;
+}

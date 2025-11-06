@@ -1,0 +1,46 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins';
+}
+
+.header {
+    background-color: #222936;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    color: white;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+}
+
+.header a {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+.left-section {
+    font-size: calc(10px + 2vmin);
+}
+
+.middle-section {
+    list-style: none;
+    display: flex;
+    gap: 1.25rem;
+    font-size: 1.1rem;
+}
+
+.right-section {
+    display: flex;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.right-section img {
+    width: 25px;
+}
