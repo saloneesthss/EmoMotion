@@ -1,0 +1,12 @@
+.calculator {
+    padding-top: 12vh;
+    color: #fff;
+    margin: 0 1rem;
+}
+
+.left-section, .navbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}

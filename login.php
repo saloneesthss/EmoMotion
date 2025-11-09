@@ -4,7 +4,7 @@ require_once "connection.php";
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = md5($_POST['password']);
 
     $sql = "select * from users where email = :email and password = :password";
     $loginStmt = $con->prepare($sql);
@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_login'] = true;
         $_SESSION['username'] = $loginUser['email'];
         $_SESSION['userid'] = $loginUser['id'];
-        header("Location: index.php?id=" . $_SESSION['userid']);
+        header("Location: logged-users/index.php?id=" . $_SESSION['userid']);
         die;
     } else {
         header("Location: login.php?error=Your entered credintials do not match our records.");
@@ -43,13 +43,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h1>Log In</h1>
 
                 <?php if(isset($_GET['error'])) { ?>
-                    <div class="error">
+                    <div class="error" style="color: #8B0000;">
                         <?php echo $_GET['error']; ?>
                     </div>
                 <?php } ?>
             
-                <input type="text" name="email" id="email" placeholder="Email">
-                <input type="password" name="password" id="password" placeholder="Password">
+                <input required type="text" name="email" id="email" placeholder="Email">
+                <input required type="password" name="password" id="password" placeholder="Password">
 
                 <div class="additional-info">
                     <div class="remember-me">

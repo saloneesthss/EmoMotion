@@ -14,22 +14,23 @@
 <body>
     <div class="header">
         <div class="left-section">
-            <a href="">EmoMotion</a>
+            <a href="#">EmoMotion</a>
         </div>
 
         <div class="middle-section">
-            <a href="../pages/index.php">Home</a>
-            <a href="../pages/workout-videos.php">Workout Videos</a>
-            <a href="../pages/workout-plans.php">Workout Plans</a>
-            <a href="../pages/calculator.php">Calculator</a>
-            <a href="../pages/about.php">About</a>
+            <a href="../index.php">Home</a>
+            <a href="workout-videos.php">Workout Videos</a>
+            <a href="workout-plans.php">Workout Plans</a>
+            <a href="calculator.php">Calculator</a>
+            <a href="community.php">Community</a>
+            <a href="about.php">About</a>
         </div>
 
         <div class="right-section">
             <a href="">
                 <img src="../assets/icons/search.svg" alt="Search" id="search">
             </a>
-            <a href="../login.php">
+            <a href="login.php">
                 <img src="../assets/icons/user.svg" alt="User Profile" id="user-profile">
             </a>
         </div>

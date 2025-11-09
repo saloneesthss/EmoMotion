@@ -5,7 +5,7 @@ require_once "connection.php";
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = md5($_POST['password']);
     $retypePassword = $_POST['retype-password'];
 
     if ($password !== $retypePassword) {
@@ -23,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_login'] = true;
         $_SESSION['username'] = $email;
         $_SESSION['userid'] = $con->lastInsertId();
-        header("Location: index.php?id=" . $_SESSION['userid']);
+        header("Location: logged-users/index.php?id=" . $_SESSION['userid']);
         die;
     } else {
         header("Location: signup.php?error=Something went wrong. Please try again.");
@@ -54,15 +54,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div> 
 
                 <?php if(isset($_GET['error'])) { ?>
-                    <div class="error">
+                    <div class="error" style="color: #8B0000;">
                         <?php echo $_GET['error']; ?>
                     </div>
                 <?php } ?>
 
-                <input type="text" name="name" id="name" placeholder="Name">
-                <input type="email" name="email" id="email" placeholder="Email">
-                <input type="password" name="password" id="password" placeholder="Password">
-                <input type="retype-password" name="retype-password" id="retype-password" placeholder="Re-type Password">
+                <input required type="text" name="name" id="name" placeholder="Name">
+                <input required type="email" name="email" id="email" placeholder="Email">
+                <input required type="password" name="password" id="password" placeholder="Password">
+                <input required type="password" name="retype-password" id="retype-password" placeholder="Re-type Password">
 
                 <button class="signup">Sign Up</button>
                 <div class="or">or</div>
