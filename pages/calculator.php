@@ -15,8 +15,8 @@ require_once '../components/navbar.php';
 </head>
 <body>
     <div class="calculator">
-        <div class="left-section">
-            <p>Calculator</p>
+        <div class="left">
+            <h3>Calculator</h3>
             <div class="navbar">
                 <a href="">BMI Calculator</a>
                 <a href="">Calorie Calculator</a>
@@ -24,7 +24,9 @@ require_once '../components/navbar.php';
                 <a href="">TDEE Calculator</a>
             </div>
         </div>
-        <div class="middle-section"></div>
+        <div class="middle">
+            hello
+        </div>
     </div>
 </body>
 </html>

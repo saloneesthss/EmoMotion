@@ -14,16 +14,16 @@
 <body>
     <div class="header">
         <div class="left-section">
-            <a href="#">EmoMotion</a>
+            <a href="">EmoMotion</a>
         </div>
 
         <div class="middle-section">
-            <a href="../index.php">Home</a>
-            <a href="workout-videos.php">Workout Videos</a>
-            <a href="workout-plans.php">Workout Plans</a>
-            <a href="calculator.php">Calculator</a>
-            <a href="community.php">Community</a>
-            <a href="about.php">About</a>
+            <a href="../pages/index.php">Home</a>
+            <a href="../pages/workout-videos.php">Workout Videos</a>
+            <a href="../pages/workout-plans.php">Workout Plans</a>
+            <a href="../pages/calculator.php">Calculator</a>
+            <a href="../pages/community.php">Community</a>
+            <a href="../pages/about.php">About</a>
         </div>
 
         <div class="right-section">
