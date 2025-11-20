@@ -18,14 +18,13 @@ require_once '../components/navbar.php';
         <div class="left">
             <h3>Calculator</h3>
             <div class="navbar">
-                <a href="">BMI Calculator</a>
-                <a href="">Calorie Calculator</a>
-                <a href="">Body Fat Calculator</a>
-                <a href="">TDEE Calculator</a>
+                <a href="bmi-calculator.php">BMI Calculator</a>
+                <a href="calorie-calculator.php">Calorie Calculator</a>
+                <a href="body-fat-calculator.php">Body Fat Calculator</a>
+                <a href="tdee-calculator.php">TDEE Calculator</a>
             </div>
         </div>
-        <div class="middle">
-            hello
+        <div class="middle hide">
         </div>
     </div>
 </body>

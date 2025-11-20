@@ -9,7 +9,6 @@
     <title>
         EmoMotion
     </title>
-    <link rel="icon" type="image/svg+xml" href="/assets/icons/title-logo.svg">
 </head>
 <body>
     <div class="header">

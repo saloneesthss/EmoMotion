@@ -1,40 +1,164 @@
-.calculator {
-    padding-top: 13vh;
-    color: black;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    height: 100vh;
-    background-color: #fff;
+* {
+    margin: 0;
+    padding: 0;
 }
 
+.calculator {
+    padding-top: 5vh;
+    color: black;
+    padding-right: 3rem;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+}
+
+/* Left section */
 .left {
     height: 100%;
-    width: 20vh;
-    color: #ddd;
-    margin-bottom: #bbb;
-    margin-right: #bbb;
+    width: 35vh;
 }
 
 .left h3 {
-    margin-bottom: #bbb;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    color: black;
+    padding: 1.5rem 5.55rem;
+    font-size: 22px;
+    background: linear-gradient(#FFD3D5, #e9c3f5);
 }
 
 .left, .navbar {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     color: #fff;
+}
+
+.navbar {
+    border-right: 1px solid #e7e5e5;
+    background-color: #fff;
+    gap: 1rem;
+    padding-top: 2rem;
+    height: 78%;
+    justify-content: flex-start;
+    width: 43.7vmin;
 }
 
 .navbar a {
     text-decoration: none;
     color: black;
-    font-size: 16px;
+    font-size: 18px;
 }
 
-.middle {
-    height: 100%;
-    width: 80vh;
-    color: #fff;
+/* Middle section */
+
+
+/* BMI Calculator */
+.container {
+    background: linear-gradient(#e9c3f5, #FFD3D5);
+    width: 400px;
+    margin-top: -80vh;
+    margin-left: 20rem;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.container label {
+    font-weight: bold;
+}
+
+.container input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.container button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #e765c2;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.container button:hover {
+    background: #ec6ec8;
+}
+
+.result {
+    padding: 20px 0;
+}
+
+/* Result Box */
+.result-box {
+    margin-left: 50rem;
+    margin-top: -24rem;
+}
+
+.bmi-display, .details {
+    padding: 0.35rem 0;
+}
+
+.bmi-display h3 {
+    margin-bottom: 10px;
+}
+
+.details li {
+    padding: 5px 0;
+}
+
+/* Calorie calculator */
+.calorie-container {
+    margin-top: -85vh;
+}
+
+.calorie-result-box {
+    margin-top: -80vh;
+    margin-left: 50rem;
+}
+
+.calorie-container input, select {
+    margin-top: 8px;
+}
+
+/* Body fat calculator */
+.body-fat-container {
+    margin-top: -85vh;
+}
+
+.body-fat-result-box {
+    margin-top: -80vh;
+    margin-left: 50rem;
+}
+
+.body-fat-container input, select {
+    margin-top: 8px;
+}
+
+/* Tdee container */
+.tdee-container {
+    margin-top: -85vh;
+}
+
+.tdee-result-box {
+    margin-top: -80vh;
+    margin-left: 50rem;
+}
+
+.tdee-container input, select {
+    margin-top: 8px;
 }

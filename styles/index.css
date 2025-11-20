@@ -15,7 +15,7 @@
 }
 
 .main-image img {
-    width: 100%;
+    width: 49.3vmin;
     height: 95vmin;
     object-fit: contain;
     margin-top: 3rem;
@@ -97,6 +97,126 @@
     background-color: #ad9ff0;
     color: #222936;
     transition: background-color 0.3s ease-in-out;
+}
+
+/* responsive */
+@media screen and (max-width: 1100px) {
+    .main-text {
+        margin-top: 6rem;
+        margin-left: 6rem;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .main-text {
+        margin-top: 8rem;
+        margin-left: 5rem;
+    }
+    
+    .main-text p {
+        font-size: 2.6rem;
+        margin-bottom: 3rem;
+    }
+    
+    .main-text .txt1 {
+        font-size: 1.25rem;
+        margin-bottom: 3rem;
+    }
+
+    .main-text .txt2 {
+        font-size: 1.05rem;
+        margin-top: 2.45rem;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .main-text {
+        margin-top: 10rem;
+    }
+    
+    .main-text p {
+        font-size: 2.6rem;
+        margin-bottom: 3rem;
+    }
+
+    .main-text .txt1 {
+        font-size: 1.25rem;
+        margin-bottom: 3rem;
+    }
+
+    .main-text .txt2 {
+        font-size: 1.05rem;
+        margin-top: 2.45rem;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .main-text p {
+        font-size: 2.6rem;
+        margin-bottom: 3rem;
+    }
+
+    .main-text .txt1 {
+        font-size: 1.25rem;
+        margin-bottom: 3rem;
+    }
+
+    .main-text .txt2 {
+        font-size: 1.05rem;
+        margin-top: 2.45rem;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .main-text {
+        margin-top: 5rem;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .main {
+        display: flex;
+        flex-direction: column;
+        height: 94.8vh;
+    }
+        
+    .main-image {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-image img {
+        width: 250px;
+        margin-top: -25rem;
+        margin-left: 450px;
+    }
+
+    .main-image div {
+        padding: 0;
+    }
+
+    .main-text {
+        margin-left: 5vmin;
+    }
+
+    .main-text p {
+        font-size: 2.6rem;
+        margin-bottom: 3rem;
+    }
+
+    .main-text .txt1 {
+        font-size: 1.25rem;
+        margin-bottom: 3rem;
+    }
+
+    .main-text .txt2 {
+        font-size: 1.05rem;
+        margin-top: 2.45rem;
+    }
+
+    .txt2 i {
+        padding-top: 5px;
+    }
 }
 
 /* workout-videos */

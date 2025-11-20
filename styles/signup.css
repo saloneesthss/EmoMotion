@@ -20,27 +20,45 @@ body {
     padding: 0 4rem;
 }
 
+@media screen and (max-width:1200px) {
+    .container {
+        width: 35%;
+    }
+}
+
 @media screen and (max-width:1100px) {
     .container {
-        width: 50%;
+        width: 40%;
+    }
+}
+
+@media screen and (max-width:950px) {
+    .container {
+        width: 48%;
     }
 }
 
 @media screen and (max-width:800px) {
     .container {
+        width: 55%;
+    }
+}
+
+@media screen and (max-width:650px) {
+    .container {
+        width: 65%;
+    }
+}
+
+@media screen and (max-width:550px) {
+    .container {
         width: 70%;
     }
 }
 
-@media screen and (max-width:600px) {
+@media screen and (max-width:400px) {
     .container {
-        width: 90%;
-    }
-}
-
-@media screen and (max-width:500px) {
-    .container {
-        width: 100%;
+        width: 80%;
     }
 }
 

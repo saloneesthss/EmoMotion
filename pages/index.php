@@ -42,7 +42,12 @@ require_once '../components/navbar.php';
                 <button>View All Videos</button>
             </div>
             <div class="videos">
-                workout video 1
+                <div class="video">video 1</div>
+                <div class="video">video 2</div>
+                <div class="video">video 3</div>
+                <div class="video">video 4</div>
+                <div class="video">video 5</div>
+                <div class="video">video 6</div>
             </div>
         </div>
 
@@ -50,6 +55,14 @@ require_once '../components/navbar.php';
             <div class="title-bar">
                 <span>Workout Plans</span>
                 <button>View All Plans</button>
+            </div>
+            <div class="plans">
+                <div class="video">video 1</div>
+                <div class="video">video 2</div>
+                <div class="video">video 3</div>
+                <div class="video">video 4</div>
+                <div class="video">video 5</div>
+                <div class="video">video 6</div>
             </div>
         </div>
     </div>
