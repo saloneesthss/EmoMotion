@@ -1,5 +1,5 @@
 <?php
-require_once 'calculator.php';
+require_once '../components/navbar.php';
 ?>
 
 <!DOCTYPE html>
@@ -11,14 +11,26 @@ require_once 'calculator.php';
     <link rel="stylesheet" href="../styles/calculator.css">
 </head>
 <body>
+    <div class="calculator">
+        <div class="left">
+            <h3 onclick="location.href='calculator.php'">Calculator</h3>
+            <div class="navbar">
+                <a href="bmi-calculator.php">BMI Calculator</a>
+                <a href="calorie-calculator.php">Calorie Calculator</a>
+                <a href="body-fat-calculator.php">Body Fat Calculator</a>
+                <a href="tdee-calculator.php">TDEE Calculator</a>
+            </div>
+        </div>
+    </div>
+    
     <div class="container">
         <h2>BMI Calculator</h2>
 
         <label for="weight">Weight (kg):</label>
-        <input type="number" id="weight" min="1" placeholder="Enter weight" />
+        <input type="number" id="weight" required min="1" placeholder="Enter weight" />
 
         <label for="height">Height (cm):</label>
-        <input type="number" id="height" min="1" placeholder="Enter height" />
+        <input type="number" id="height" required min="1" placeholder="Enter height" />
 
         <button onclick="calculateBMI()">Calculate BMI</button>
 

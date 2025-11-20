@@ -1,5 +1,5 @@
 <?php
-require_once 'calculator.php';
+require_once '../components/navbar.php';
 ?>
 
 <!DOCTYPE html>
@@ -8,8 +8,21 @@ require_once 'calculator.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmoMotion</title>
+    <link rel="stylesheet" href="../styles/calculator.css">
 </head>
 <body>
+    <div class="calculator">
+        <div class="left">
+            <h3 onclick="location.href='calculator.php'">Calculator</h3>
+            <div class="navbar">
+                <a href="bmi-calculator.php">BMI Calculator</a>
+                <a href="calorie-calculator.php">Calorie Calculator</a>
+                <a href="body-fat-calculator.php">Body Fat Calculator</a>
+                <a href="tdee-calculator.php">TDEE Calculator</a>
+            </div>
+        </div>
+    </div>
+    
     <div class="container tdee-container">
         <h2>TDEE Calculator</h2>
         <label>Age (years):</label>
