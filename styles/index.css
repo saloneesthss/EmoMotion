@@ -221,7 +221,7 @@
 
 /* workout-videos */
 .workout-videos {
-    height: 100vh;
+    /* height: 100vh; */
     background-color: #fff;
     margin: 2rem 4rem;
 }
@@ -246,6 +246,32 @@
     border-radius: 2rem;
     cursor: pointer;
 }
+
+.exercise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.exercise-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform .2s;
+}
+
+.exercise-card:hover {
+    transform: scale(1.03);
+}
+
+.exercise-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
 
 /* workout-plans */
 .workout-plans {

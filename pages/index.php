@@ -39,16 +39,10 @@ require_once '../components/navbar.php';
         <div class="workout-videos">
             <div class="title-bar">
                 <span>Workout Videos</span>
-                <button>View All Videos</button>
+                <button id="view-all-button">View All Videos</button>
             </div>
-            <div class="videos">
-                <div class="video">video 1</div>
-                <div class="video">video 2</div>
-                <div class="video">video 3</div>
-                <div class="video">video 4</div>
-                <div class="video">video 5</div>
-                <div class="video">video 6</div>
-            </div>
+            
+            <div id="exercise-container" class="exercise-grid"></div>
         </div>
 
         <div class="workout-plans">
@@ -66,5 +60,7 @@ require_once '../components/navbar.php';
             </div>
         </div>
     </div>
+
+    <script src="../apis/fetch-data.js"></script>
 </body>
 </html>
