@@ -14,7 +14,9 @@ require_once '../components/navbar.php';
 </head>
 <body>
     <div class='container'>
-        <div class="about"></div>
+        <div class="exercise-grid"></div>
     </div>
+
+    <script src="../scripts/workout-videos.js"></script>
 </body>
 </html>

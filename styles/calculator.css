@@ -52,6 +52,71 @@
     font-size: 18px;
 }
 
+@media (max-width: 1024px) {
+    .calculator {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left {
+        width: 100%;
+        height: auto;
+    }
+
+    .left h3 {
+        width: 100%;
+        padding: 2.7rem 0 1.2rem 0;
+        text-align: center;
+    }
+
+    .navbar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e7e5e5;
+        padding: 1.5rem 0;
+        align-items: center;
+    }
+
+    .navbar a {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .left {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .left h3 {
+        font-size: 16px;
+        text-align: center;
+        padding-top: 40px;
+    }
+
+    .navbar a {
+        font-size: 16px;
+    }
+
+    .navbar {
+        gap: 0.8rem;
+        padding: 2rem 0;
+        border-right: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar a {
+        font-size: 14px;
+    }
+
+    .left h3 {
+        font-size: 16px;
+        padding-top: 40px;
+    }
+}
+
 /* Middle section */
 .main-content {
     flex-grow: 1;

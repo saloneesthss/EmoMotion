@@ -42,7 +42,103 @@ require_once '../components/navbar.php';
                 <button id="view-all-button">View All Videos</button>
             </div>
             
-            <div id="exercise-container" class="exercise-grid"></div>
+            <div class="exercise-grid">
+                <div class="exercise-card" data-product-id="${exercise-id}">
+                    <div class="exercise-image-container">
+                        <img class="exercise-image"
+                        src="../assets/gifs/sit-up.gif">
+                    </div>
+
+                    <div class="exercise-name">
+                        3/4 sit-up
+                    </div>
+
+                    <div class="exercise-body-part">
+                        body part: waist
+                    </div>
+
+                    <div class="exercise-target">
+                        target: abs
+                    </div>
+
+                    <button class="view-more-button"
+                    data-product-id="${exercise.id}">
+                        View More
+                    </button>
+                </div>
+
+                <div class="exercise-card" data-product-id="${exercise-id}">
+                    <div class="exercise-image-container">
+                        <img class="exercise-image"
+                        src="../assets/gifs/45-side-bend.gif">
+                    </div>
+
+                    <div class="exercise-name">
+                        45° side bend
+                    </div>
+
+                    <div class="exercise-body-part">
+                        body part: waist
+                    </div>
+
+                    <div class="exercise-target">
+                        target: abs
+                    </div>
+
+                    <button class="view-more-button"
+                    data-product-id="${exercise.id}">
+                        View More
+                    </button>
+                </div>
+
+                <div class="exercise-card" data-product-id="${exercise-id}">
+                    <div class="exercise-image-container">
+                        <img class="exercise-image"
+                        src="../assets/gifs/air-bike.gif">
+                    </div>
+
+                    <div class="exercise-name">
+                        air bike
+                    </div>
+
+                    <div class="exercise-body-part">
+                        body part: waist
+                    </div>
+
+                    <div class="exercise-target">
+                        target: abs
+                    </div>
+
+                    <button class="view-more-button"
+                    data-product-id="${exercise.id}">
+                        View More
+                    </button>
+                </div>
+
+                <div class="exercise-card" data-product-id="${exercise-id}">
+                    <div class="exercise-image-container">
+                        <img class="exercise-image"
+                        src="../assets/gifs/alternate-heel-touch.gif">
+                    </div>
+
+                    <div class="exercise-name">
+                        alternate heel touchers
+                    </div>
+
+                    <div class="exercise-body-part">
+                        body part: waist
+                    </div>
+
+                    <div class="exercise-target">
+                        target: abs
+                    </div>
+
+                    <button class="view-more-button"
+                    data-product-id="${exercise.id}">
+                        View More
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="workout-plans">
@@ -50,17 +146,11 @@ require_once '../components/navbar.php';
                 <span>Workout Plans</span>
                 <button>View All Plans</button>
             </div>
-            <div class="plans">
-                <div class="video">video 1</div>
-                <div class="video">video 2</div>
-                <div class="video">video 3</div>
-                <div class="video">video 4</div>
-                <div class="video">video 5</div>
-                <div class="video">video 6</div>
+            <div class="plans-grid">
             </div>
         </div>
     </div>
 
-    <script src="../apis/fetch-data.js"></script>
+    <script type="module" src="../scripts/index.js"></script>
 </body>
 </html>
