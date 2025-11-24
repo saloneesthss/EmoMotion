@@ -14,11 +14,15 @@ exercises.forEach((exercise) => {
             </div>
 
             <div class="exercise-price">
-                ${exercise.bodyPart}
+                body part: ${exercise.bodyPart}
             </div>
 
             <div class="exercise-target">
-                ${exercise.target}
+                target: ${exercise.target}
+            </div>
+
+            <div class="exercise-equipment">
+                equipment: ${exercise.equipment}
             </div>
 
             <button class="view-more-button"
