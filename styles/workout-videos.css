@@ -1,0 +1,47 @@
+.container {
+    margin: 15vh 7vh 10vh 7vh;
+}
+
+.collection-filter {
+    position: relative;
+    display: inline-block;
+}
+
+.collection-button {
+    padding: 10px 18px;
+    background: #da80d7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.collection-button:hover {
+    background: #de8adb;
+}
+
+/* Dropdown menu */
+.collection-menu {
+    list-style: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: white;
+    width: 220px;
+    padding: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 50;
+}
+
+.collection-menu li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.collection-menu li:hover {
+    background: #f2f2f2;
+}

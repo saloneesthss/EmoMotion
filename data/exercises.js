@@ -18,7 +18,10 @@ export const exercises = [
         "Repeat for the desired number of repetitions."
         ],
         "difficulty": "beginner",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "medium",
+        "mood": ["unmotivated", "sad"], 
+        "caloriesBurned": "20",
     },
     {
         "bodyPart": "waist",
@@ -38,7 +41,10 @@ export const exercises = [
         "Continue alternating sides for the desired number of repetitions."
         ],
         "difficulty": "beginner",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "low",
+        "mood": ["anxious", "tired"],
+        "caloriesBurned": "15",
     },
     {
         "bodyPart": "waist",
@@ -58,7 +64,10 @@ export const exercises = [
         "Continue alternating sides in a pedaling motion for the desired number of repetitions."
         ],
         "difficulty": "beginner",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "medium",
+        "mood": ["sad", "low energy"],
+        "caloriesBurned": "25",
     },
     {
         "bodyPart": "waist",
@@ -78,7 +87,10 @@ export const exercises = [
         "Continue alternating sides for the desired number of repetitions."
         ],
         "difficulty": "beginner",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "low",
+        "mood": ["overwhelmed", "anxious"],
+        "caloriesBurned": "12",
     },
     {
         "bodyPart": "back",
@@ -99,7 +111,10 @@ export const exercises = [
         "Repeat for the desired number of repetitions."
         ],
         "difficulty": "beginner",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "high",
+        "mood": ["angry", "frustrated"],
+        "caloriesBurned": "40",
     },
     {
         "bodyPart": "chest",
@@ -120,7 +135,10 @@ export const exercises = [
         "Repeat for the desired number of repetitions."
         ],
         "difficulty": "beginner",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "medium",
+        "mood": ["sad", "unmotivated"],
+        "caloriesBurned": "35",
     },
     {
         "bodyPart": "waist",
@@ -140,7 +158,10 @@ export const exercises = [
         "Allow your legs to swing back up and repeat the movement for the desired number of repetitions."
         ],
         "difficulty": "advanced",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "high",
+        "mood": ["angry", "energized"],
+        "caloriesBurned": "60",
     },
     {
         "bodyPart": "waist",
@@ -164,6 +185,9 @@ export const exercises = [
         "Repeat for the desired number of repetitions."
         ],
         "difficulty": "intermediate",
-        "category": "strength"
+        "category": "strength",
+        "energyLevel": "medium",
+        "mood": ["stressed", "tired"],
+        "caloriesBurned": "45",
     }
 ];

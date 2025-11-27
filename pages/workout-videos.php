@@ -11,14 +11,24 @@ require_once '../components/navbar.php';
     <link rel="stylesheet" href="../styles/navbar.css">
     <link rel="stylesheet" href="../styles/index.css">
     <title>EmoMotion</title>
-    <style>
-        .container {
-            margin: 17vh 7vh 10vh 7vh;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/workout-videos.css">
 </head>
 <body>
     <div class='container'>
+        <div class="collection-filter">
+            <button class="collection-button">Browse By Collection ▾</button>
+            <ul class="collection-menu">
+                <li data-filter="abs">Abs</li>
+                <li data-filter="arms">Arms</li>
+                <li data-filter="legs">Legs</li>
+                <li data-filter="back">Back</li>
+                <li data-filter="chest">Chest</li>
+                <li data-filter="shoulders">Shoulders</li>
+                <li data-filter="fullbody">Full Body</li>
+                <li data-filter="cardio">Cardio</li>
+                <li data-filter="stretch">Stretch</li>
+            </ul>
+        </div>
         <div class="exercise-grid"></div>
     </div>
 

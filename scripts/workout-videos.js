@@ -34,3 +34,29 @@ exercises.forEach((exercise) => {
 })
 
 document.querySelector('.exercise-grid').innerHTML = exercisesHTML;
+
+const btn = document.querySelector('.collection-button');
+const menu = document.querySelector('.collection-menu');
+
+btn.addEventListener('click', () => {
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+});
+
+document.addEventListener('click', (event) => {
+    if (!btn.contains(event.target) && !menu.contains(event.target)) {
+        menu.style.display = "none";
+    }
+});
+
+menu.querySelectorAll('li').forEach(item => {
+    item.addEventListener('click', () => {
+        const filterValue = item.dataset.filter;
+        btn.innerText = item.innerText + " ▾";
+        menu.style.display = "none";
+        filterVideos(filterValue);
+    });
+});
+
+function filterVideos(filter) {
+    console.log("Filtering videos by:", filter);
+}

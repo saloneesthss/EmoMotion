@@ -6,7 +6,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = md5($_POST['password']);
-    $retypePassword = $_POST['retype-password'];
+    $retypePassword = md5($_POST['retype-password']);
 
     if ($password !== $retypePassword) {
         header("Location: signup.php?error=Passwords do not match.");
@@ -29,6 +29,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: signup.php?error=Something went wrong. Please try again.");
         die;
     }
+}
+
+if(isset($_SESSION['user_login']) && $_SESSION['user_login'] === true) {
+    header("Location: logged-users/index.php?id=" . $_SESSION['userid']);
+    exit();
+}
+
+if(isset($_COOKIE['remember_user'])) {
+    header("Location: logged-users/index.php?id=" . $_COOKIE['remember_user']);
+    exit();
 }
 ?>
 

@@ -39,7 +39,7 @@ require_once '../components/navbar.php';
         <div class="workout-videos">
             <div class="title-bar">
                 <span>Workout Videos</span>
-                <button id="view-all-button">View All Videos</button>
+                <button id="view-all-videos">View All Videos</button>
             </div>
             
             <div class="exercise-grid">
@@ -144,7 +144,7 @@ require_once '../components/navbar.php';
         <div class="workout-plans">
             <div class="title-bar">
                 <span>Workout Plans</span>
-                <button>View All Plans</button>
+                <button id="view-all-plans">View All Plans</button>
             </div>
             <div class="plans-grid">
             </div>
