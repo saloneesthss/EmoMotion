@@ -23,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_login'] = true;
         $_SESSION['username'] = $email;
         $_SESSION['userid'] = $con->lastInsertId();
-        header("Location: logged-users/index.php?id=" . $_SESSION['userid']);
+        header("Location: pages/users-db.php?id=" . $_SESSION['userid']);
         die;
     } else {
         header("Location: signup.php?error=Something went wrong. Please try again.");
@@ -32,12 +32,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if(isset($_SESSION['user_login']) && $_SESSION['user_login'] === true) {
-    header("Location: logged-users/index.php?id=" . $_SESSION['userid']);
+    header("Location: pages/users-db.php?id=" . $_SESSION['userid']);
     exit();
 }
 
 if(isset($_COOKIE['remember_user'])) {
-    header("Location: logged-users/index.php?id=" . $_COOKIE['remember_user']);
+    header("Location: pages/users-db.php?id=" . $_COOKIE['remember_user']);
     exit();
 }
 ?>
