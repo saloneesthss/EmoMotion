@@ -1,5 +1,12 @@
 <?php
-require_once '../components/navbar.php';
+session_start();
+var_dump($_SESSION);
+
+if (isset($_SESSION['user_id'])) {
+    require_once '../components/user-navbar.php';
+} else {
+    require_once '../components/navbar.php';
+}
 ?>
 
 <!DOCTYPE html>

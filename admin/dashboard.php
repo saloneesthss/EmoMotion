@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="sidebar">
-        <h2><i class="fa-solid fa-gear"></i> Admin</h2>
+        <h2>Admin Panel</h2>
 
         <a href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a>
         <a href="#"><i class="fa-solid fa-users"></i> Users</a>

@@ -17,11 +17,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if($loginUser) {
         $_SESSION['user_login'] = true;
         $_SESSION['username'] = $loginUser['email'];
-        $_SESSION['userid'] = $loginUser['id'];
+        $_SESSION['user_id'] = $loginUser['id'];
          if(isset($_POST['remember-me'])) {
             setcookie("remember_user", $loginUser['id'], time() + (86400 * 7), "/"); // store 30 days
         }
-        header("Location: pages/users-db.php?id=" . $_SESSION['userid']);
+        header("Location: pages/users-db.php?id=" . $_SESSION['user_id']);
         die;
     } else {
         header("Location: login.php?error=Your entered credintials do not match our records.");
@@ -36,7 +36,7 @@ if(isset($_COOKIE['remember_user'])) {
 
 if(isset($_SESSION['user_login']) && $_SESSION['user_login'] === true) {
     if(isset($_COOKIE['remember_user'])) {
-        header("Location: pages/users-db.php?id=" . $_SESSION['userid']);
+        header("Location: pages/users-db.php?id=" . $_SESSION['user_id']);
         exit();
     }
 }

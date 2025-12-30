@@ -22,8 +22,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if($insertStmt->execute()) {
         $_SESSION['user_login'] = true;
         $_SESSION['username'] = $email;
-        $_SESSION['userid'] = $con->lastInsertId();
-        header("Location: pages/users-db.php?id=" . $_SESSION['userid']);
+        $_SESSION['user_id'] = $con->lastInsertId();
+        header("Location: pages/users-db.php?id=" . $_SESSION['user_id']);
         die;
     } else {
         header("Location: signup.php?error=Something went wrong. Please try again.");
@@ -32,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if(isset($_SESSION['user_login']) && $_SESSION['user_login'] === true) {
-    header("Location: pages/users-db.php?id=" . $_SESSION['userid']);
+    header("Location: pages/users-db.php?id=" . $_SESSION['user_id']);
     exit();
 }
 

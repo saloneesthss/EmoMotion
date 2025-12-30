@@ -34,6 +34,22 @@
                 <img src="../assets/icons/user.svg" alt="User Profile" id="user-profile">
             </a>
         </div>
+        
+        <div class="hamburger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
+
+    <script>
+        const hamburger = document.querySelector(".hamburger-menu");
+        const navLinks = document.querySelector(".middle-section");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navLinks.classList.toggle("active");
+        });
+    </script>
 </body>
 </html>
