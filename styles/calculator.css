@@ -140,7 +140,7 @@
 
 .stat-card {
     flex: 1 1 200px;
-    background: linear-gradient(#f0d4e2, #ddadec);
+    background: linear-gradient(#f0d4e2, #fdc6d0);
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
@@ -160,7 +160,7 @@
 }
 
 .card {
-    background: linear-gradient(#edcce3, #5a80ef);
+    background: linear-gradient(#edcce3, #c8bee6);
     padding: 25px;
     border-radius: 10px;
     text-align: center;

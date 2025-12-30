@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    background: #f5f6fa;
+    margin: 0;
+}
+
+.container {
+    width: 70%;
+    margin: 20px auto 20px 300px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 80px;
+    margin-left: 310px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: 600;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+textarea {
+    height: 120px;
+}
+
+.btn-row {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.btn {
+    background: #704784;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.cancel {
+    background: #fff;
+    color: black;
+    margin-right: 10px;
+}
