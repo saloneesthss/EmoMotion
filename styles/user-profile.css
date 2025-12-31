@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: #f4f3ff;
+}
+
+/* LAYOUT */
+.layout {
+    display: flex;
+    margin-top: 70px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #ecebf9;
+    color: #4b1f96;
+    padding: 25px 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 35px;
+}
+
+.sidebar a {
+    display: block;
+    color: #4b1f96;
+    font-size: 16px;
+    padding: 12px 0;
+    margin: 5px 0;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #411293;
+    padding-left: 5px;
+}
+
+.sidebar .logout {
+    color: #570872;
+}
+
+/* MAIN */
+.main-content {
+    margin-left: 250px;
+    padding: 30px 50px;
+    width: calc(100% - 250px);
+}
+
+/* TOPBAR
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #4b1f96;
+    padding: 15px 20px;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 25px;
+}
+
+.searchbox {
+    width: 300px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+}
+
+.top-right i {
+    margin-left: 20px;
+    font-size: 20px;
+    cursor: pointer;
+} */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Page Title */
+.page-title {
+    margin-bottom: 25px;
+    color: #3a136c;
+}
+
+/* Cards */
+.profile-card {
+    display: flex;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.profile-card img {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.details h3 {
+    margin-bottom: 5px;
+    font-size: 22px;
+}
+
+.info-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.header-row h3 {
+    color: #3a136c;
+}
+
+.edit-btn {
+    background: #6a3bbd;
+    color: white;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+.edit-btn:hover {
+    background: #4b1f96;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.info-grid span {
+    color: gray;
+    font-size: 14px;
+}
+
+.info-grid p {
+    font-size: 16px;
+    margin-top: 5px;
+}

@@ -40,52 +40,29 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email Address</th>
-                <th>Role</th>
-                <th>Status</th>
+                <th>BMI</th>
+                <th>Country</th>
                 <th></th>
             </tr>
 
             <?php foreach ($users as $user) { ?>
             <tr>
                 <td><input type="checkbox"></td>
-                <td><?php echo $user['id'] ?>
-                <td><?php echo $user['name'] ?>
-                <td><?php echo $user['email'] ?>
-                <td></td>
-                <td></td>
+                <td><?php echo $user['id'] ?></td>
+                <td>
+                    <div class="row">
+                        <?php if (!empty($user['image']) && file_exists('../assets/users-images/' . $user['image'])) { ?>
+                            <img width="100" src="../assets/users-images/<?php echo $user['image']; ?>" class="user-icon">
+                        <?php } ?>
+                        <?php echo $user['name'] ?>
+                    </div>
+                </td>
+                <td><?php echo $user['email'] ?></td>
+                <td><?php echo $user['bmi'] ?></td>
+                <td><?php echo $user['country'] ?></td>
                 <td><span class="trash">🗑</span></td>
             </tr>
             <?php } ?>
-
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>101</td>
-                <td>
-                    <div class="row">
-                        <div class="user-icon">EW</div>
-                        Emily Wegner
-                    </div>
-                </td>
-                <td>emilyw@example.com</td>
-                <td><span class="role-tag">User</span></td>
-                <td><span class="permission">Active</span></td>
-                <td><span class="trash">🗑</span></td>
-            </tr>
-
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>102</td>
-                <td>
-                    <div class="row">
-                        <div class="user-icon">JM</div>
-                        John Monroe
-                    </div>
-                </td>
-                <td>john@example.com</td>
-                <td><span class="role-tag">Premium</span></td>
-                <td><span class="permission">Inactive</span></td>
-                <td><span class="trash">🗑</span></td>
-            </tr>
         </table>
     </div>
 </body>

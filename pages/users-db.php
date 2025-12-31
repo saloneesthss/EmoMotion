@@ -1,11 +1,6 @@
 <?php
 session_start();
-
-if (isset($_SESSION['user_id'])) {
-    require_once '../components/user-navbar.php';
-} else {
-    require_once '../components/navbar.php';
-}
+require_once '../components/user-navbar.php';
 ?>
 
 <!DOCTYPE html>

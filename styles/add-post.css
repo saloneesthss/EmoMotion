@@ -98,7 +98,6 @@ body {
 .create-post-card {
     width: 67%;
     margin: auto;
-    background: white;
     padding: 35px;
     border-radius: 20px;
     border: 1px solid #e9e9e9;
@@ -138,21 +137,17 @@ body {
 }
 
 /* Input boxes */
-.input-box,
-.textarea-box,
-.dropdown-box {
+.input-box, .textarea-box, .dropdown-box {
     width: 100%;
     border: 1px solid #e3e3e3;
-    background: #fafafa;
+    background: white;
     padding: 12px 18px;
     border-radius: 12px;
     font-size: 14px;
     outline: none;
 }
 
-.input-box:focus,
-.textarea-box:focus,
-.dropdown-box:focus {
+.input-box:focus, .textarea-box:focus, .dropdown-box:focus {
     border-color: #c4c4c4;
 }
 
@@ -198,7 +193,7 @@ body {
 }
 
 .create-btn {
-    background: #666;
+    background: #5746d8;
     border: none;
     padding: 10px 22px;
     border-radius: 25px;
@@ -209,5 +204,5 @@ body {
 }
 
 .create-btn:hover {
-    background: #555;
+    background: #4a37d6;
 }

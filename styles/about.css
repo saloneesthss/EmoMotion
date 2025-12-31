@@ -3,7 +3,7 @@ body {
   top: 0;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial;
-  background: linear-gradient(180deg, #bacced 0%, #7fa1eb 60%);
+  background: linear-gradient(180deg, #ddbaed 0%, #bfbdf0 60%);
   color: #07101a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,7 +30,7 @@ header.brand {
   width: 56px;
   height: 56px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  background: linear-gradient(135deg, #7c3aed, #6125e3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,11 +62,9 @@ header.brand {
 }
 
 .hero-card {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.01)
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.02),
+      rgba(255, 255, 255, 0.01));
   border-radius: 14px;
   padding: 26px;
   box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
@@ -111,11 +109,9 @@ header.brand {
 }
 
 .card {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.01)
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.02),
+      rgba(255, 255, 255, 0.01));
   padding: 18px;
   border-radius: 12px;
 }
@@ -146,7 +142,7 @@ section {
 }
 
 .step {
-  background: #bd5f94;
+  background: #bd5f95;
   padding: 18px;
   border-radius: 12px;
 }

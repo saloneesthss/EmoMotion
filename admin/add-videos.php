@@ -1,4 +1,10 @@
 <?php
+require_once "../connection.php";
+
+$success = "";
+$error = "";
+$upload_path = "../assets/gifs";
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $video_name = $_POST['video_name'];
     $target_area = $_POST['target_area'];
@@ -8,11 +14,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $duration = $_POST['duration'];
     $description = $_POST['description'];
 
-    $file_name = $_FILES["video_file"]["name"];
-    $tmp = $_FILES["video_file"]["tmp_name"];
-    move_uploaded_file($tmp, "uploads/videos/" . $file_name);
+    $file_name = null;
+    if(is_uploaded_file($_FILES['video_file']['tmp_name'])) {
+        $file_name = $_FILES['video_file']['name'];
+        move_uploaded_file($_FILES['video_file']['tmp_name'], $upload_path . '/' . $file_name);
+    }
+    
+    $sql = "insert into workout_videos set title='$video_name', file_path='$file_name', target_area='$target_area', mood='$mood', intensity='$intensity', fitness_level='$fitness_level', duration='$duration', description='$description'";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
 
-    echo "<script>alert('Workout Video Added Successfully!');</script>";
+    header("Location: add-videos.php?success=Video added successfully.");
+    die;
 }
 ?>
 
@@ -45,6 +58,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="title">Add Workout Video</div>
     <div class="container">
+        <?php if(isset($_GET['success'])) { ?>
+            <div class="success" style="color:green;margin-bottom:10px;">
+                <?php echo $_GET['success']; ?>
+            </div>
+        <?php } ?>
+
         <form method="POST" enctype="multipart/form-data">
             <div class="grid">
                 <div>
@@ -60,41 +79,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div>
                     <label>Target Area</label>
                     <select name="target_area" required>
-                        <option>Waist</option>
-                        <option>Hips</option>
-                        <option>Abs</option>
-                        <option>Legs</option>
-                        <option>Arms</option>
-                        <option>Back</option>
+                        <option value="waist">Waist</option>
+                        <option value="hips">Hips</option>
+                        <option value="abs">Abs</option>
+                        <option value="legs">Legs</option>
+                        <option value="arms">Arms</option>
+                        <option value="back">Back</option>
                     </select>
                 </div>
 
                 <div>
                     <label>Mood Category</label>
                     <select name="mood" required>
-                        <option>Happy</option>
-                        <option>Sad</option>
-                        <option>Angry</option>
-                        <option>Tired</option>
-                        <option>Energized</option>
+                        <option value="happy">Happy</option>
+                        <option value="sad">Sad</option>
+                        <option value="angry">Angry</option>
+                        <option value="tired">Tired</option>
+                        <option value="energized">Energized</option>
                     </select>
                 </div>
 
                 <div>
                     <label>Intensity</label>
                     <select name="intensity" required>
-                        <option>Low</option>
-                        <option>Medium</option>
-                        <option>High</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
                     </select>
                 </div>
 
                 <div>
                     <label>Fitness Level</label>
                     <select name="fitness_level" required>
-                        <option>Beginner</option>
-                        <option>Intermediate</option>
-                        <option>Advanced</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
                     </select>
                 </div>
 

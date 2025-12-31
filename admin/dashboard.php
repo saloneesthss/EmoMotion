@@ -24,7 +24,7 @@
 
     <div class="header">
         <div class="left-side">Hello, Admin</div>
-        <div class="right-side"><a href="../logout.php">Logout</a></div>
+        <div class="right-side"><a href="logout.php">Logout</a></div>
     </div>
 
     <div class="main">

@@ -18,7 +18,7 @@
         </div>
 
         <div class="middle-section">
-            <a href="../pages/index.php">Home</a>
+            <a href="../pages/users-db.php">Home</a>
             <a href="../pages/workout-videos.php">Workout Videos</a>
             <a href="../pages/workout-plans.php">Workout Plans</a>
             <a href="../pages/calculator.php">Calculator</a>
@@ -30,7 +30,7 @@
             <a href="">
                 <img src="../assets/icons/search.svg" alt="Search" id="search">
             </a>
-            <a href="login.php">
+            <a href="../pages/user-profile.php">
                 <img src="../assets/icons/user.svg" alt="User Profile" id="user-profile">
             </a>
         </div>

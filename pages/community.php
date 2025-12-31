@@ -64,7 +64,6 @@ $posts->execute();
                 </div>
             </div>
 
-            <!-- POPUP FOR CREATING POST -->
             <div id="popup" class="popup">
                 <form class="popup-content" method="POST" action="submit_post.php">
                     <h2>Create New Post</h2>
@@ -72,9 +71,12 @@ $posts->execute();
                     <input type="text" name="title" placeholder="Post title" required>
                     <textarea name="body" placeholder="Write your post..." required></textarea>
                     <select name="category">
-                        <option value="fitness">#fitness</option>
-                        <option value="food">#food</option>
-                        <option value="off-topic">#off-topic</option>
+                        <option value="#fitness">#fitness</option>
+                        <option value="#brfore-after-results">#before-after-results</option>
+                        <option value="#fitness-journeys">#fitness-journeys</option>
+                        <option value="#off-topic">#off-topic</option>
+                        <option value="#feedback">#feedback</option>
+                        <option value="#tech-support">#tech-support</option>
                     </select>
 
                     <div class="popup-buttons">

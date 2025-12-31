@@ -1,6 +1,27 @@
 <?php
 require_once '../components/user-navbar.php';
 require_once '../connection.php';
+    
+$uploadPath = '../assets/community-images';
+
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'];
+    $body = $_POST['body'];
+    $category = $_POST['category'];
+    // $created_at = $_POST['created_at'];
+
+    $imageName = null;
+    if(is_uploaded_file($_FILES['image_name']['tmp_name'])) {
+        $imageName = $_FILES['image_name']['name'];
+        move_uploaded_file($_FILES['image_name']['tmp_name'], $uploadPath . "/" . $imageName);
+    }
+    $sql = "insert into community_posts set title='$title', body='$body', category='$category', created_at='$created_at'";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+
+    header("Location:community.php?success=Post added successfully.");
+    die;
+}
 ?>
 
 <!DOCTYPE html>
@@ -34,40 +55,50 @@ require_once '../connection.php';
 
         <div class="main">    
             <div class="create-post-header">
-                <a href="#" class="back-btn">
+                <a href="community.php" class="back-btn">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
+            </div>
+
+            <div class="message" style="color:green;">
+                <?php if(isset($_GET['success'])) { ?>
+                    <?php echo $_GET['success']; ?>
+                <?php }?>
             </div>
 
             <div class="create-post-card">
                 <div class="card-header">
                     <h2>Create A New Post</h2>
-                    <button class="close-btn">✕</button>
+                    <button class="close-btn" onclick="location.href='community.php'">✕</button>
                 </div>
 
-                <form>
+                <form action="" method="post" enctype="multipart/form-data">
                     <label class="form-label">Post title</label>
-                    <input type="text" class="input-box" placeholder="Write a meaningful post title">
+                    <input required type="text" name="title" class="input-box" placeholder="Write a meaningful post title">
 
                     <label class="form-label">Post details</label>
-                    <textarea class="textarea-box" placeholder="Write a detailed post"></textarea>
+                    <textarea required class="textarea-box" name="body" placeholder="Write a detailed post"></textarea>
 
                     <div class="char-count">0/3000 characters</div>
 
                     <div class="attach-row">
-                        <a href="#" class="attach-link">+ Attach Images</a>
+                        <input type="file" id="image_name" name="image_name" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
+                        <label for="image_name" class="attach-link">+ Attach Images</label>
                     </div>
 
                     <label class="form-label">Select A Tag</label>
-                    <select class="dropdown-box">
+                    <select class="dropdown-box" name="category" required>
                         <option>Select a tag</option>
-                        <option>#fitness</option>
-                        <option>#food</option>
-                        <option>#before-after-results</option>
+                        <option value="#fitness">#fitness</option>
+                        <option value="#brfore-after-results">#before-after-results</option>
+                        <option value="#fitness-journeys">#fitness-journeys</option>
+                        <option value="#off-topic">#off-topic</option>
+                        <option value="#feedback">#feedback</option>
+                        <option value="#tech-support">#tech-support</option>
                     </select>
 
                     <div class="footer-actions">
-                        <button type="button" class="cancel-btn">Cancel</button>
+                        <button type="button" class="cancel-btn" onclick="location.href='community.php'">Cancel</button>
                         <button type="submit" class="create-btn">Create</button>
                     </div>
                 </form>

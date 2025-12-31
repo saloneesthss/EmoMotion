@@ -9,7 +9,7 @@
 
 .collection-button {
     padding: 10px 18px;
-    background: #da80d7;
+    background: #6a3bbd;
     color: white;
     border: none;
     border-radius: 8px;
@@ -18,7 +18,7 @@
 }
 
 .collection-button:hover {
-    background: #de8adb;
+    background: #663eac;
 }
 
 /* Dropdown menu */

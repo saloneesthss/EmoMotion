@@ -34,7 +34,7 @@ if(isset($_COOKIE['remember_user'])) {
     exit();
 }
 
-if(isset($_SESSION['user_login']) && $_SESSION['user_login'] === true) {
+if(isset($_SESSION['user_login']) === true) {
     if(isset($_COOKIE['remember_user'])) {
         header("Location: pages/users-db.php?id=" . $_SESSION['user_id']);
         exit();
