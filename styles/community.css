@@ -12,8 +12,8 @@
     padding: 20px 0 10px 0;
     background-color: #ecebf9;
     border-bottom: 1px solid #e5e5e5;
-    display: flex;
     position: fixed;
+    display: flex;
 }
 
 .community-header h2 {
@@ -25,17 +25,20 @@
     width: 265px;
 }
 
-.community-header .title {
+.community-header .title-tag {
     display: flex;
-    justify-content: space-around;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    gap: 300px;
 }
 
 .community-header .hashtag {
     font-size: 20px;
     font-weight: 500;
     color: #444;
-    margin: 0 500px 0 80px;
+    /* margin: 0 500px 0 70px; */
 }
 
 .community-header .right {
@@ -137,6 +140,12 @@
     margin-right: 10px;
 }
 
+.post-image {
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
 .post-header {
     display: flex;
     align-items: center;
@@ -159,47 +168,4 @@
     padding: 5px 10px;
     cursor: pointer;
     color: #444;
-}
-
-/* POPUP */
-.popup {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-}
-
-.popup-content {
-    background: white;
-    width: 400px;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.popup-content input,
-.popup-content textarea,
-.popup-content select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
-
-.popup-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.popup-buttons button {
-    padding: 8px 15px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
 }

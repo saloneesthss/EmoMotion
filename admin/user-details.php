@@ -28,7 +28,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="header">
         <div class="left-side">Hello, Admin</div>
-        <div class="right-side">Logout</div>
+        <div class="right-side"><a href="logout.php">Logout</a></div>
     </div>
     
     <div class="content">

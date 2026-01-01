@@ -1,21 +1,28 @@
 <?php
+session_start();
 require_once '../components/user-navbar.php';
 require_once '../connection.php';
     
 $uploadPath = '../assets/community-images';
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit;
+}
+
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id = $_SESSION['user_id'];
     $title = $_POST['title'];
     $body = $_POST['body'];
     $category = $_POST['category'];
     // $created_at = $_POST['created_at'];
 
     $imageName = null;
-    if(is_uploaded_file($_FILES['image_name']['tmp_name'])) {
-        $imageName = $_FILES['image_name']['name'];
-        move_uploaded_file($_FILES['image_name']['tmp_name'], $uploadPath . "/" . $imageName);
+    if(is_uploaded_file($_FILES['image']['tmp_name'])) {
+        $imageName = $_FILES['image']['name'];
+        move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath . "/" . $imageName);
     }
-    $sql = "insert into community_posts set title='$title', body='$body', category='$category', created_at='$created_at'";
+    $sql = "insert into community_posts set user_id='$user_id', title='$title', body='$body', image='$imageName', category='$category', created_at=NOW()";
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
@@ -82,8 +89,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="char-count">0/3000 characters</div>
 
                     <div class="attach-row">
-                        <input type="file" id="image_name" name="image_name" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
-                        <label for="image_name" class="attach-link">+ Attach Images</label>
+                        <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, .webp" style="display: none;">
+                        <label for="image" class="attach-link">+ Attach Images</label>
                     </div>
 
                     <label class="form-label">Select A Tag</label>
@@ -98,7 +105,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </select>
 
                     <div class="footer-actions">
-                        <button type="button" class="cancel-btn" onclick="location.href='community.php'">Cancel</button>
+                        <button type="reset" class="cancel-btn">Cancel</button>
                         <button type="submit" class="create-btn">Create</button>
                     </div>
                 </form>

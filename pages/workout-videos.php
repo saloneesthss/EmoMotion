@@ -1,11 +1,30 @@
 <?php
 session_start();
+require_once "../connection.php";
 
 if (isset($_SESSION['user_id'])) {
     require_once '../components/user-navbar.php';
 } else {
     require_once '../components/navbar.php';
 }
+
+$filter = "";
+$whereClause = "";
+
+if (isset($_GET['filter']) && !empty($_GET['filter'])) {
+    $filter = $_GET['filter'];
+    $whereClause = " WHERE target_area = :filter OR mood = :filter OR fitness_level = :filter OR intensity = :filter ";
+}
+
+$sql = "SELECT * FROM workout_videos $whereClause ORDER BY id DESC";
+$stmt = $con->prepare($sql);
+
+if (!empty($filter)) {
+    $stmt->bindParam(':filter', $filter);
+}
+
+$stmt->execute();
+$videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +42,13 @@ if (isset($_SESSION['user_id'])) {
     <div class='container'>
         <div class="collection-filter">
             <button class="collection-button">Browse By Collection ▾</button>
+            <!-- <ul class="collection-menu">
+                <li><a href="?filter=Abs">Abs</a></li>
+                <li><a href="?filter=Waist">Waist</a></li>
+                <li><a href="?filter=Happy">Happy</a></li>
+                <li><a href="?filter=Energized">Energized</a></li>
+                <li><a href="?filter=Beginner">Beginner</a></li>
+            </ul> -->
             <ul class="collection-menu">
                 <li data-filter="abs">Abs</li>
                 <li data-filter="arms">Arms</li>
@@ -35,9 +61,46 @@ if (isset($_SESSION['user_id'])) {
                 <li data-filter="stretch">Stretch</li>
             </ul>
         </div>
-        <div class="exercise-grid"></div>
-    </div>
+        <div class="exercise-grid">
+            <?php foreach ($videos as $video): ?>
+                <div class="exercise-card">
 
-    <script type="module" src="../scripts/workout-videos.js"></script>
+                    <div class="exercise-image-container">
+                        <img class="exercise-image" src="../assets/gifs/<?php echo $video['file_path']; ?>" alt="Workout Video">
+                    </div>
+
+                    <div class="exercise-name">
+                        <?php echo htmlspecialchars($video['title']); ?>
+                    </div>
+
+                    <div class="exercise-price">
+                        Target Area: <?php echo htmlspecialchars($video['target_area']); ?>
+                    </div>
+
+                    <div class="exercise-target">
+                        Mood: <?php echo htmlspecialchars($video['mood']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Fitness Level: <?php echo htmlspecialchars($video['fitness_level']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Intensity: <?php echo htmlspecialchars($video['intensity']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Duration: <?php echo $video['duration']; ?> mins
+                    </div>
+
+                    <!-- <button class="view-more-button"
+                        data-video-id="<?php echo $video['id']; ?>">
+                        View More
+                    </button> -->
+
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
 </body>
 </html>

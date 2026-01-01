@@ -82,7 +82,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
                         <input type="file" accept=".webp, .jpg, .jpeg, .png" name="image_name" required />
                         <input type="hidden" name="image_name_old" value="<?php echo $user['image']; ?>">
                         <?php if (!empty($user['image']) && file_exists('../assets/users-images/' . $user['image'])) { ?>
-                            <img width="100" src="../assets/users-images/<?php echo $user['image']; ?>" alt="">
+                            <img width="100" src="../assets/users-images/<?php echo $user['image']; ?>" name="image">
                         <?php } ?>
                     </div>
                     

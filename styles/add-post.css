@@ -16,7 +16,7 @@ body {
     display: flex;
     position: fixed;
     z-index: 100;
-    background-color: #fafafa;
+    background-color: #ecebf9;
 }
 
 .community-header h2 {

@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="header">
         <div class="left-side">Hello, Admin</div>
-        <div class="right-side">Logout</div>
+        <div class="right-side"><a href="logout.php">Logout</a></div>
     </div>
     
     <div class="title">Add Workout Plan</div>
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <div>
-                    <label>Duration (Minutes)</label>
+                    <label>Duration (Seconds)</label>
                     <input type="number" name="duration" required />
                 </div>
 

@@ -1,7 +1,9 @@
 <?php
+session_start();
 require_once '../components/user-navbar.php';
 require_once '../connection.php';
-$posts = $con->prepare("SELECT * FROM community_posts ORDER BY id DESC");
+
+$posts = $con->prepare("SELECT p.*, u.name, u.image AS user_image FROM community_posts p JOIN users u ON p.user_id = u.id ORDER BY p.id DESC");
 $posts->execute();
 ?>
 
@@ -19,8 +21,8 @@ $posts->execute();
     <div class='container'>
         <div class="community-header">
             <h2>Community</h2>
-            <div class="title">
-                <div class="hashtag">#fitness</div>
+            <div class="title-tag">
+                <div class="hashtag">#all_posts</div>
                 <div class="right">
                     <div class="search-tag"><i class="fa-solid fa-magnifying-glass"></i>Search</div>
                     <button class="create-post" onclick="location.href='add-post.php'">Create Post</button>
@@ -31,12 +33,12 @@ $posts->execute();
         <div class="main-part">
             <div class="sidebar">
                 <ul>
-                    <li class="active"><i class="fa-solid fa-dumbbell"></i>#fitness</li>
-                    <li><i class="fa-regular fa-star"></i>#before-after-results</li>
-                    <li><i class="fa-solid fa-globe"></i>#fitness-journeys</li>
-                    <li><i class="fa-regular fa-message"></i>#off-topic</li>
-                    <li><i class="fa-regular fa-lightbulb"></i>#feedback</li>
-                    <li><i class="fa-solid fa-wrench"></i>#tech-support</li>
+                    <li class="category-btn" data-category="#fitness"><i class="fa-solid fa-dumbbell"></i>#fitness</li>
+                    <li class="category-btn" data-category="#before-after-results"><i class="fa-regular fa-star"></i>#before-after-results</li>
+                    <li class="category-btn" data-category="#fitness-journeys"><i class="fa-solid fa-globe"></i>#fitness-journeys</li>
+                    <li class="category-btn" data-category="#off-topic"><i class="fa-regular fa-message"></i>#off-topic</li>
+                    <li class="category-btn" data-category="#feedback"><i class="fa-regular fa-lightbulb"></i>#feedback</li>
+                    <li class="category-btn" data-category="#tech-support"><i class="fa-solid fa-wrench"></i>#tech-support</li>
                 </ul>
             </div>
 
@@ -45,13 +47,24 @@ $posts->execute();
                     <?php while($row = $posts->fetch(PDO::FETCH_ASSOC)): ?>
                     <div class="post-card">
                         <div class="post-header">
-                            <img src="avatar.png" class="avatar">
-                            <span class="username"><?php echo $row['username']; ?></span>
-                            <span class="time"><?php echo $row['created_at']; ?></span>
+                            <?php if (!empty($row['user_image'])): ?>
+                                <img class="post-image" src="../assets/users-images/<?php echo $row['user_image']; ?>">
+                            <?php endif; ?>
+
+                            <span class="username">
+                                <?php echo htmlspecialchars($row['name']); ?>
+                            </span>
+
+                            <span class="time">
+                                <?php echo date("M d, Y • h:i A", strtotime($row['created_at'])); ?>
+                            </span>
                         </div>
 
                         <h3><?php echo $row['title']; ?></h3>
                         <p><?php echo $row['body']; ?></p>
+                        <?php if (!empty($row['image'])): ?>
+                            <img src="../assets/community-images/<?php echo $row['image']; ?>" style="width:150px;">
+                        <?php endif; ?>
 
                         <div class="post-actions">
                             <button>💬 Reply</button>
@@ -63,29 +76,29 @@ $posts->execute();
                     <?php endwhile; ?>
                 </div>
             </div>
-
-            <div id="popup" class="popup">
-                <form class="popup-content" method="POST" action="submit_post.php">
-                    <h2>Create New Post</h2>
-                    <input type="text" name="username" placeholder="Your name" required>
-                    <input type="text" name="title" placeholder="Post title" required>
-                    <textarea name="body" placeholder="Write your post..." required></textarea>
-                    <select name="category">
-                        <option value="#fitness">#fitness</option>
-                        <option value="#brfore-after-results">#before-after-results</option>
-                        <option value="#fitness-journeys">#fitness-journeys</option>
-                        <option value="#off-topic">#off-topic</option>
-                        <option value="#feedback">#feedback</option>
-                        <option value="#tech-support">#tech-support</option>
-                    </select>
-
-                    <div class="popup-buttons">
-                        <button type="button" onclick="closePostPopup()">Cancel</button>
-                        <button type="submit">Post</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll('.category-btn').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.category-btn').forEach(li => li.classList.remove('active'));
+                this.classList.add('active');
+                const category = this.dataset.category;
+        
+                let text = item.innerText.trim();
+                document.querySelector(".hashtag").innerText = text;
+
+                fetch("filter-posts.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "category=" + encodeURIComponent(category)
+                })
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("post-list").innerHTML = data;
+                });
+            });
+        });
+    </script>
 </body>
 </html>
