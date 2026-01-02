@@ -51,7 +51,7 @@ if (isset($_COOKIE['rememberme'])) {
             A safe space for physical and mental fitness
         </p>
         <?php if(isset($_GET['error'])) { ?>
-            <div class="error" style="color:red;">
+            <div class="error" style="color:red; margin-bottom:10px;">
                 <?php echo $_GET['error']; ?>
             </div>
         <?php } ?>

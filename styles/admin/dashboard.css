@@ -13,7 +13,7 @@ body {
     width: 100%;
     padding-left: 200px;
     background-color: #c8bee6;
-    color: 170415;
+    color: #290763;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -29,7 +29,7 @@ body {
     width: 250px;
     height: 100vh;
     background: #c8bee6;
-    color: black;
+    color: #290763;
     position: fixed;
     top: 0;
     left: 0;
@@ -47,7 +47,7 @@ body {
     display: block;
     padding: 12px 25px;
     text-decoration: none;
-    color: #170415;
+    color: #290763;
     font-size: 16px;
 }
 
@@ -61,7 +61,7 @@ body {
 
 /* Main */
 .right-side a {
-    color: #170415;
+    color: #290763;
     text-decoration: none;
 }
 

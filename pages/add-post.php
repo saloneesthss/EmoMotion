@@ -51,7 +51,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="sidebar">
             <ul>
-                <li class="active"><i class="fa-solid fa-dumbbell"></i>#fitness</li>
+                <li><i class="fa-solid fa-dumbbell"></i>#fitness</li>
                 <li><i class="fa-regular fa-star"></i>#before-after-results</li>
                 <li><i class="fa-solid fa-globe"></i>#fitness-journeys</li>
                 <li><i class="fa-regular fa-message"></i>#off-topic</li>

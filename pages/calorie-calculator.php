@@ -1,5 +1,12 @@
 <?php
-require_once '../components/navbar.php';
+session_start();
+require_once "../connection.php";
+
+if (isset($_SESSION['user_id'])) {
+    require_once '../components/user-navbar.php';
+} else {
+    require_once '../components/navbar.php';
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,6 +16,7 @@ require_once '../components/navbar.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmoMotion</title>
     <link rel="stylesheet" href="../styles/calculator.css">
+    <link rel="stylesheet" href="../styles/navbar.css">
 </head>
 <body>
     <div class="calculator">

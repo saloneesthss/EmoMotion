@@ -1,4 +1,10 @@
 <?php
+require_once "logincheck.php";
+
+$success = "";
+$error = "";
+$upload_path = "../assets/plans-thumbnail";
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $plan_name = $_POST['plan_name'];
     $target_area = $_POST['target_area'];
@@ -8,7 +14,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $duration = $_POST['duration'];
     $description = $_POST['description'];
 
-    echo "<script>alert('Workout Plan Added Successfully!');</script>";
+    $file_name = null;
+    if(is_uploaded_file($_FILES['thumbnail']['tmp_name'])) {
+        $file_name = $_FILES['thumbnail']['name'];
+        move_uploaded_file($_FILES['thumbnail']['tmp_name'], $upload_path . '/' . $file_name);
+    }
+    
+    $sql = "insert into workout_plans set plan_name='$plan_name', file_path='$file_name', target_area='$target_area', mood='$mood', intensity='$intensity', fitness_level='$fitness_level', duration='$duration', description='$description'";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+
+    header("Location: add-plans.php?success=Plan added successfully.");
+    die;
 }
 ?>
 
@@ -31,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <a href="add-videos.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
         <a href="add-plans.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
         <a href="community-posts.php"><i class="fa-solid fa-comment-dots"></i> Community Posts</a>
-        <a href="settings.php"><i class="fa-solid fa-gear"></i> Settings</a>
+        <a href="report.php"><i class="fa-solid fa-file-lines"></i> User Report</a>
     </div>
 
     <div class="header">
@@ -42,11 +59,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="title">Add Workout Plan</div>
 
     <div class="container">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             <div class="grid">
                 <div>
                     <label>Plan Name</label>
                     <input type="text" name="plan_name" required />
+                </div>
+
+                <div>
+                    <label>Upload Thumbnail</label>
+                    <input type="file" name="thumbnail" accept=".jpg,.jpeg,.png,.webp,.avif" required />
                 </div>
 
                 <div>

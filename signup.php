@@ -13,7 +13,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         die;
     }
 
-    $insertSql = "insert into users (name, email, password) values (:name, :email, :password)";
+    $insertSql = "insert into users (name, email, password, joined_date) values (:name, :email, :password, NOW())";
     $insertStmt = $con->prepare($insertSql);
     $insertStmt->bindParam(':name', $name);
     $insertStmt->bindParam(':email', $email);

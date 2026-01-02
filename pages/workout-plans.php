@@ -1,11 +1,30 @@
 <?php
 session_start();
+require_once "../connection.php";
 
 if (isset($_SESSION['user_id'])) {
     require_once '../components/user-navbar.php';
 } else {
     require_once '../components/navbar.php';
 }
+
+$filter = "";
+$whereClause = "";
+
+if (isset($_GET['filter']) && !empty($_GET['filter'])) {
+    $filter = $_GET['filter'];
+    $whereClause = " WHERE target_area = :filter OR mood = :filter OR fitness_level = :filter OR intensity = :filter ";
+}
+
+$sql = "SELECT * FROM workout_plans $whereClause ORDER BY id DESC";
+$stmt = $con->prepare($sql);
+
+if (!empty($filter)) {
+    $stmt->bindParam(':filter', $filter);
+}
+
+$stmt->execute();
+$videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -17,10 +36,65 @@ if (isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="../styles/index.css">
     <link rel="stylesheet" href="../styles/navbar.css">
     <title>EmoMotion</title>
+    <link rel="stylesheet" href="../styles/workout-videos.css">
 </head>
 <body>
     <div class='container'>
-        <div class="about"></div>
+        <div class="collection-filter">
+            <button class="collection-button">Browse By Collection ▾</button>         
+            <ul class="collection-menu">
+                <li data-filter="abs">Abs</li>
+                <li data-filter="arms">Arms</li>
+                <li data-filter="legs">Legs</li>
+                <li data-filter="back">Back</li>
+                <li data-filter="chest">Chest</li>
+                <li data-filter="shoulders">Shoulders</li>
+                <li data-filter="fullbody">Full Body</li>
+                <li data-filter="cardio">Cardio</li>
+                <li data-filter="stretch">Stretch</li>
+            </ul>
+        </div>
+
+        <div class="exercise-grid">
+            <?php foreach ($videos as $video): ?>
+                <div class="exercise-card">
+
+                    <div class="exercise-image-container">
+                        <img class="exercise-image" src="../assets/plans-thumbnail/<?php echo $video['file_path']; ?>" alt="Workout Plan">
+                    </div>
+
+                    <div class="exercise-name">
+                        <?php echo htmlspecialchars($video['plan_name']); ?>
+                    </div>
+
+                    <div class="exercise-price">
+                        Target Area: <?php echo htmlspecialchars($video['target_area']); ?>
+                    </div>
+
+                    <div class="exercise-target">
+                        Mood: <?php echo htmlspecialchars($video['mood']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Fitness Level: <?php echo htmlspecialchars($video['fitness_level']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Intensity: <?php echo htmlspecialchars($video['intensity']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Duration: <?php echo $video['duration']; ?> mins
+                    </div>
+
+                    <!-- <button class="view-more-button"
+                        data-video-id="<?php echo $video['id']; ?>">
+                        View More
+                    </button> -->
+
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 </body>
 </html>

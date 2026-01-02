@@ -3,7 +3,8 @@ body {
   top: 0;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial;
-  background: linear-gradient(180deg, #ddbaed 0%, #bfbdf0 60%);
+  /* background: linear-gradient(180deg, #ddbaed 0%, #bfbdf0 60%); */
+  background: linear-gradient(#c8bee6, #edcce3);
   color: #07101a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

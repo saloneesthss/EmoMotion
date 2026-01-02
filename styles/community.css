@@ -11,14 +11,13 @@
     width: 100%;
     padding: 20px 0 10px 0;
     background-color: #ecebf9;
-    border-bottom: 1px solid #e5e5e5;
     position: fixed;
     display: flex;
 }
 
 .community-header h2 {
     font-size: 22px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 10px;
     padding-left: 40px;
     color: #222;
@@ -38,7 +37,6 @@
     font-size: 20px;
     font-weight: 500;
     color: #444;
-    /* margin: 0 500px 0 70px; */
 }
 
 .community-header .right {
@@ -82,12 +80,11 @@
 /* SIDEBAR */
 .sidebar {
     width: 265px;
-    background: #ffffff;
-    height: 90vh;
-    border-right: 1px solid #dadada;
+    background: #ecebf9;
+    height: 91vh;
     padding: 20px;
     position: fixed;
-    margin-top: 75px;
+    margin-top: 73px;
 }
 
 .sidebar h2 {
@@ -112,7 +109,7 @@
 
 .sidebar li.active,
 .sidebar li:hover {
-    background: #eae6ff;
+    background: #d7d0fa;
     color: #4a37d6;
 }
 

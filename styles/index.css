@@ -1,4 +1,8 @@
 /* home page */
+body {
+    background-color: #ecebf9;
+}
+
 .main {
     height: 100vh;
     display: flex;
@@ -188,8 +192,6 @@
 
 /* WORKOUT VIDEOS */
 .workout-videos {
-    /* height: 100vh; */
-    background-color: #fff;
     margin: 2rem 4rem;
 }
 
@@ -208,15 +210,15 @@
     padding: 0.5rem 1rem;
     font-size: 14px;
     border: 1px solid black;
-    background-color: white;
+    background-color: #ecebf9;
     color: black;
     border-radius: 2rem;
     cursor: pointer;
 }
 
 .title-bar button:hover {
-    border: 1px solid #9D8DF1;
-    background-color: #ad9ff0;
+    border: 1px solid #afa0f7;
+    background-color: #c9c0fa;
 }
 
 .exercise-grid {
@@ -227,16 +229,22 @@
 }
 
 .exercise-card {
-    background: #e7e7ff;
+    background-color: #c8bee6;
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     text-align: center;
     transition: transform .2s;
+    font-size: 15px;
 }
 
 .exercise-card:hover {
     transform: scale(1.03);
+}
+
+.exercise-card .exercise-name {
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .exercise-card img {
@@ -262,7 +270,5 @@
 
 /* WORKOUT PLANS */
 .workout-plans {
-    height: 100vh;
-    background-color: #fff;
     margin: 2rem 4rem;
 }

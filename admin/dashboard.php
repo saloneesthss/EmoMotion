@@ -1,4 +1,5 @@
 <?php
+require_once "logincheck.php";
 ?>
 
 <!DOCTYPE html>
@@ -19,79 +20,12 @@
         <a href="add-videos.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
         <a href="add-plans.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
         <a href="community-posts.php"><i class="fa-solid fa-comment-dots"></i> Community Posts</a>
-        <a href="settings.php"><i class="fa-solid fa-gear"></i> Settings</a>
+        <a href="report.php"><i class="fa-solid fa-file-lines"></i> User Report</a>
     </div>
 
     <div class="header">
         <div class="left-side">Hello, Admin</div>
         <div class="right-side"><a href="logout.php">Logout</a></div>
     </div>
-
-    <div class="main">
-        <div class="cards">
-            <div class="card blue">
-                <h3>Total Users</h3>
-                <div class="value" id="totalUsers">0</div>
-            </div>
-            <div class="card green">
-                <h3>Active Users</h3>
-                <div class="value" id="activeUsers">0</div>
-            </div>
-            <div class="card red">
-                <h3>Inactive Users</h3>
-                <div class="value" id="inactiveUsers">0</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- CHART -->
-            <div class="chart-box">
-                <h3>Users Chart</h3>
-                <canvas id="barChart"></canvas>
-            </div>
-
-            <div class="notif-box">
-                <h3>Notifications</h3>
-                <div class="notif-item">
-                    <span><i class="fa-solid fa-comment"></i> New user registered</span>
-                    <span>1 min ago</span>
-                </div>
-                <div class="notif-item">
-                    <span><i class="fa-solid fa-comment"></i> New comment</span>
-                    <span>20 min ago</span>
-                </div>
-                <div class="notif-item">
-                    <span><i class="fa-solid fa-comment"></i> System update</span>
-                    <span>1 hour ago</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Dummy data for users
-        let totalUsers = 12;
-        let activeUsers = 8;
-        let inactiveUsers = totalUsers - activeUsers;
-
-        document.getElementById("totalUsers").innerText = totalUsers;
-        document.getElementById("activeUsers").innerText = activeUsers;
-        document.getElementById("inactiveUsers").innerText = inactiveUsers;
-
-        // Bar Chart
-        // new Chart(document.getElementById("barChart"), {
-        //     type: "bar",
-        //     data: {
-        //         labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
-        //         datasets: [{
-        //             label: "Users Joined",
-        //             data: [12, 19, 3, 5, 2],
-        //             backgroundColor: "#3b82f6",
-        //         }]
-        //     },
-        //     options: { responsive: true, maintainAspectRatio: false }
-        // });
-    </script>
 </body>
 </html>

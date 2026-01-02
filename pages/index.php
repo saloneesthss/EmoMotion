@@ -1,11 +1,21 @@
 <?php
 session_start();
+require_once "../connection.php";
 
 if (!empty($_SESSION['user_id'])) {
     require_once '../components/user-navbar.php';
 } else {
     require_once '../components/navbar.php';
 }
+
+$sql = "SELECT * FROM workout_videos ORDER BY id DESC";
+$stmt = $con->prepare($sql);
+$stmt->execute();
+$videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$plan_stmt = $con->prepare("SELECT * FROM workout_plans ORDER BY id DESC");
+$plan_stmt->execute();
+$plans = $plan_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -49,101 +59,38 @@ if (!empty($_SESSION['user_id'])) {
             </div>
             
             <div class="exercise-grid">
-                <div class="exercise-card" data-product-id="${exercise-id}">
+                <?php foreach ($videos as $video): ?>
+                <div class="exercise-card">
+
                     <div class="exercise-image-container">
-                        <img class="exercise-image"
-                        src="../assets/gifs/sit-up.gif">
+                        <img class="exercise-image" src="../assets/gifs/<?php echo $video['file_path']; ?>" alt="Workout Video">
                     </div>
 
                     <div class="exercise-name">
-                        3/4 sit-up
+                        <?php echo htmlspecialchars($video['title']); ?>
                     </div>
 
-                    <div class="exercise-body-part">
-                        body part: waist
-                    </div>
-
-                    <div class="exercise-target">
-                        target: abs
-                    </div>
-
-                    <button class="view-more-button"
-                    data-product-id="${exercise.id}">
-                        View More
-                    </button>
-                </div>
-
-                <div class="exercise-card" data-product-id="${exercise-id}">
-                    <div class="exercise-image-container">
-                        <img class="exercise-image"
-                        src="../assets/gifs/45-side-bend.gif">
-                    </div>
-
-                    <div class="exercise-name">
-                        45° side bend
-                    </div>
-
-                    <div class="exercise-body-part">
-                        body part: waist
+                    <div class="exercise-price">
+                        Target Area: <?php echo htmlspecialchars($video['target_area']); ?>
                     </div>
 
                     <div class="exercise-target">
-                        target: abs
+                        Mood: <?php echo htmlspecialchars($video['mood']); ?>
                     </div>
 
-                    <button class="view-more-button"
-                    data-product-id="${exercise.id}">
-                        View More
-                    </button>
+                    <div class="exercise-equipment">
+                        Fitness Level: <?php echo htmlspecialchars($video['fitness_level']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Intensity: <?php echo htmlspecialchars($video['intensity']); ?>
+                    </div>
+
+                    <div class="exercise-equipment">
+                        Duration: <?php echo $video['duration']; ?> seconds
+                    </div>
                 </div>
-
-                <div class="exercise-card" data-product-id="${exercise-id}">
-                    <div class="exercise-image-container">
-                        <img class="exercise-image"
-                        src="../assets/gifs/air-bike.gif">
-                    </div>
-
-                    <div class="exercise-name">
-                        air bike
-                    </div>
-
-                    <div class="exercise-body-part">
-                        body part: waist
-                    </div>
-
-                    <div class="exercise-target">
-                        target: abs
-                    </div>
-
-                    <button class="view-more-button"
-                    data-product-id="${exercise.id}">
-                        View More
-                    </button>
-                </div>
-
-                <div class="exercise-card" data-product-id="${exercise-id}">
-                    <div class="exercise-image-container">
-                        <img class="exercise-image"
-                        src="../assets/gifs/alternate-heel-touch.gif">
-                    </div>
-
-                    <div class="exercise-name">
-                        alternate heel touchers
-                    </div>
-
-                    <div class="exercise-body-part">
-                        body part: waist
-                    </div>
-
-                    <div class="exercise-target">
-                        target: abs
-                    </div>
-
-                    <button class="view-more-button"
-                    data-product-id="${exercise.id}">
-                        View More
-                    </button>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -152,7 +99,39 @@ if (!empty($_SESSION['user_id'])) {
                 <span>Workout Plans</span>
                 <button id="view-all-plans">View All Plans</button>
             </div>
-            <div class="plans-grid">
+            <div class="exercise-grid">
+                <?php foreach ($plans as $plan): ?>
+                    <div class="exercise-card">
+
+                        <div class="exercise-image-container">
+                            <img class="exercise-image" src="../assets/plans-thumbnail/<?php echo $plan['file_path']; ?>" alt="Workout Plan">
+                        </div>
+
+                        <div class="exercise-name">
+                            <?php echo htmlspecialchars($plan['plan_name']); ?>
+                        </div>
+
+                        <div class="exercise-price">
+                            Target Area: <?php echo htmlspecialchars($plan['target_area']); ?>
+                        </div>
+
+                        <div class="exercise-target">
+                            Mood: <?php echo htmlspecialchars($plan['mood']); ?>
+                        </div>
+
+                        <div class="exercise-equipment">
+                            Fitness Level: <?php echo htmlspecialchars($plan['fitness_level']); ?>
+                        </div>
+
+                        <div class="exercise-equipment">
+                            Intensity: <?php echo htmlspecialchars($plan['intensity']); ?>
+                        </div>
+
+                        <div class="exercise-equipment">
+                            Duration: <?php echo $plan['duration']; ?> seconds
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
