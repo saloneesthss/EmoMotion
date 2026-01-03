@@ -84,7 +84,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input required type="text" name="title" class="input-box" placeholder="Write a meaningful post title">
 
                     <label class="form-label">Post details</label>
-                    <textarea required class="textarea-box" name="body" placeholder="Write a detailed post"></textarea>
+                    <textarea required class="textarea-box" maxlength="3000" name="body" id="body" placeholder="Write a detailed post"></textarea>
 
                     <div class="char-count">0/3000 characters</div>
 
@@ -112,5 +112,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+
+    <script>
+        const bodyField = document.querySelector("#body");
+        const charCount = document.querySelector(".char-count");
+
+        bodyField.addEventListener("input", () => {
+            let currentLength = bodyField.value.length;
+            if (currentLength > 3000) {
+                bodyField.value = bodyField.value.substring(0, 3000);
+                currentLength = 3000;
+            }
+            charCount.textContent = `${currentLength}/3000 characters`;
+        });
+    </script>
 </body>
 </html>

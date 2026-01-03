@@ -64,9 +64,12 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="exercise-grid">
             <?php foreach ($videos as $video): ?>
                 <div class="exercise-card">
-
                     <div class="exercise-image-container">
                         <img class="exercise-image" src="../assets/gifs/<?php echo $video['file_path']; ?>" alt="Workout Video">
+                    </div>
+
+                    <div class="small-card">
+                        <i class="fa fa-heart"></i>
                     </div>
 
                     <div class="exercise-name">

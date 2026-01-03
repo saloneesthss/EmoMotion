@@ -57,42 +57,45 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="exercise-grid">
             <?php foreach ($videos as $video): ?>
-                <div class="exercise-card">
+                <a href="plan-details.php?id=<?= $video['id'] ?>" class="plan-link">
+                    <div class="exercise-card plan-card">
+                        <div class="exercise-image-container">
+                            <img class="exercise-image" src="../assets/plans-thumbnail/<?php echo $video['file_path']; ?>" alt="Workout Plan">
+                        </div>
 
-                    <div class="exercise-image-container">
-                        <img class="exercise-image" src="../assets/plans-thumbnail/<?php echo $video['file_path']; ?>" alt="Workout Plan">
+                        <div class="exercise-name plan-title">
+                            <?php echo htmlspecialchars($video['plan_name']); ?>
+                        </div>
+
+                        <div class="plan-details">
+                            <div class="exercise-price">
+                                Target Area: <?php echo htmlspecialchars($video['target_area']); ?>
+                            </div>
+
+                            <div class="exercise-target">
+                                Mood: <?php echo htmlspecialchars($video['mood']); ?>
+                            </div>
+
+                            <div class="exercise-equipment">
+                                Fitness Level: <?php echo htmlspecialchars($video['fitness_level']); ?>
+                            </div>
+
+                            <div class="exercise-equipment">
+                                Intensity: <?php echo htmlspecialchars($video['intensity']); ?>
+                            </div>
+
+                            <div class="exercise-equipment">
+                                Duration: <?php echo $video['duration']; ?> seconds
+                            </div>
+                        </div>
+
+                        <!-- <button class="view-more-button"
+                            data-video-id="<?php echo $video['id']; ?>">
+                            View More
+                        </button> -->
+
                     </div>
-
-                    <div class="exercise-name">
-                        <?php echo htmlspecialchars($video['plan_name']); ?>
-                    </div>
-
-                    <div class="exercise-price">
-                        Target Area: <?php echo htmlspecialchars($video['target_area']); ?>
-                    </div>
-
-                    <div class="exercise-target">
-                        Mood: <?php echo htmlspecialchars($video['mood']); ?>
-                    </div>
-
-                    <div class="exercise-equipment">
-                        Fitness Level: <?php echo htmlspecialchars($video['fitness_level']); ?>
-                    </div>
-
-                    <div class="exercise-equipment">
-                        Intensity: <?php echo htmlspecialchars($video['intensity']); ?>
-                    </div>
-
-                    <div class="exercise-equipment">
-                        Duration: <?php echo $video['duration']; ?> mins
-                    </div>
-
-                    <!-- <button class="view-more-button"
-                        data-video-id="<?php echo $video['id']; ?>">
-                        View More
-                    </button> -->
-
-                </div>
+                </a>
             <?php endforeach; ?>
         </div>
     </div>
