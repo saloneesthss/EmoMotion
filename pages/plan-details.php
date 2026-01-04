@@ -39,7 +39,7 @@ $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div class="plan-meta">
-            <span><i class="fa-regular fa-calendar"></i> 28 Days</span>
+            <span><i class="fa-regular fa-calendar"></i> <?php echo $plan['duration']; ?> Days</span>
             <span><i class="fa-solid fa-stopwatch"></i> <?php echo $plan['duration']; ?> Sec/Day</span>
         </div>
 
@@ -74,7 +74,7 @@ $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2 class="workout-heading">Day 1’s Workout</h2> -->
 
         <div class="workout-card">
-            <img src="images/video2.png" class="video-thumb">
+            <img src="" class="video-thumb">
 
             <div class="video-info">
                 <h3>Full Body</h3>

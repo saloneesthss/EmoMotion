@@ -15,14 +15,33 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $body = $_POST['body'];
     $category = $_POST['category'];
-    // $created_at = $_POST['created_at'];
 
-    $imageName = null;
-    if(is_uploaded_file($_FILES['image']['tmp_name'])) {
-        $imageName = $_FILES['image']['name'];
-        move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath . "/" . $imageName);
+    $imageName = [];
+    // if(is_uploaded_file($_FILES['image']['tmp_name'])) {
+    //     $imageName = $_FILES['image']['name'];
+    //     move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath . "/" . $imageName);
+    // }
+    // $sql = "insert into community_posts set user_id='$user_id', title='$title', body='$body', image='$imageName', category='$category', created_at=NOW()";
+    // $stmt = $con->prepare($sql);
+    // $stmt->execute();
+
+    foreach ($_FILES['image']['name'] as $key => $name) {
+        if ($_FILES['image']['error'][$key] !== 0) continue;
+        $tmpName = $_FILES['image']['tmp_name'][$key];
+        $uniqueName = time() . "_" . $name;
+        if (move_uploaded_file($tmpName, $uploadPath . "/" . $uniqueName)) {
+            $imageNames[] = $uniqueName;   // Store ONLY name
+        }
     }
-    $sql = "insert into community_posts set user_id='$user_id', title='$title', body='$body', image='$imageName', category='$category', created_at=NOW()";
+
+    $imageJSON = json_encode($imageNames);
+    $sql = "INSERT INTO community_posts SET 
+            user_id='$user_id', 
+            title='$title', 
+            body='$body', 
+            image='$imageJSON', 
+            category='$category', 
+            created_at=NOW()";
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
@@ -89,7 +108,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="char-count">0/3000 characters</div>
 
                     <div class="attach-row">
-                        <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, .webp" style="display: none;">
+                        <input type="file" id="image" name="image[]" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
                         <label for="image" class="attach-link">+ Attach Images</label>
                     </div>
 
@@ -97,7 +116,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <select class="dropdown-box" name="category" required>
                         <option>Select a tag</option>
                         <option value="#fitness">#fitness</option>
-                        <option value="#brfore-after-results">#before-after-results</option>
+                        <option value="#before-after-results">#before-after-results</option>
                         <option value="#fitness-journeys">#fitness-journeys</option>
                         <option value="#off-topic">#off-topic</option>
                         <option value="#feedback">#feedback</option>

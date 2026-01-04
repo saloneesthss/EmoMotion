@@ -62,3 +62,53 @@ textarea {
     color: black;
     margin-right: 10px;
 }
+
+.select-box {
+    position: relative;
+    width: 100%;
+}
+
+.select-btn {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.select-btn span {
+    font-size: 14px;
+    color: #333;
+}
+
+.options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+.options label {
+    display: block;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.options label input {
+    width: 20px;
+}
+
+.options label:hover {
+    background: #f0f0f0;
+}

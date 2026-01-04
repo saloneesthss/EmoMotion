@@ -22,13 +22,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             <span class="time"><?php echo date("M d, Y • h:i A", strtotime($row['created_at'])); ?></span>
         </div>
 
-        <?php if (!empty($row['image'])): ?>
-            <img style="width:150px;" src="../assets/community-images/<?php echo $row['image']; ?>">
-        <?php endif; ?>
-
         <h3><?php echo $row['title']; ?></h3>
         <p><?php echo $row['body']; ?></p>
+
+        <?php
+        $images = json_decode($row['image'], true);
+        if (!empty($images)) {
+            foreach ($images as $image) {
+                echo "<img src='../assets/community-images/$image' style='width:150px; margin:10px;'>";
+            }
+        }
+        ?>
     </div>
-<?php
-}
-?>
+<?php } ?>

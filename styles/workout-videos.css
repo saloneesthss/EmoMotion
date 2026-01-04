@@ -31,28 +31,43 @@ body {
     position: absolute;
     top: 110%;
     left: 0;
-    background: white;
-    width: 220px;
+    background: #ecebf9;
+    width: 250px;
     padding: 10px 0;
-    border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     display: none;
-    z-index: 50;
+    z-index: 150;
 }
 
 .collection-menu li {
     padding: 10px 15px;
+    position: relative;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .collection-menu li:hover {
-    background: #f2f2f2;
+    background: white;
+}
+
+.sub-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%; /* show to the right of parent */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    background: #ecebf9;
+    min-width: 180px;
+}
+
+.collection-menu li:hover .sub-menu {
+    display: block;
 }
 
 .small-card{
-    width: 45px;
-    height: 45px;
     float: right;
     position: relative;
     top: -230px;
@@ -65,22 +80,27 @@ body {
 .exercise-card:hover .small-card{
     position: relative;
     top: -230px;
-    right: 0px;
+    right: 20px;
     opacity: 1;
 }
 
 .small-card i{
     font-size: 24px;
+    color: #232b2b;
 }
 
-.small-card i:hover{
+.small-card i.favorited {
+    color: #6a3bbd;
+}
+
+.small-card i:hover {
     color: #6a3bbd;
 }
 
 .plan-card {
     position: relative;
     /* width: 260px; */
-    height: 310px; 
+    height: 330px; 
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -117,7 +137,7 @@ body {
 }
 
 .plan-card:hover .plan-details {
-    opacity: 1;
+    opacity: 0.9;
 }
 
 .plan-link {

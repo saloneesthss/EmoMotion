@@ -43,15 +43,40 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="collection-filter">
             <button class="collection-button">Browse By Collection ▾</button>         
             <ul class="collection-menu">
-                <li data-filter="abs">Abs</li>
-                <li data-filter="arms">Arms</li>
-                <li data-filter="legs">Legs</li>
-                <li data-filter="back">Back</li>
-                <li data-filter="chest">Chest</li>
-                <li data-filter="shoulders">Shoulders</li>
-                <li data-filter="fullbody">Full Body</li>
-                <li data-filter="cardio">Cardio</li>
-                <li data-filter="stretch">Stretch</li>
+                <li class="has-submenu" data-filter="">Browse By Target Area ▸
+                    <ul class="sub-menu">
+                        <li>Abs</li>
+                        <li>Waist</li>
+                        <li>Hips</li>
+                        <li>Legs</li>
+                        <li>Arms</li>
+                        <li>Back</li>
+                        <li>Full Body</li>
+                    </ul>
+                </li>
+                <li class="has-submenu" data-filter="">Browse By Current Mood ▸
+                    <ul class="sub-menu">
+                        <li>Happy</li>
+                        <li>Sad</li>
+                        <li>Angry</li>
+                        <li>Tired</li>
+                        <li>Energized</li>
+                    </ul>
+                </li>
+                <li class="has-submenu" data-filter="">Browse By Intensity ▸
+                    <ul class="sub-menu">
+                        <li>Low</li>
+                        <li>Medium</li>
+                        <li>High</li>
+                    </ul>
+                </li>
+                <li class="has-submenu" data-filter="">Browse By Fitness Level ▸
+                    <ul class="sub-menu">
+                        <li>Beginner</li>
+                        <li>Intermediate</li>
+                        <li>Advanced</li>
+                    </ul>
+                </li>
             </ul>
         </div>
 
@@ -99,5 +124,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </div>
     </div>
+
+    <script src="../scripts/favorites.js"></script>
 </body>
 </html>

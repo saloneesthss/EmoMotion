@@ -62,15 +62,18 @@ $posts->execute();
 
                         <h3><?php echo $row['title']; ?></h3>
                         <p><?php echo $row['body']; ?></p>
-                        <?php if (!empty($row['image'])): ?>
-                            <img src="../assets/community-images/<?php echo $row['image']; ?>" style="width:150px;">
-                        <?php endif; ?>
+                        <?php 
+                        $images = json_decode($row['image'], true);
+                        if (!empty($images)) {
+                            foreach ($images as $image) {
+                                echo "<img src='../assets/community-images/$image' style='width:150px; margin:10px;'>";
+                            }
+                        }
+                        ?>
 
                         <div class="post-actions">
-                            <button>💬 Reply</button>
-                            <button>⬆ 13</button>
-                            <button>💾 Save</button>
-                            <button>↗ Share</button>
+                            <button><i class="fa-regular fa-heart"></i> Like</button>
+                            <button><i class="fa-regular fa-comment"></i> Comment</button>
                         </div>
                     </div>
                     <?php endwhile; ?>

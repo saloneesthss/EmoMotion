@@ -66,6 +66,10 @@ $plans = $plan_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img class="exercise-image" src="../assets/gifs/<?php echo $video['file_path']; ?>" alt="Workout Video">
                     </div>
 
+                    <a href="" style="color:#232b2b;"><div class="small-card">
+                        <i class="fa fa-heart"></i>
+                    </div></a>
+
                     <div class="exercise-name">
                         <?php echo htmlspecialchars($video['title']); ?>
                     </div>
@@ -101,37 +105,40 @@ $plans = $plan_stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="exercise-grid">
                 <?php foreach ($plans as $plan): ?>
-                    <div class="exercise-card">
-
+                <a href="plan-details.php?id=<?= $video['id'] ?>" class="plan-link">
+                    <div class="exercise-card plan-card">
                         <div class="exercise-image-container">
                             <img class="exercise-image" src="../assets/plans-thumbnail/<?php echo $plan['file_path']; ?>" alt="Workout Plan">
                         </div>
 
-                        <div class="exercise-name">
+                        <div class="exercise-name plan-title">
                             <?php echo htmlspecialchars($plan['plan_name']); ?>
                         </div>
 
-                        <div class="exercise-price">
-                            Target Area: <?php echo htmlspecialchars($plan['target_area']); ?>
-                        </div>
+                        <div class="plan-details">
+                            <div class="exercise-price">
+                                Target Area: <?php echo htmlspecialchars($plan['target_area']); ?>
+                            </div>
 
-                        <div class="exercise-target">
-                            Mood: <?php echo htmlspecialchars($plan['mood']); ?>
-                        </div>
+                            <div class="exercise-target">
+                                Mood: <?php echo htmlspecialchars($plan['mood']); ?>
+                            </div>
 
-                        <div class="exercise-equipment">
-                            Fitness Level: <?php echo htmlspecialchars($plan['fitness_level']); ?>
-                        </div>
+                            <div class="exercise-equipment">
+                                Fitness Level: <?php echo htmlspecialchars($plan['fitness_level']); ?>
+                            </div>
 
-                        <div class="exercise-equipment">
-                            Intensity: <?php echo htmlspecialchars($plan['intensity']); ?>
-                        </div>
+                            <div class="exercise-equipment">
+                                Intensity: <?php echo htmlspecialchars($plan['intensity']); ?>
+                            </div>
 
-                        <div class="exercise-equipment">
-                            Duration: <?php echo $plan['duration']; ?> seconds
+                            <div class="exercise-equipment">
+                                Duration: <?php echo $plan['duration']; ?> seconds
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
+                </a>
             </div>
         </div>
     </div>

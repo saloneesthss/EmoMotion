@@ -23,6 +23,6 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-header("Location:login.php?success=You are logged out successfully.");
+header("Location:pages/index.php?success=You are logged out successfully.");
 die;
 ?>

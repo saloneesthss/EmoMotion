@@ -62,9 +62,14 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $post['title'] ?></td>
                 <td><?php echo $post['body'] ?></td>
                 <td>
-                    <?php if (!empty($post['image']) && file_exists('../assets/community-images/' . $post['image'])) { ?>
-                        <img width="100" src="../assets/community-images/<?php echo $post['image']; ?>" alt="">
-                    <?php } ?>
+                    <?php 
+                        $images = json_decode($post['image'], true);
+                        if (!empty($images)) {
+                            foreach ($images as $image) {
+                                echo "<img src='../assets/community-images/$image' style='width:100px; margin:2px;'>";
+                            }
+                        }
+                    ?>
                 </td>
                 <td><?php echo $post['category'] ?></td>
                 <td><?php echo $post['created_at'] ?></td>

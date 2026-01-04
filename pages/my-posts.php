@@ -2,6 +2,8 @@
 session_start();
 require_once '../components/user-navbar.php';
 require_once '../connection.php';
+
+$user_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
