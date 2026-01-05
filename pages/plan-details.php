@@ -8,10 +8,17 @@ if (isset($_SESSION['user_id'])) {
     require_once '../components/navbar.php';
 }
 
-$sql = "select * from workout_plans";
+$plan_id = (int) $_GET['id']; 
+$sql = "select * from workout_plans where id = $plan_id";
 $stmt = $con->prepare($sql);
 $stmt->execute();
 $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (!$plans) {
+    echo "Plan not found!";
+    exit;
+}
+
+$video_list = json_decode($plans['video_list'], true);
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +47,21 @@ $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="plan-meta">
             <span><i class="fa-regular fa-calendar"></i> <?php echo $plan['duration']; ?> Days</span>
-            <span><i class="fa-solid fa-stopwatch"></i> <?php echo $plan['duration']; ?> Sec/Day</span>
+            <?php
+                $seconds = $plan['time_duration'];
+                $minutes = floor($seconds / 60);
+                $remainingSeconds = $seconds % 60;
+                if ($minutes > 0) {
+                    if ($remainingSeconds > 0) {
+                        $readable = $minutes . " Minute" . ($minutes > 1 ? "s " : " ") . $remainingSeconds . " Second" . ($remainingSeconds > 1 ? "s" : "");
+                    } else {
+                        $readable = $minutes . " Minute" . ($minutes > 1 ? "s" : "");
+                    }
+                } else {
+                    $readable = $remainingSeconds . " Second" . ($remainingSeconds > 1 ? "s" : "");
+                }
+            ?>
+            <span><i class="fa-solid fa-stopwatch"></i> <?= $readable ?> /Day</span>
         </div>
 
         <h4 class="section-label">January 2026</h4>
@@ -77,13 +98,36 @@ $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <img src="" class="video-thumb">
 
             <div class="video-info">
-                <h3>Full Body</h3>
+                <!-- <h3>Full Body</h3>
                 <span class="video-tag"><i class="fa-regular fa-compass"></i> Full Body</span>
-                <p class="video-meta">43K views • Jan 26</p>
+                <p class="video-meta">43K views • Jan 26</p> -->
+
+                <?php if(!empty($video_list)): ?>
+                    <h3>Workout Videos:</h3>
+                    <ul>
+                        <?php foreach($video_list as $video_path): ?>
+                            <li><?= htmlspecialchars($video_path) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
 
-            <div class="right-icons">
-                <span class="duration">21:04</span>
+            <div class="right-icons">  
+                <?php
+                    $seconds = $plan['time_duration'];
+                    $minutes = floor($seconds / 60);
+                    $remainingSeconds = $seconds % 60;
+                    if ($minutes > 0) {
+                        if ($remainingSeconds > 9) {
+                            $readable = $minutes . ":" . $remainingSeconds . " mins";
+                        } else {
+                            $readable = $minutes . ":0" . $remainingSeconds . " mins";
+                        }
+                    } else {
+                        $readable = $remainingSeconds . " secs";
+                    }
+                ?>              
+                <span class="duration"><?= $readable ?></span>
                 <i class="fa-regular fa-circle-question info-icon"></i>
                 <i class="fa-regular fa-heart heart-icon"></i>
             </div>

@@ -110,7 +110,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
 
                             <div class="exercise-equipment">
-                                Duration: <?php echo $video['duration']; ?> seconds
+                                Duration: <?php echo $video['time_duration']; ?> seconds
                             </div>
                         </div>
 

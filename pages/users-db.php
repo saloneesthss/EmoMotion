@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once '../logincheck.php';
 require_once '../components/user-navbar.php';
 ?>
 

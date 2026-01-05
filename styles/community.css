@@ -166,3 +166,18 @@
     cursor: pointer;
     color: #444;
 }
+
+.tag-header {
+    margin: 20px 0;
+}
+
+.my-posts {
+    margin-top: 0;
+}
+
+.post-header-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+}

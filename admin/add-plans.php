@@ -10,13 +10,6 @@ $stmtvdo=$con->prepare("select * from workout_videos");
 $stmtvdo->execute();
 $videos[]=$stmtvdo->fetchAll(PDO::FETCH_ASSOC);
 
-// $sql = "SELECT v.id, v.title, v.file_path, p.* FROM workout_plans p INNER JOIN workout_videos v ON ";
-// $result = $con->query($sql);
-// if ($result->rowCount() > 0) {
-//     while ($row = $result->fetchAll(PDO::FETCH_ASSOC)) {
-//         $videos[] = $row;
-//     }
-// }
 $selectedVideos = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -27,22 +20,55 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fitness_level = $_POST['fitness_level'];
     $duration = $_POST['duration'];
     $description = $_POST['description'];
-    $video_list = $_POST['videos[]'];
 
-    $file_name = null;
-    if(is_uploaded_file($_FILES['thumbnail']['tmp_name'])) {
-        $file_name = $_FILES['thumbnail']['name'];
-        move_uploaded_file($_FILES['thumbnail']['tmp_name'], $upload_path . '/' . $file_name);
+    $selectedVideos = $_POST['videos'] ?? [];
+
+    $video_list = json_encode($selectedVideos);
+
+    $totalDuration = 0;
+
+    if (!empty($selectedVideos)) {
+        $placeholders = rtrim(str_repeat('?,', count($selectedVideos)), ',');
+        $stmtDur = $con->prepare("SELECT duration FROM workout_videos WHERE file_path IN ($placeholders)");
+        $stmtDur->execute($selectedVideos);
+        $videoDurations = $stmtDur->fetchAll(PDO::FETCH_COLUMN);
+
+        // Add all durations
+        foreach ($videoDurations as $dur) {
+            $totalDuration += (int)$dur;
+        }
     }
 
-    $selectedVideos = $_POST['file_path'] ?? [];
-    
-    $sql = "insert into workout_plans set plan_name='$plan_name', file_path='$file_name', target_area='$target_area', mood='$mood', intensity='$intensity', fitness_level='$fitness_level', duration='$duration', description='$description', video_list='$video_list'";
-    $stmt = $con->prepare($sql);
-    $stmt->execute();
+    $file_name = null;
+    if (is_uploaded_file($_FILES['thumbnail']['tmp_name'])) {
+        $file_name = $_FILES['thumbnail']['name'];
+        move_uploaded_file(
+            $_FILES['thumbnail']['tmp_name'],
+            $upload_path . '/' . $file_name
+        );
+    }
 
+    $sql = "INSERT INTO workout_plans 
+            (plan_name, file_path, target_area, mood, intensity, fitness_level, duration, time_duration, description, video_list)
+            VALUES 
+            (:plan_name, :file_path, :target_area, :mood, :intensity, :fitness_level, :duration, :time_duration, :description, :video_list)";
+
+    $stmt = $con->prepare($sql);
+
+    $stmt->execute([
+        ':plan_name' => $plan_name,
+        ':file_path' => $file_name,
+        ':target_area' => $target_area,
+        ':mood' => $mood,
+        ':intensity' => $intensity,
+        ':fitness_level' => $fitness_level,
+        ':duration' => $duration,
+        ':time_duration' => $totalDuration,
+        ':description' => $description,
+        ':video_list' => $video_list
+    ]);
     header("Location: add-plans.php?success=Plan added successfully.");
-    die;
+    exit;
 }
 ?>
 
@@ -134,6 +160,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="number" name="duration" required />
                 </div>
 
+                <?php if (isset($videos[0]) && is_array($videos[0])) {
+                    $videos = $videos[0];
+                } ?>
                 <div class="select-box">
                     <label>Select Videos</label>
                     <div class="select-btn" onclick="toggleOptions()">
@@ -143,9 +172,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="options">
                         <?php foreach ($videos as $video): ?>
                             <label>
-                                <input type="checkbox" name="videos[]" value="<?= htmlspecialchars($video['file_path']) ?>"
+                                <input type="checkbox"
+                                    name="videos[]"
+                                    value="<?= htmlspecialchars($video['file_path']) ?>"
                                     <?= in_array($video['file_path'], $selectedVideos) ? 'checked' : '' ?>>
-                                <?= htmlspecialchars($video['title']) ?></br>
+                                <?= htmlspecialchars($video['title']) ?><br>
                             </label>
                         <?php endforeach; ?>
                     </div>
