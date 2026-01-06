@@ -9,7 +9,10 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $plan_id = (int) $_GET['id']; 
-$sql = "select * from workout_plans where id = $plan_id";
+$sql = "SELECT p.*, v.title as video_title, v.file_path as video_file, v.duration as time
+FROM workout_plans p
+JOIN workout_videos v
+  ON JSON_CONTAINS(p.video_list, JSON_QUOTE(v.file_path)) WHERE p.id=$plan_id";
 $stmt = $con->prepare($sql);
 $stmt->execute();
 $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -18,7 +21,18 @@ if (!$plans) {
     exit;
 }
 
-$video_list = json_decode($plans['video_list'], true);
+$plan = $plans[0];
+$video_list = [];
+foreach($plans as $row){
+    if(!empty($row['video_file'])){
+        $video_list[] = [
+            'title' => $row['video_title'],
+            'file' => $row['video_file'],
+            'time' => $row['time'],
+        ];
+    }
+// $video_list = json_decode($plans['video_list'], true);
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +47,6 @@ $video_list = json_decode($plans['video_list'], true);
 </head>
 <body>
 <div class="page-container">
-    <?php foreach($plans as $plan) { ?>
     <div class="left-sidebar">
         <?php if (!empty($plan['file_path']) && file_exists('../assets/plans-thumbnail/' . $plan['file_path'])) { ?>
             <img class="plan-thumb" src="../assets/plans-thumbnail/<?php echo $plan['file_path']; ?>" alt="">
@@ -61,7 +74,7 @@ $video_list = json_decode($plans['video_list'], true);
                     $readable = $remainingSeconds . " Second" . ($remainingSeconds > 1 ? "s" : "");
                 }
             ?>
-            <span><i class="fa-solid fa-stopwatch"></i> <?= $readable ?> /Day</span>
+            <span><i class="fa-solid fa-stopwatch"></i> <?= $readable ?>/Day</span>
         </div>
 
         <h4 class="section-label">January 2026</h4>
@@ -75,56 +88,45 @@ $video_list = json_decode($plans['video_list'], true);
         <h4 class="section-label">Details</h4>
         <p class="plan-description">
             <?php echo $plan['description']; ?>
-            <!-- <a href="#" class="read-more">Read More</a> -->
         </p>
     </div>
 
     <div class="right-content">
         <h1 class="main-title"><?php echo $plan['plan_name']; ?></h1>
 
-        <!-- <div class="days-nav">
-            <button class="day active">Day 1</button>
-            <button class="day">Day 2</button>
-            <button class="day">Day 3</button>
-            <button class="day rest">Rest Day</button>
-            <button class="day">Day 5</button>
-            <button class="day">Day 6</button>
-            <button class="day">Day 7</button>
-        </div>
-
-        <h2 class="workout-heading">Day 1’s Workout</h2> -->
-
+        <?php foreach ($video_list as $gif): ?>
         <div class="workout-card">
-            <img src="" class="video-thumb">
+            <img 
+                src="../assets/gifs/<?php echo htmlspecialchars($gif['file']); ?>" 
+                class="video-thumb"
+                alt="Video Thumbnail">
 
             <div class="video-info">
-                <!-- <h3>Full Body</h3>
-                <span class="video-tag"><i class="fa-regular fa-compass"></i> Full Body</span>
-                <p class="video-meta">43K views • Jan 26</p> -->
-
-                <?php if(!empty($video_list)): ?>
-                    <h3>Workout Videos:</h3>
-                    <ul>
-                        <?php foreach($video_list as $video_path): ?>
-                            <li><?= htmlspecialchars($video_path) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php endif; ?>
+                <h3><?= htmlspecialchars($gif['title']) ?></h3>
+                <span class="video-tag">
+                    <i class="fa-regular fa-compass"></i> 
+                    <?= htmlspecialchars($plan['target_area']) ?>
+                </span>
+                <p class="video-meta"><?= htmlspecialchars($plan['intensity']) ?> Intensity • <?= htmlspecialchars($plan['fitness_level']) ?></p>
             </div>
 
             <div class="right-icons">  
                 <?php
-                    $seconds = $plan['time_duration'];
+                    $seconds = $gif['time'];
                     $minutes = floor($seconds / 60);
                     $remainingSeconds = $seconds % 60;
                     if ($minutes > 0) {
                         if ($remainingSeconds > 9) {
-                            $readable = $minutes . ":" . $remainingSeconds . " mins";
+                            $readable = $minutes . ":" . $remainingSeconds;
                         } else {
-                            $readable = $minutes . ":0" . $remainingSeconds . " mins";
+                            $readable = $minutes . ":0" . $remainingSeconds;
                         }
                     } else {
-                        $readable = $remainingSeconds . " secs";
+                        if ($remainingSeconds > 9) {
+                            $readable = "0:" . $remainingSeconds;
+                        } else {
+                            $readable = "0:0" . $remainingSeconds;
+                        }
                     }
                 ?>              
                 <span class="duration"><?= $readable ?></span>
@@ -132,8 +134,8 @@ $video_list = json_decode($plans['video_list'], true);
                 <i class="fa-regular fa-heart heart-icon"></i>
             </div>
         </div>
+        <?php endforeach; ?>
     </div>
-    <?php } ?>
 </div>
 </body>
 </html>

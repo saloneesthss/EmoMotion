@@ -113,12 +113,6 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 Duration: <?php echo $video['time_duration']; ?> seconds
                             </div>
                         </div>
-
-                        <!-- <button class="view-more-button"
-                            data-video-id="<?php echo $video['id']; ?>">
-                            View More
-                        </button> -->
-
                     </div>
                 </a>
             <?php endforeach; ?>

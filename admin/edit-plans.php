@@ -1,9 +1,24 @@
 <?php
 require_once "logincheck.php";
 
+if (!isset($_GET['id'])) {
+    header("Location:add-plans.php?error=Please provide a valid ID for the plan.");
+    die;
+}
+
 $success = "";
 $error = "";
 $upload_path = "../assets/plans-thumbnail";
+$id=(int) $_GET['id'];
+
+$sql="select * from workout_plans where id=$id";
+$stmt=$con->prepare($sql);
+$stmt->execute();
+$plans=$stmt->fetch(PDO::FETCH_ASSOC);
+if(!$plans) {
+    header("Location:add-plans.php?error=No plan found with the given ID.");
+    die;
+}
 
 $stmtvdo=$con->prepare("select * from workout_videos");
 $stmtvdo->execute();
@@ -32,14 +47,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmtDur->execute($selectedVideos);
         $videoDurations = $stmtDur->fetchAll(PDO::FETCH_COLUMN);
 
-        // Add all durations
         foreach ($videoDurations as $dur) {
             $totalDuration += (int)$dur;
         }
     }
 
-    $file_name = null;
+    $imageNameOld = $_POST['image_name_old'];
+    $file_name = $imageNameOld;
     if (is_uploaded_file($_FILES['thumbnail']['tmp_name'])) {
+        if (!empty($imageNameOld) && file_exists('../assets/plans-thumbnail/' . $imageNameOld)) {
+            unlink('../assets/plans-thumbnail/' . $imageNameOld);
+        }
         $file_name = $_FILES['thumbnail']['name'];
         move_uploaded_file(
             $_FILES['thumbnail']['tmp_name'],
@@ -47,10 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         );
     }
 
-    $sql = "INSERT INTO workout_plans 
-            (plan_name, file_path, target_area, mood, intensity, fitness_level, duration, time_duration, description, video_list)
-            VALUES 
-            (:plan_name, :file_path, :target_area, :mood, :intensity, :fitness_level, :duration, :time_duration, :description, :video_list)";
+    $sql = "update workout_plans set plan_name=:plan_name, file_path=:file_path, target_area=:target_area, mood=:mood, intensity=:intensity, fitness_level=:fitness_level, duration=:duration, time_duration=:time_duration, description=:description, video_list=:video_list where id=$id";
 
     $stmt = $con->prepare($sql);
 
@@ -66,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ':description' => $description,
         ':video_list' => $video_list
     ]);
-    header("Location: add-plans.php?success=Plan added successfully.");
+    header("Location:plans-list.php?success=Plan added successfully.");
     exit;
 }
 ?>
@@ -98,65 +113,69 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="right-side"><a href="logout.php">Logout</a></div>
     </div>
     
-    <div class="title">Add Workout Plan</div>
+    <div class="title">Edit Workout Plan</div>
 
     <div class="container">
         <form method="POST" enctype="multipart/form-data">
             <div class="grid">
                 <div>
                     <label>Plan Name</label>
-                    <input type="text" name="plan_name" required />
+                    <input type="text" name="plan_name" value="<?php echo $plans['plan_name'] ?>" required />
                 </div>
 
                 <div>
-                    <label>Upload Thumbnail</label>
+                    <label>Update Thumbnail</label>
                     <input type="file" name="thumbnail" accept=".jpg,.jpeg,.png,.webp,.avif" required />
+                    <input type="hidden" name="image_name_old" value="<?php echo $plans['file_path']; ?>">
+                    <?php if (!empty($plans['file_path']) && file_exists('../assets/plans-thumbnail/' . $plans['file_path'])) { ?>
+                        <img width="100" src="../assets/plans-thumbnail/<?php echo $plans['file_path']; ?>" alt="">
+                    <?php } ?>
                 </div>
 
                 <div>
                     <label>Target Area</label>
                     <select name="target_area" required>
-                        <option>Waist</option>
-                        <option>Hips</option>
-                        <option>Abs</option>
-                        <option>Legs</option>
-                        <option>Arms</option>
-                        <option>Back</option>
+                        <option <?= ($plans['target_area'] == 'Waist') ? 'selected' : '' ?>>Waist</option>
+                        <option <?= ($plans['target_area'] == 'Hips') ? 'selected' : '' ?>>Hips</option>
+                        <option <?= ($plans['target_area'] == 'Abs') ? 'selected' : '' ?>>Abs</option>
+                        <option <?= ($plans['target_area'] == 'Legs') ? 'selected' : '' ?>>Legs</option>
+                        <option <?= ($plans['target_area'] == 'Arms') ? 'selected' : '' ?>>Arms</option>
+                        <option <?= ($plans['target_area'] == 'Back') ? 'selected' : '' ?>>Back</option>
                     </select>
                 </div>
 
                 <div>
                     <label>Mood Category</label>
                     <select name="mood" required>
-                        <option>Happy</option>
-                        <option>Sad</option>
-                        <option>Angry</option>
-                        <option>Tired</option>
-                        <option>Energized</option>
+                        <option <?= ($plans['mood'] == 'Happy') ? 'selected' : '' ?>>Happy</option>
+                        <option <?= ($plans['mood'] == 'Sad') ? 'selected' : '' ?>>Sad</option>
+                        <option <?= ($plans['mood'] == 'Angry') ? 'selected' : '' ?>>Angry</option>
+                        <option <?= ($plans['mood'] == 'Tired') ? 'selected' : '' ?>>Tired</option>
+                        <option <?= ($plans['mood'] == 'Energized') ? 'selected' : '' ?>>Energized</option>
                     </select>
                 </div>
 
                 <div>
                     <label>Intensity</label>
                     <select name="intensity" required>
-                        <option>Low</option>
-                        <option>Medium</option>
-                        <option>High</option>
+                        <option <?= ($plans['intensity'] == 'Low') ? 'selected' : '' ?>>Low</option>
+                        <option <?= ($plans['intensity'] == 'Medium') ? 'selected' : '' ?>>Medium</option>
+                        <option <?= ($plans['intensity'] == 'High') ? 'selected' : '' ?>>High</option>
                     </select>
                 </div>
 
                 <div>
                     <label>Fitness Level</label>
                     <select name="fitness_level" required>
-                        <option>Beginner</option>
-                        <option>Intermediate</option>
-                        <option>Advanced</option>
+                        <option <?= ($plans['fitness_level'] == 'Beginner') ? 'selected' : '' ?>>Beginner</option>
+                        <option <?= ($plans['fitness_level'] == 'Intermediate') ? 'selected' : '' ?>>Intermediate</option>
+                        <option <?= ($plans['fitness_level'] == 'Advanced') ? 'selected' : '' ?>>Advanced</option>
                     </select>
                 </div>
 
                 <div>
                     <label>Duration (Days)</label>
-                    <input type="number" name="duration" required />
+                    <input type="number" name="duration" value="<?php echo $plans['duration'] ?>" required />
                 </div>
 
                 <?php if (isset($videos[0]) && is_array($videos[0])) {
@@ -183,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div style="grid-column: span 2;">
                     <label>Description</label>
-                    <textarea name="description"></textarea>
+                    <textarea name="description"><?php echo $plans['description'] ?></textarea>
                 </div>
             </div>
 

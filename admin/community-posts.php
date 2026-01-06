@@ -29,8 +29,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <a href="dashboard.php"><i class="fa-solid fa-gauge"></i> Dashboard</a>
         <a href="user-details.php"><i class="fa-solid fa-users"></i> Users</a>
-        <a href="add-videos.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
-        <a href="add-plans.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
+        <a href="videos-list.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
+        <a href="plans-list.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
         <a href="community-posts.php"><i class="fa-solid fa-comment-dots"></i> Community Posts</a>
         <a href="report.php"><i class="fa-solid fa-file-lines"></i> User Report</a>
     </div>
@@ -45,19 +45,19 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="subtitle">List of all community posts made by registered users in the system</div>
         <table>
             <tr>
-                <th></th>
+                <!-- <th></th> -->
                 <th>Name</th>
                 <th>Title</th>
                 <th>Body</th>
                 <th>Image</th>
                 <th>Category</th>
                 <th>Created at</th>
-                <th></th>
+                <!-- <th></th> -->
             </tr>
 
             <?php foreach ($posts as $post) { ?>
             <tr>
-                <td><input type="checkbox"></td>
+                <!-- <td><input type="checkbox"></td> -->
                 <td><?php echo $post['username'];?></td>
                 <td><?php echo $post['title'] ?></td>
                 <td><?php echo $post['body'] ?></td>
@@ -73,7 +73,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </td>
                 <td><?php echo $post['category'] ?></td>
                 <td><?php echo $post['created_at'] ?></td>
-                <td><span class="trash">🗑</span></td>
+                <!-- <td><span class="trash">🗑</span></td> -->
             </tr>
             <?php } ?>
         </table>

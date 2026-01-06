@@ -17,8 +17,8 @@ require_once "logincheck.php";
 
         <a href="dashboard.php"><i class="fa-solid fa-gauge"></i> Dashboard</a>
         <a href="user-details.php"><i class="fa-solid fa-users"></i> Users</a>
-        <a href="add-videos.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
-        <a href="add-plans.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
+        <a href="videos-list.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
+        <a href="plans-list.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
         <a href="community-posts.php"><i class="fa-solid fa-comment-dots"></i> Community Posts</a>
         <a href="report.php"><i class="fa-solid fa-file-lines"></i> User Report</a>
     </div>

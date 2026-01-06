@@ -122,8 +122,6 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 
                 <label class="form-label">Select a Tag</label>
                 <select name="category" id="category" class="dropdown-box" required>
-                    <option value="">Select a Tag</option>
-
                     <?php 
                     $tags = ["#fitness", "#before-after-results", "#fitness-journeys", "#off-topic", "#feedback", "#tech-support"];
                     foreach ($tags as $tag) { ?>

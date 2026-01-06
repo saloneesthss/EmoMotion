@@ -59,7 +59,8 @@ $plans = $plan_stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             
             <div class="exercise-grid">
-                <?php foreach ($videos as $video): ?>
+                <?php $latestFour = array_slice($videos, 0, 4); ?>
+                <?php foreach ($latestFour as $video): ?>
                 <div class="exercise-card">
 
                     <div class="exercise-image-container">
@@ -104,8 +105,9 @@ $plans = $plan_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <button id="view-all-plans">View All Plans</button>
             </div>
             <div class="exercise-grid">
-                <?php foreach ($plans as $plan): ?>
-                <a href="plan-details.php?id=<?= $video['id'] ?>" class="plan-link">
+                <?php $latestFour = array_slice($plans, 0, 4); ?>
+                <?php foreach ($latestFour as $plan): ?>
+                <a href="plan-details.php?id=<?= $plan['id'] ?>" class="plan-link">
                     <div class="exercise-card plan-card">
                         <div class="exercise-image-container">
                             <img class="exercise-image" src="../assets/plans-thumbnail/<?php echo $plan['file_path']; ?>" alt="Workout Plan">
@@ -133,7 +135,7 @@ $plans = $plan_stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
 
                             <div class="exercise-equipment">
-                                Duration: <?php echo $plan['duration']; ?> seconds
+                                Duration: <?php echo $plan['time_duration']; ?> seconds
                             </div>
                         </div>
                     </div>

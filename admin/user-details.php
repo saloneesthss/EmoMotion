@@ -21,8 +21,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <a href="dashboard.php"><i class="fa-solid fa-gauge"></i> Dashboard</a>
         <a href="user-details.php"><i class="fa-solid fa-users"></i> Users</a>
-        <a href="add-videos.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
-        <a href="add-plans.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
+        <a href="videos-list.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
+        <a href="plans-list.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
         <a href="community-posts.php"><i class="fa-solid fa-comment-dots"></i> Community Posts</a>
         <a href="report.php"><i class="fa-solid fa-file-lines"></i> User Report</a>
     </div>
@@ -37,18 +37,18 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="subtitle">List of all registered users in the system</div>
         <table>
             <tr>
-                <th></th>
+                <!-- <th></th> -->
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email Address</th>
                 <th>BMI</th>
                 <th>Joined On</th>
-                <th></th>
+                <!-- <th></th> -->
             </tr>
 
             <?php foreach ($users as $user) { ?>
             <tr>
-                <td><input type="checkbox"></td>
+                <!-- <td><input type="checkbox"></td> -->
                 <td><?php echo $user['id'] ?></td>
                 <td>
                     <div class="row">
@@ -61,7 +61,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $user['email'] ?></td>
                 <td><?php echo $user['bmi'] ?></td>
                 <td><?php echo $user['joined_date'] ?></td>
-                <td><span class="trash">🗑</span></td>
+                <!-- <td><span class="trash">🗑</span></td> -->
             </tr>
             <?php } ?>
         </table>

@@ -78,8 +78,39 @@ th {
     color: #374151;
 }
 
-.trash {
+.edit a {
     cursor: pointer;
     font-size: 18px;
-    color: #ef4444;
+    color: blue;
+    margin-right: 12px;
+    text-decoration: none;
+}
+
+.trash a {
+    cursor: pointer;
+    font-size: 18px;
+    color: red;
+    text-decoration: none;
+}
+
+.add-btn {
+    background: #6a3bbd;
+    color: white;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+.add-btn:hover {
+    background: #4b1f96;
+}
+
+.add-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-right: 20px;
 }
