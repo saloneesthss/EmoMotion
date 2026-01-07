@@ -1,3 +1,14 @@
+function handleFavoriteClick(videoId, iconElement) {
+    let loggedIn = iconElement.getAttribute("data-loggedin");
+
+    if (loggedIn === "0") {
+        window.location.href = "../login.php";
+        return;
+    }
+
+    toggleFavorite(videoId);
+}
+
 function toggleFavorite(exerciseId) {
     let favorites = JSON.parse(localStorage.getItem("favoriteExercises")) || {};
     let card = document.querySelector(`.exercise-card[data-id='${exerciseId}']`);
@@ -8,7 +19,6 @@ function toggleFavorite(exerciseId) {
     if (favorites[exerciseId]) {
         delete favorites[exerciseId];
         icon.classList.remove("favorited");
-        console.log("Added");
     } else {
         favorites[exerciseId] = {
             id: exerciseId,
@@ -17,7 +27,6 @@ function toggleFavorite(exerciseId) {
             img: card.dataset.img
         };
         icon.classList.add("favorited");
-        console.log("Added");
     }
     localStorage.setItem("favoriteExercises", JSON.stringify(favorites));
 }

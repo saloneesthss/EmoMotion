@@ -87,7 +87,11 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <a><div class="small-card">
-                        <i class="fa fa-heart" id="fav-<?php echo $video['id'];?>" onclick="toggleFavorite(<?php echo $video['id']; ?>)"></i>
+                        <?php $isLoggedIn = isset($_SESSION['user_id']) ? '1' : '0'; ?>
+                        <i class="fa fa-heart" 
+                            id="fav-<?php echo $video['id'];?>" 
+                            data-loggedin="<?php echo $isLoggedIn; ?>"
+                            onclick="handleFavoriteClick(<?php echo $video['id']; ?>, this)"></i>
                     </div></a>
 
                     <div class="exercise-name">

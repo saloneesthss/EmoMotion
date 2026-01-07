@@ -35,7 +35,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="content">
         <div class="add-header">
             <div>
-                <div class="page-title">Workout Videos</div>
+                <div class="page-title">Workout Plans</div>
                 <div class="subtitle">List of all workout plans posted in the system</div>
             </div>
             <button class="add-btn" onclick="location.href='add-plans.php'">Add</button>
@@ -74,7 +74,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $video['time_duration'] ?>s</td>
                 <td>
                     <span class="edit"><a href="edit-plans.php?id=<?php echo $video['id']; ?>">🖊</a></span>
-                    <span class="trash"><a href="">🗑</a></span>
+                    <span class="trash"><a href="delete-plans.php?id=<?php echo $video['id'];?>" onclick="return confirm('Are you sure to delete this plan?')">🗑</a></span>
                 </td>
             </tr>
             <?php } ?>

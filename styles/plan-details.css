@@ -45,9 +45,14 @@ body {
 
 .small-card i{
     font-size: 24px;
+    color: #232b2b;
 }
 
-.small-card i:hover{
+.small-card i.favorited {
+    color: #6a3bbd;
+}
+
+.small-card i:hover {
     color: #6a3bbd;
 }
 

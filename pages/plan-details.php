@@ -54,9 +54,13 @@ foreach($plans as $row){
         
         <h2 class="plan-title"><?php echo $plan['plan_name']; ?></h2>
 
-        <div class="small-card">
-            <i class="fa fa-heart"></i>
-        </div>
+        <a><div class="small-card">
+            <?php $isLoggedIn = isset($_SESSION['user_id']) ? '1' : '0'; ?>
+            <i class="fa fa-heart" 
+                id="fav-<?php echo $video['id'];?>" 
+                data-loggedin="<?php echo $isLoggedIn; ?>"
+                onclick="handleFavoriteClick(<?php echo $video['id']; ?>, this)"></i>
+        </div></a>
 
         <div class="plan-meta">
             <span><i class="fa-regular fa-calendar"></i> <?php echo $plan['duration']; ?> Days</span>
@@ -137,5 +141,7 @@ foreach($plans as $row){
         <?php endforeach; ?>
     </div>
 </div>
+
+<script src="../scripts/favorites.js"></script>
 </body>
 </html>

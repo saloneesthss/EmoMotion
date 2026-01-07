@@ -74,7 +74,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $video['description'] ?></td>
                 <td>
                     <span class="edit"><a href="edit-videos.php?id=<?php echo $video['id']; ?>">🖊</a></span>
-                    <span class="trash"><a href="">🗑</a></span>
+                    <span class="trash"><a href="delete-videos.php?id=<?php echo $video['id'];?>" onclick="return confirm('Are you sure to delete this video?')">🗑</a></span>
                 </td>
             </tr>
             <?php } ?>
