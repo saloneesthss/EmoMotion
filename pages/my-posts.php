@@ -4,6 +4,9 @@ require_once '../components/user-navbar.php';
 require_once '../connection.php';
 
 $user_id = $_SESSION['user_id'];
+$userstmt = $con->prepare("SELECT * FROM users WHERE id = $user_id");
+$userstmt->execute();
+$user = $userstmt->fetch(PDO::FETCH_ASSOC);
 
 $posts = $con->prepare("SELECT p.*, u.name, u.image AS user_image FROM community_posts p JOIN users u ON p.user_id = u.id WHERE p.user_id=$user_id ORDER BY p.id DESC");
 $posts->execute();
@@ -24,11 +27,11 @@ $posts->execute();
 <body>
     <div class="layout">
         <div class="sidebar">
-            <a href="user-profile.php"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-            <a href="my-plans.php"><i class="fa-solid fa-dumbbell"></i> My Plans</a>
-            <a href="my-workouts.php"><i class="fa-solid fa-video"></i> My Workouts</a>
-            <a href="my-posts.php"><i class="fa-solid fa-comments"></i> My Posts</a>
-            <a href="settings.php"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="user-profile.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+            <a href="my-plans.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-dumbbell"></i> My Plans</a>
+            <a href="my-workouts.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-video"></i> My Workouts</a>
+            <a href="my-posts.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-comments"></i> My Posts</a>
+            <a href="settings.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-gear"></i> Settings</a>
             <a href="../logout.php" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         </div>
     </div>

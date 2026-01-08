@@ -35,8 +35,8 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../styles/navbar.css">
     <link rel="stylesheet" href="../styles/index.css">
-    <title>EmoMotion</title>
     <link rel="stylesheet" href="../styles/workout-videos.css">
+    <title>EmoMotion</title>
 </head>
 <body>
     <div class='container'>
@@ -91,7 +91,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <i class="fa fa-heart" 
                             id="fav-<?php echo $video['id'];?>" 
                             data-loggedin="<?php echo $isLoggedIn; ?>"
-                            onclick="handleFavoriteClick(<?php echo $video['id']; ?>, this)"></i>
+                            onclick="handleFavoriteClick(<?php echo $video['id'];?>, 0, this)"></i>
                     </div></a>
 
                     <div class="exercise-name">
@@ -117,12 +117,6 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="exercise-equipment">
                         Duration: <?php echo $video['duration']; ?> seconds
                     </div>
-
-                    <!-- <button class="view-more-button"
-                        data-video-id="<?php echo $video['id']; ?>">
-                        View More
-                    </button> -->
-
                 </div>
             <?php endforeach; ?>
         </div>

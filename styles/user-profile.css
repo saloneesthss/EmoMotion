@@ -62,32 +62,6 @@ body {
     width: calc(100% - 250px);
 }
 
-/* TOPBAR
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #4b1f96;
-    padding: 15px 20px;
-    border-radius: 12px;
-    color: white;
-    margin-bottom: 25px;
-}
-
-.searchbox {
-    width: 300px;
-    padding: 10px 15px;
-    border-radius: 20px;
-    border: none;
-    outline: none;
-}
-
-.top-right i {
-    margin-left: 20px;
-    font-size: 20px;
-    cursor: pointer;
-} */
-
 .topbar {
     display: flex;
     justify-content: space-between;
@@ -168,4 +142,49 @@ body {
 .info-grid p {
     font-size: 16px;
     margin-top: 5px;
+}
+
+.videos-container {
+    margin-left: 300px;
+    margin-top: 50px;
+}
+
+.plan-title {
+    padding-bottom: 10px;
+}
+
+.exercise-grid {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: flex-start;
+}
+
+.exercise-card {
+    flex: 1 1 250px; 
+    max-width: 300px;
+}
+
+.plan-grid {
+    gap: 10px;
+    margin: 20px;
+    margin-left: 270px;
+}
+
+.plan-details {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s ease;
+    font-size: 16px;
+}
+
+.plan-card:hover .plan-details {
+    opacity: 0.9;
 }

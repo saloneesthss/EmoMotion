@@ -31,7 +31,6 @@ foreach($plans as $row){
             'time' => $row['time'],
         ];
     }
-// $video_list = json_decode($plans['video_list'], true);
 }
 ?>
 
@@ -57,9 +56,9 @@ foreach($plans as $row){
         <a><div class="small-card">
             <?php $isLoggedIn = isset($_SESSION['user_id']) ? '1' : '0'; ?>
             <i class="fa fa-heart" 
-                id="fav-<?php echo $video['id'];?>" 
+                id="fav-plan-<?php echo $plan['id'];?>"
                 data-loggedin="<?php echo $isLoggedIn; ?>"
-                onclick="handleFavoriteClick(<?php echo $video['id']; ?>, this)"></i>
+                onclick="handleFavoriteClick(<?php echo $plan['id'];?>, 1, this)"></i>
         </div></a>
 
         <div class="plan-meta">
