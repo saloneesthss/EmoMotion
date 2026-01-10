@@ -79,7 +79,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php echo htmlspecialchars($video['plan_name']); ?>
                 </div>
                         
-                <div class="plan-details">
+                <!-- <div class="plan-details">
                     <div class="exercise-price">
                         Target Area: <?php echo htmlspecialchars($video['target_area']); ?>
                     </div>
@@ -99,7 +99,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="exercise-equipment">
                         Duration: <?php echo $video['duration']; ?> seconds
                     </div>
-                </div>
+                </div> -->
             </div>
         </a>
         <?php endforeach; ?>

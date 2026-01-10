@@ -54,11 +54,24 @@ foreach($plans as $row){
         <h2 class="plan-title"><?php echo $plan['plan_name']; ?></h2>
 
         <a><div class="small-card">
-            <?php $isLoggedIn = isset($_SESSION['user_id']) ? '1' : '0'; ?>
-            <i class="fa fa-heart" 
-                id="fav-plan-<?php echo $plan['id'];?>"
-                data-loggedin="<?php echo $isLoggedIn; ?>"
-                onclick="handleFavoriteClick(<?php echo $plan['id'];?>, 1, this)"></i>
+            <?php
+            $isLoggedIn = isset($_SESSION['user_id']) ? '1' : '0'; 
+            $isFavoritedPlan = false;
+
+            if ($isLoggedIn === '1') {
+                $checkPlan = $con->prepare("SELECT 1 FROM favorites WHERE user_id = :uid AND plan_id = :pid");
+                $checkPlan->execute([
+                    ':uid' => $_SESSION['user_id'],
+                    ':pid' => $plan['id']
+                ]);
+
+                $isFavoritedPlan = $checkPlan->fetch() ? true : false;
+            }
+            ?>
+            <i class="fa fa-heart <?= $isFavoritedPlan ? 'favorited' : '' ?>" 
+                id="fav-plan-<?= $plan['id'];?>"
+                data-loggedin="<?= $isLoggedIn; ?>"
+                onclick="handleFavoriteClick(<?= $plan['id'];?>, 1, this)"></i>
         </div></a>
 
         <div class="plan-meta">
@@ -95,8 +108,11 @@ foreach($plans as $row){
     </div>
 
     <div class="right-content">
-        <h1 class="main-title"><?php echo $plan['plan_name']; ?></h1>
-
+        <div class="content-header">
+            <h1 class="main-title"><?php echo $plan['plan_name']; ?></h1>
+            <button class="start-btn" onclick="openWorkoutDialog()"><i class="fa-solid fa-circle-play"></i> Start</button>
+        </div>
+        
         <?php foreach ($video_list as $gif): ?>
         <div class="workout-card">
             <img 
@@ -141,6 +157,140 @@ foreach($plans as $row){
     </div>
 </div>
 
+<div id="workoutPlayer" class="player-overlay">
+    <div class="player-container">
+
+        <div class="player-top">
+            <button class="player-back" onclick="closeWorkoutPlayer()">←</button>
+            <h2 class="player-title"><?php echo $plan['plan_name']; ?></h2>
+            <span></span>
+        </div>
+
+        <div class="gif-card">
+            <img id="playerGif" src="">
+        </div>
+
+        <div class="time-details">
+            <div class="timer-wrapper">
+                <svg class="progress-ring" width="220" height="220">
+                    <circle class="progress-ring__circle"
+                            stroke="#B388FF"
+                            stroke-width="12"
+                            fill="transparent"
+                            r="100"
+                            cx="110"
+                            cy="110"/>
+                </svg>
+
+                <div class="timer-number" id="timerNumber">00</div>
+            </div>
+
+            <div class="player-controls">
+                <button id="pauseBtn" class="control-btn">Pause</button>
+                <button class="control-btn stop-btn" onclick="closeWorkoutPlayer()">Stop</button>
+            </div>
+        </div>
+        
+        <div id="nextMsg" class="next-msg">Next exercise incoming...</div>
+    </div>
+</div>
+
 <script src="../scripts/favorites.js"></script>
+<script>
+let exercises = <?php echo json_encode($video_list); ?>;
+let current = 0;
+let countdown;
+let paused = false;
+
+const dialog = document.getElementById("workoutPlayer");
+const gifImg = document.getElementById("playerGif");
+const timerNum = document.getElementById("timerNumber");
+const nextMsg = document.getElementById("nextMsg");
+const repText = document.getElementById("repCount");
+const setText = document.getElementById("setCount");
+
+const circle = document.querySelector(".progress-ring__circle");
+const radius = circle.r.baseVal.value;
+const circumference = 2 * Math.PI * radius;
+circle.style.strokeDasharray = `${circumference} ${circumference}`;
+
+/* OPEN PLAYER */
+function openWorkoutDialog() {
+    dialog.style.display = "flex";
+    startExercise(0);
+}
+
+/* CLOSE PLAYER */
+function closeWorkoutPlayer() {
+    dialog.style.display = "none";
+    clearInterval(countdown);
+}
+
+/* START SINGLE EXERCISE */
+function startExercise(index) {
+    current = index;
+    paused = false;
+
+    let ex = exercises[index];
+
+    gifImg.src = "../assets/gifs/" + ex.file;
+
+    let timeLeft = ex.time;
+    timerNum.textContent = timeLeft;
+
+    repText.textContent = "Rep " + (index + 1);
+    setText.textContent = "Set " + (index + 1) + "/" + exercises.length;
+
+    updateCircle(timeLeft, ex.time);
+
+    countdown = setInterval(() => {
+        if (!paused) {
+            timeLeft--;
+            timerNum.textContent = timeLeft;
+            updateCircle(timeLeft, ex.time);
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                showNextMessage();
+            }
+        }
+    }, 1000);
+}
+
+/* ANIMATED RING */
+function updateCircle(time, total) {
+    const percent = time / total;
+    const offset = circumference - percent * circumference;
+    circle.style.strokeDashoffset = offset;
+}
+
+/* SHOW NEXT EXERCISE */
+function showNextMessage() {
+    nextMsg.style.display = "block";
+
+    setTimeout(() => {
+        nextMsg.style.display = "none";
+        goNext();
+    }, 3000);
+}
+
+/* MOVE TO NEXT GIF */
+function goNext() {
+    if (current + 1 < exercises.length) {
+        startExercise(current + 1);
+    } else {
+        timerNum.textContent = "Done";
+        gifImg.src = "../assets/images/workout-completed.avif";
+        
+    }
+}
+
+/* PAUSE BUTTON */
+document.getElementById("pauseBtn").onclick = function () {
+    paused = !paused;
+    this.textContent = paused ? "Resume" : "Pause";
+};
+</script>
+
 </body>
 </html>
