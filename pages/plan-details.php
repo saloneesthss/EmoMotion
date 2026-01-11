@@ -170,12 +170,17 @@ foreach($plans as $row){
             <img id="playerGif" src="">
         </div>
 
+        <div class="rep-set-box">
+            <span id="repCount"></span>
+            <span id="setCount"></span>
+        </div>
+
         <div class="time-details">
             <div class="timer-wrapper">
                 <svg class="progress-ring" width="220" height="220">
                     <circle class="progress-ring__circle"
                             stroke="#B388FF"
-                            stroke-width="12"
+                            stroke-width="10"
                             fill="transparent"
                             r="100"
                             cx="110"
@@ -191,7 +196,7 @@ foreach($plans as $row){
             </div>
         </div>
         
-        <div id="nextMsg" class="next-msg">Next exercise incoming...</div>
+        <!-- <div id="nextMsg" class="next-msg">Next exercise incoming...</div> -->
     </div>
 </div>
 
@@ -199,13 +204,13 @@ foreach($plans as $row){
 <script>
 let exercises = <?php echo json_encode($video_list); ?>;
 let current = 0;
-let countdown;
+let countdown = null;
 let paused = false;
 
 const dialog = document.getElementById("workoutPlayer");
 const gifImg = document.getElementById("playerGif");
 const timerNum = document.getElementById("timerNumber");
-const nextMsg = document.getElementById("nextMsg");
+// const nextMsg = document.getElementById("nextMsg");
 const repText = document.getElementById("repCount");
 const setText = document.getElementById("setCount");
 
@@ -217,6 +222,7 @@ circle.style.strokeDasharray = `${circumference} ${circumference}`;
 /* OPEN PLAYER */
 function openWorkoutDialog() {
     dialog.style.display = "flex";
+    clearInterval(countdown); 
     startExercise(0);
 }
 
@@ -228,50 +234,72 @@ function closeWorkoutPlayer() {
 
 /* START SINGLE EXERCISE */
 function startExercise(index) {
+    clearInterval(countdown);
     current = index;
     paused = false;
 
     let ex = exercises[index];
-
     gifImg.src = "../assets/gifs/" + ex.file;
 
-    let timeLeft = ex.time;
+    let totalTime = ex.time;
+    let timeLeft = totalTime;
     timerNum.textContent = timeLeft;
 
     repText.textContent = "Rep " + (index + 1);
     setText.textContent = "Set " + (index + 1) + "/" + exercises.length;
 
-    updateCircle(timeLeft, ex.time);
+    updateCircle(timeLeft, totalTime);
 
     countdown = setInterval(() => {
         if (!paused) {
             timeLeft--;
             timerNum.textContent = timeLeft;
-            updateCircle(timeLeft, ex.time);
+            updateCircle(timeLeft, totalTime);
 
             if (timeLeft <= 0) {
                 clearInterval(countdown);
+                if (current === exercises.length - 1) {
+                    timerNum.textContent = "Done!";
+                    gifImg.src = "../assets/images/workout-completed.avif";
+                    return;
+                }
                 showNextMessage();
             }
         }
     }, 1000);
 }
 
-/* ANIMATED RING */
-function updateCircle(time, total) {
-    const percent = time / total;
-    const offset = circumference - percent * circumference;
-    circle.style.strokeDashoffset = offset;
-}
-
 /* SHOW NEXT EXERCISE */
 function showNextMessage() {
-    nextMsg.style.display = "block";
+    if (current === exercises.length - 1) {
+        timerNum.textContent = "Done!";
+        gifImg.src = "../assets/images/workout-completed.avif";
+        return;
+    }
 
-    setTimeout(() => {
-        nextMsg.style.display = "none";
-        goNext();
-    }, 3000);
+    gifImg.src = "../assets/images/next-exercise-msg.png";
+    let waitTime = 10;
+    timerNum.textContent = waitTime;
+
+    updateCircle(waitTime, waitTime);
+
+    const waitCountdown = setInterval(() => {
+        waitTime--;
+        timerNum.textContent = waitTime;
+        updateCircle(waitTime, 10);
+
+        if (waitTime <= 0) {
+            clearInterval(waitCountdown);
+            gifImg.style.display = "block";
+            goNext();
+        }
+    }, 1000);
+}
+
+function updateCircle(timeLeft, totalTime) {
+    const percent = timeLeft / totalTime;
+    const offset = circumference - percent * circumference;
+    circle.style.strokeDashoffset = offset;
 }
 
 /* MOVE TO NEXT GIF */
@@ -281,7 +309,6 @@ function goNext() {
     } else {
         timerNum.textContent = "Done";
         gifImg.src = "../assets/images/workout-completed.avif";
-        
     }
 }
 

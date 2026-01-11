@@ -117,6 +117,7 @@ body {
     font-size: 32px;
     padding: 30px 10px;
 }
+
 .start-btn {
     margin-right: 40px;
     padding: 7px 10px;
@@ -201,7 +202,7 @@ body {
 /* CONTAINER */
 .player-container {
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
     padding: 20px;
     text-align: center;
 }
@@ -247,6 +248,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.rep-set-box {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 5px;
 }
 
 /* TIMER */
