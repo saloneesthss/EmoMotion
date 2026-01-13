@@ -252,7 +252,6 @@ function startExercise(index) {
 
     countdown = setInterval(() => {
         if (!paused) {
-            timeLeft--;
             timerNum.textContent = timeLeft;
             updateCircle(timeLeft, totalTime);
 
@@ -264,7 +263,9 @@ function startExercise(index) {
                     return;
                 }
                 showNextMessage();
+                return;
             }
+            timeLeft--;
         }
     }, 1000);
 }
@@ -284,7 +285,6 @@ function showNextMessage() {
     updateCircle(waitTime, waitTime);
 
     const waitCountdown = setInterval(() => {
-        waitTime--;
         timerNum.textContent = waitTime;
         updateCircle(waitTime, 10);
 
@@ -293,6 +293,7 @@ function showNextMessage() {
             gifImg.style.display = "block";
             goNext();
         }
+        waitTime--;
     }, 1000);
 }
 
