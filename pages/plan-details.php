@@ -195,8 +195,6 @@ foreach($plans as $row){
                 <button class="control-btn stop-btn" onclick="closeWorkoutPlayer()">Stop</button>
             </div>
         </div>
-        
-        <!-- <div id="nextMsg" class="next-msg">Next exercise incoming...</div> -->
     </div>
 </div>
 
@@ -210,7 +208,6 @@ let paused = false;
 const dialog = document.getElementById("workoutPlayer");
 const gifImg = document.getElementById("playerGif");
 const timerNum = document.getElementById("timerNumber");
-// const nextMsg = document.getElementById("nextMsg");
 const repText = document.getElementById("repCount");
 const setText = document.getElementById("setCount");
 
