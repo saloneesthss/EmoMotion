@@ -169,7 +169,7 @@ function bmiScore($plan, $bmi) {
             <a href="#challenges"><button class="filter-btn">Challenges</button></a>
             <a href="#full-body"><button class="filter-btn">Full Body</button></a>
 
-            <button class="create-workout">+ Create your own plan</button>
+            <button class="create-workout" onclick="location.href='../pages/customize-plans.php'">+ Create your own plan</button>
         </div>
 
         <h2 class="section-title top-title" id="recommended">Recommended for you</h2>

@@ -1,3 +1,36 @@
+<?php
+require_once "../connection.php";
+$query = $_GET['query'] ?? '';
+$search = "%$query%";
+$videoStmt = $con->prepare("SELECT * FROM workout_videos WHERE title LIKE :q OR target_area LIKE :q");
+$videoStmt->execute([':q' => $search]);
+$videos = $videoStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$planStmt = $con->prepare("SELECT * FROM workout_plans WHERE plan_name LIKE :q OR target_area LIKE :q");
+$planStmt->execute([':q' => $search]);
+$plans = $planStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$results = array_merge($videos, $plans);
+if (count($results) === 0) {
+    echo "<div class='no-results'>No matches found</div>";
+    exit;
+}
+
+foreach ($results as $item) {
+    // $typeLabel = $item['type'] === 'video' ? "🎬 Video" : "📘 Plan";
+
+    echo "
+        <a href='" . ($item['type'] === 'video' 
+            ? "video.php?id=".$item['id'] 
+            : "plan.php?id=".$item['id']) . "' class='search-result'>
+            <div class='result-item'>
+                <span class='result-title'>{$item['title']}</span>
+            </div>
+        </a>
+    ";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,9 +59,11 @@
 
         <div class="right-section">
             <input type="text" class="search" placeholder="Search..">
-            <a href="">
-                <img src="../assets/icons/search.svg" alt="Search" id="search">
-            </a>
+            <div class="search-wrapper">
+                <img src="../assets/icons/search.svg" alt="Search" id="search-icon">
+                <input type="text" id="search-field" placeholder="Search..." />
+            </div>
+
             <a href="../login.php">
                 <img src="../assets/icons/user.svg" alt="User Profile" id="user-profile">
             </a>
@@ -48,6 +83,25 @@
         hamburger.addEventListener("click", () => {
             hamburger.classList.toggle("active");
             navLinks.classList.toggle("active");
+        });
+
+        const searchIcon = document.getElementById('search-icon');
+        const searchField = document.getElementById('search-field');
+
+        searchIcon.addEventListener('click', () => {
+            searchField.classList.toggle('active');
+            searchField.focus();
+        });
+
+        // Live search fetch to PHP
+        searchField.addEventListener('keyup', function () {
+            let query = this.value;
+
+            fetch("search.php?query=" + query)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("results-container").innerHTML = data;
+                });
         });
     </script>
 </body>
