@@ -27,6 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $mood = $_POST['mood'];
     $intensity = $_POST['intensity'];
     $fitness_level = $_POST['fitness_level'];
+    $repetition = $_POST['repetition'];
+    $sets = $_POST['sets'];
     $duration = $_POST['duration'];
     $description = $_POST['description'];
 
@@ -40,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         move_uploaded_file($_FILES['video_file']['tmp_name'], $upload_path . '/' . $file_name);
     }
     
-    $sql = "update workout_videos set title='$video_name', file_path='$file_name', target_area='$target_area', mood='$mood', intensity='$intensity', fitness_level='$fitness_level', duration='$duration', description='$description' where id=$id";
+    $sql = "update workout_videos set title='$video_name', file_path='$file_name', target_area='$target_area', mood='$mood', intensity='$intensity', fitness_level='$fitness_level', repetition='$repetition', sets='$sets', duration='$duration', description='$description' where id=$id";
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
@@ -109,6 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <option value="legs" <?php echo ($videos['target_area'] == 'Legs') ? 'selected' : '';?>>Legs</option>
                         <option value="arms" <?php echo ($videos['target_area'] == 'Arms') ? 'selected' : '';?>>Arms</option>
                         <option value="back" <?php echo ($videos['target_area'] == 'Back') ? 'selected' : '';?>>Back</option>
+                        <option value="full-body" <?php echo ($videos['target_area'] == 'Full Body') ? 'selected' : '';?>>Full Body</option>
                     </select>
                 </div>
 
@@ -142,8 +145,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <div>
+                    <label>Repetitions</label>
+                    <input type="number" min="1" name="repetition" value="<?php echo $videos['repetition'] ?>" required />
+                </div>
+
+                <div>
+                    <label>Sets</label>
+                    <input type="number" min="1" name="sets" value="<?php echo $videos['sets'] ?>" required />
+                </div>
+
+                <div>
                     <label>Duration (Seconds)</label>
-                    <input type="number" name="duration" value="<?php echo $videos['duration'] ?>" required />
+                    <input type="number" min="1" name="duration" value="<?php echo $videos['duration'] ?>" required />
                 </div>
 
                 <div style="grid-column: span 2;">

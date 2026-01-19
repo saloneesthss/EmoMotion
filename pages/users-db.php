@@ -145,6 +145,10 @@ function bmiScore($plan, $bmi) {
     }
     return $score;
 }
+
+$customizeStmt = $con->prepare("SELECT * FROM customized_plans WHERE user_id = $user_id");
+$customizeStmt->execute();
+$customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -172,6 +176,8 @@ function bmiScore($plan, $bmi) {
             <button class="create-workout" onclick="location.href='../pages/customize-plans.php'">+ Create your own plan</button>
         </div>
 
+        <div id="plans-results"></div>
+
         <h2 class="section-title top-title" id="recommended">Recommended for you</h2>
         <div class="plans-grid">
             <?php foreach ($recommended as $video): ?>
@@ -194,10 +200,10 @@ function bmiScore($plan, $bmi) {
 
         <h2 class="section-title" id="created-by-me">Customized by you</h2>
         <div class="plans-grid">
-            <?php foreach ($recommended as $video): ?>
-            <a href="plan-details.php?id=<?= $video['id'] ?>" class="plan-link">
+            <?php foreach ($customized as $video): ?>
+            <a href="customized-details.php?id=<?= $video['id'] ?>" class="plan-link">
                 <div class="plans-card">
-                    <img class="exercise-image" src="../assets/plans-thumbnail/<?php echo $video['file_path']; ?>" alt="Workout Plan">
+                    <img class="exercise-image" src="../assets/userplan-thumbnail/<?php echo $video['file_path']; ?>" alt="Workout Plan">
                     <button class="play-btn" onclick="openWorkoutDialog(event)">▶</button>
                     <h3><?php echo htmlspecialchars($video['plan_name']); ?></h3>
                     <?php

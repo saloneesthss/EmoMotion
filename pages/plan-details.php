@@ -9,7 +9,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $plan_id = (int) $_GET['id']; 
-$sql = "SELECT p.*, v.title as video_title, v.file_path as video_file, v.duration as time
+$sql = "SELECT p.*, v.title as video_title, v.file_path as video_file, v.duration as time, v.repetition, v.sets
 FROM workout_plans p
 JOIN workout_videos v
   ON JSON_CONTAINS(p.video_list, JSON_QUOTE(v.file_path)) WHERE p.id=$plan_id";
@@ -29,6 +29,8 @@ foreach($plans as $row){
             'title' => $row['video_title'],
             'file' => $row['video_file'],
             'time' => $row['time'],
+            'repetition' => $row['repetition'],
+            'sets' => $row['sets'],
         ];
     }
 }
@@ -171,8 +173,8 @@ foreach($plans as $row){
         </div>
 
         <div class="rep-set-box">
-            <span id="repCount"></span>
-            <span id="setCount"></span>
+            <span id="repCount">Rep <?php echo $plan['repetition']; ?></span>
+            <span id="setCount">Sets <?php echo $plan['sets']; ?></span>
         </div>
 
         <div class="time-details">
@@ -242,9 +244,6 @@ function startExercise(index) {
     let timeLeft = totalTime;
     timerNum.textContent = timeLeft;
 
-    repText.textContent = "Rep " + (index + 1);
-    setText.textContent = "Set " + (index + 1) + "/" + exercises.length;
-
     updateCircle(timeLeft, totalTime);
 
     countdown = setInterval(() => {
@@ -252,7 +251,7 @@ function startExercise(index) {
             timerNum.textContent = timeLeft;
             updateCircle(timeLeft, totalTime);
 
-            if (timeLeft <= 0) {
+            if (timeLeft < 0) {
                 clearInterval(countdown);
                 if (current === exercises.length - 1) {
                     timerNum.textContent = "Done!";
@@ -285,7 +284,7 @@ function showNextMessage() {
         timerNum.textContent = waitTime;
         updateCircle(waitTime, 10);
 
-        if (waitTime <= 0) {
+        if (waitTime < 0) {
             clearInterval(waitCountdown);
             gifImg.style.display = "block";
             goNext();

@@ -11,6 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $mood = $_POST['mood'];
     $intensity = $_POST['intensity'];
     $fitness_level = $_POST['fitness_level'];
+    $repetition = $_POST['repetition'];
+    $sets = $_POST['sets'];
     $duration = $_POST['duration'];
     $description = $_POST['description'];
 
@@ -20,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         move_uploaded_file($_FILES['video_file']['tmp_name'], $upload_path . '/' . $file_name);
     }
     
-    $sql = "insert into workout_videos set title='$video_name', file_path='$file_name', target_area='$target_area', mood='$mood', intensity='$intensity', fitness_level='$fitness_level', duration='$duration', description='$description'";
+    $sql = "insert into workout_videos set title='$video_name', file_path='$file_name', target_area='$target_area', mood='$mood', intensity='$intensity', fitness_level='$fitness_level', repetition='$repetition', sets='$sets', duration='$duration', description='$description'";
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
@@ -85,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <option value="legs">Legs</option>
                         <option value="arms">Arms</option>
                         <option value="back">Back</option>
+                        <option value="full-body">Full Body</option>
                     </select>
                 </div>
 
@@ -118,8 +121,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <div>
+                    <label>Repetitions</label>
+                    <input type="number" min="1" name="repetition" required />
+                </div>
+
+                <div>
+                    <label>Sets</label>
+                    <input type="number" min="1" name="sets" required />
+                </div>
+
+                <div>
                     <label>Duration (Seconds)</label>
-                    <input type="number" name="duration" required />
+                    <input type="number" min="1" name="duration" required />
                 </div>
 
                 <div style="grid-column: span 2;">

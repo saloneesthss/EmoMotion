@@ -6,34 +6,15 @@ body {
 
 .container {
     display: flex;
-    height: 100vh;
-    margin-top: 11vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 220px;
-    background: #ecebf9;
-    padding: 20px;
-    border-right: 1px solid #ddd;
-}
-
-.menu-item {
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 6px;
-    margin-top: 5px;
-}
-
-.menu-item.active {
-    background: #dfdef9;
-    color: #6a3bbd;
+    margin-top: 10vh;
 }
 
 /* MAIN CONTENT */
 .content {
     flex: 1;
     padding: 30px;
+    margin-left: 20px;
+    min-width: 900px;
 }
 
 .title {
@@ -45,11 +26,11 @@ body {
 }
 
 .input-block input {
-    width: 90%;
+    width: 100%;
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    margin-top: 6px;
+    margin-top: 10px;
 }
 
 /* More Settings */
@@ -60,19 +41,31 @@ body {
     display: flex;
     justify-content: space-between;
     width: 150px;
+    margin-bottom: 10px;
 }
 
 #arrow {
     transition: 0.3s;
 }
 
+.attach-row {
+    margin-top: 8px;
+}
+
+.attach-link {
+    color: #5a54e8;
+    font-size: 14px;
+    text-decoration: none;
+}
+
 .more-settings-content {
     margin-top: 10px;
     padding: 15px;
-    background: #f8f8f8;
+    background: #f4f3fd;
     border-radius: 10px;
     border: 1px solid #ddd;
     display: none;
+    margin-bottom: 20px;
 }
 
 .settings-section {
@@ -80,7 +73,11 @@ body {
 }
 
 .settings-section h4 {
-    margin: 0;
+    margin: 5px 0;
+}
+
+.settings-section label {
+    margin-right: 20px;
 }
 
 .description {
@@ -93,9 +90,11 @@ body {
 
 /* Routine Box */
 .routine-box {
-    background: #dfdef9;
+    background: #f4f3fd;
     padding: 15px;
     border-radius: 12px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
 }
 
 .routine-header {
@@ -118,18 +117,28 @@ body {
 }
 
 .exercise-card img {
-    width: 120px;
+    width: 180px;
+    height: 150px;
+    object-fit: contain;
     border-radius: 6px;
+    border: 1px solid #ddd;
 }
 
 .exercise-info {
     margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .set-row {
     display: grid;
-    grid-template-columns: 40px 120px 120px 120px;
+    grid-template-columns: 50px 120px 120px 120px 120px;
     gap: 10px;
+    margin-top: 5px;
+}
+
+.set-row div {
     margin-top: 5px;
 }
 
@@ -139,17 +148,43 @@ body {
     border: 1px solid #ccc;
 }
 
+.btn-row {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    background: #6a3bbd;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.cancel {
+    background: #fff;
+    color: black;
+    margin-right: 10px;
+}
+
 /* RIGHT LIBRARY */
 .exercise-library {
     width: 350px;
     border-left: 1px solid #ddd;
-    background: white;
+    background: #e8e7f8;
     padding: 20px;
     overflow-y: scroll;
 }
 
+.library-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .library-header input {
-    width: 90%;
+    width: 100%;
     padding: 8px;
     background: url(../assets/icons/search-gray.svg);
     background-repeat: no-repeat;
@@ -159,6 +194,7 @@ body {
     border: 1px solid #808080;
     border-radius: 7px;
     font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .exercise-item {
@@ -179,6 +215,13 @@ body {
     height: 32px;
     border-radius: 6px;
     border: none;
-    background: #f0f0f0;
+    background: #f8f7f7;
     font-size: 20px;
+    cursor: pointer;
+}
+
+.video-thumb {
+    background-color: white;
+    height: 65px;
+    object-fit: contain;
 }

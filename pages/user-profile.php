@@ -56,14 +56,6 @@ if (!empty($user['height']) && !empty($user['weight'])) {
         </div>
 
         <div class="main-content">
-            <!-- <div class="topbar">
-                <input type="text" placeholder="Search..." class="searchbox">
-                <div class="top-right">
-                    <i class="fa-solid fa-bell"></i>
-                    <i class="fa-solid fa-gear"></i>
-                </div>
-            </div> -->
-
             <div class="topbar">
                 <h2 class="page-title">My Profile</h2>
                 <button class="edit-btn" onclick="location.href='settings.php?id=<?php echo $user['id'];?>'">Edit</button>

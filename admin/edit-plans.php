@@ -141,6 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <option <?= ($plans['target_area'] == 'Legs') ? 'selected' : '' ?>>Legs</option>
                         <option <?= ($plans['target_area'] == 'Arms') ? 'selected' : '' ?>>Arms</option>
                         <option <?= ($plans['target_area'] == 'Back') ? 'selected' : '' ?>>Back</option>
+                        <option <?= ($plans['target_area'] == 'Full Body') ? 'selected' : '' ?>>Full Body</option>
                     </select>
                 </div>
 

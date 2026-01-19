@@ -1,26 +1,54 @@
 <?php
+session_start();
 require_once "../connection.php";
 require_once "../components/user-navbar.php";
 
-$sql = "SELECT p.*, v.title as video_title, v.file_path as video_file, v.duration as time
-FROM workout_plans p
-JOIN workout_videos v
-  ON JSON_CONTAINS(p.video_list, JSON_QUOTE(v.file_path))";
+$user_id = $_SESSION['user_id'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $plan_name = $_POST['plan_name'];
+    $target = $_POST['target'] ?? null;
+    $mood = $_POST['mood'];
+    $intensity = $_POST['intensity'];
+    $level = $_POST['level'];
+
+    $video_list = $_POST['video_list']; // json
+    $total_duration = $_POST['total_duration']; // seconds
+    $days = $_POST['days'];
+    $description = $_POST['description'];
+
+    // HANDLE THUMBNAIL UPLOAD
+    $thumbnailPath = null;
+
+    if (!empty($_FILES['image']['name'][0])) {
+        $uploadDir = "../assets/userplan-thumbnail/";
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileName = basename($_FILES['image']['name'][0]);
+        $targetPath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($_FILES['image']['tmp_name'][0], $targetPath)) {
+            $thumbnailPath = $fileName; 
+        }
+    }
+
+    $sql = "INSERT INTO customized_plans 
+        (user_id, plan_name, file_path, video_list, target_area, mood, intensity, fitness_level, time_duration, duration, description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = $con->prepare($sql);
+    $stmt->execute([$user_id, $plan_name, $thumbnailPath, $video_list, $target, $mood, $intensity, $level, $total_duration, $days, $description]);
+
+    header("Location: users-db.php");
+    exit();
+}
+
+$sql = "SELECT * FROM workout_videos";
 $stmt = $con->prepare($sql);
 $stmt->execute();
-$plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$plan = $plans[0];
-$video_list = [];
-foreach($plans as $row){
-    if(!empty($row['video_file'])){
-        $video_list[] = [
-            'title' => $row['video_title'],
-            'file' => $row['video_file'],
-            'time' => $row['time'],
-        ];
-    }
-}
+$videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -35,109 +63,88 @@ foreach($plans as $row){
 </head>
 <body>
 <div class="container">
-    
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar">
-        <h3>Total: 2 days</h3>
-        <div class="menu-item active">Any</div>
-        <div class="menu-item">Any</div>
-    </div>
-
     <!-- MAIN CONTENT -->
-    <div class="content">
-        <h2 class="title">Customize Your Own Plan</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="content">
+            <h2 class="title">Customize Your Own Plan</h2>
 
-        <div class="input-block">
-            <label>Plan name</label>
-            <input type="text" placeholder="Enter the name of your plan">
-        </div>
-
-        <!-- More Settings Toggle -->
-        <div class="more-settings-header" onclick="toggleSettings()">
-            <span>More settings</span>
-            <span id="arrow">▼</span>
-        </div>
-
-        <!-- More Settings Content -->
-        <div class="more-settings-content" id="moreSettings">
-            <div class="settings-section">
-                <h4>Target Area</h4>
-                <label><input type="radio" name="target" checked> Waist</label>
-                <label><input type="radio" name="target"> Hips</label>
-                <label><input type="radio" name="target"> Abs</label>
-                <label><input type="radio" name="target"> Legs</label>
-                <label><input type="radio" name="target"> Arms</label>
-                <label><input type="radio" name="target"> Back</label>
+            <div class="input-block">
+                <label>Plan name</label>
+                <input type="text" name="plan_name" placeholder="Enter the name of your plan">
             </div>
 
-            <div class="settings-section">
-                <h4>Mood</h4>
-                <label><input type="radio" name="mood" checked> Happy</label>
-                <label><input type="radio" name="mood"> Sad</label>
-                <label><input type="radio" name="mood"> Angry</label>
-                <label><input type="radio" name="mood"> Tired</label>
-                <label><input type="radio" name="mood"> Energized</label>
+            <!-- More Settings Toggle -->
+            <div class="more-settings-header" onclick="toggleSettings()">
+                <span>More settings</span>
+                <span id="arrow">▼</span>
             </div>
 
-            <div class="settings-section">
-                <h4>Intensity</h4>
-                <label><input type="radio" name="intensity" checked> Low</label>
-                <label><input type="radio" name="intensity"> Medium</label>
-                <label><input type="radio" name="intensity"> High</label>
+            <!-- More Settings Content -->
+            <div class="more-settings-content" id="moreSettings">
+                <div class="attach-row">
+                    <input type="file" id="image" name="image[]" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
+                    <label for="image" class="attach-link">+ Attach Thumbnail for Plan</label>
+                </div>
+                <div class="settings-section">
+                    <h4>Target Area</h4>
+                    <label><input type="radio" name="target" value="Waist" checked> Waist</label>
+                    <label><input type="radio" name="target" value="Hips"> Hips</label>
+                    <label><input type="radio" name="target" value="Abs"> Abs</label>
+                    <label><input type="radio" name="target" value="Legs"> Legs</label>
+                    <label><input type="radio" name="target" value="Arms"> Arms</label>
+                    <label><input type="radio" name="target" value="Back"> Back</label>
+                    <label><input type="radio" name="target" value="Full Body"> Full Body</label>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Mood</h4>
+                    <label><input type="radio" name="mood" value="Happy" checked> Happy</label>
+                    <label><input type="radio" name="mood" value="Sad"> Sad</label>
+                    <label><input type="radio" name="mood" value="Angry"> Angry</label>
+                    <label><input type="radio" name="mood" value="Tired"> Tired</label>
+                    <label><input type="radio" name="mood" value="Energized"> Energized</label>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Intensity</h4>
+                    <label><input type="radio" name="intensity" value="Low" checked> Low</label>
+                    <label><input type="radio" name="intensity" value="Medium"> Medium</label>
+                    <label><input type="radio" name="intensity" value="High"> High</label>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Fitness Level</h4>
+                    <label><input type="radio" name="level" value="Beginner" checked> Beginner</label>
+                    <label><input type="radio" name="level" value="Intermediate"> Intermediate</label>
+                    <label><input type="radio" name="level" value="Advanced"> Advanced</label>
+                </div>
+
+                <textarea class="description" name="description" placeholder="Enter your plan details here..."></textarea>
             </div>
 
-            <div class="settings-section">
-                <label><input type="radio" name="level" checked> Beginner</label>
-                <label><input type="radio" name="level"> Intermediate</label>
-                <label><input type="radio" name="level"> Advanced</label>
+            <!-- Plan Detail -->
+            <div class="input-block">
+                <label>Plan detail</label>
             </div>
 
-            <textarea class="description" placeholder="Enter your plan details here..."></textarea>
-        </div>
-
-        <!-- <hr> -->
-
-        <!-- Routine Detail -->
-        <div class="input-block">
-            <label>Plan detail</label>
-        </div>
-
-        <div class="routine-box">
-            <div class="routine-header">
-                <span>Any ▾</span>
-                <span>Week 1 - 3 ✎</span>
-                <span class="estimate">Est. 32 min • 5 exercises</span>
-            </div>
-
-            <div class="exercise-card">
-                <img src="https://images.jefit.com/images/exercises/weighted-crunch.jpg">
-                <div class="exercise-info">
-                    <h3>Weighted Crunch</h3>
-
-                    <div class="set-row">
-                        <div>1</div>
-                        <input value="10 lbs">
-                        <input value="30 reps">
-                        <input value="45 sec rest">
-                    </div>
-
-                    <div class="set-row">
-                        <div>2</div>
-                        <input value="10 lbs">
-                        <input value="30 reps">
-                        <input value="45 sec rest">
-                    </div>
-
-                    <div class="set-row">
-                        <div>3</div>
-                        <input value="10 lbs">
-                        <input value="30 reps">
-                        <input value="45 sec rest">
-                    </div>
+            <div class="routine-box">
+                <div class="routine-header">
+                    <span>Videos List</span>
+                    <span><span id="daysBox" name="days">30</span> Days <span id="editDays" style="cursor:pointer;">✎</span></span>
+                    <span class="estimate">0:00 • 0 exercise</span>
                 </div>
             </div>
+
+            <input type="hidden" name="video_list" id="video_list">
+            <input type="hidden" name="total_duration" id="total_duration">
+            <input type="hidden" name="days" id="days">
+
+            <div class="btn-row">
+                <button type="reset" class="btn cancel">Cancel</button>
+                <button type="submit" class="btn">Save</button>
+            </div>
         </div>
-    </div>
+    </form>
 
     <!-- RIGHT EXERCISE LIBRARY -->
     <div class="exercise-library">
@@ -146,22 +153,117 @@ foreach($plans as $row){
             <input type="text" placeholder="Search exercise name">
         </div>
 
-        <?php foreach ($video_list as $gif): ?>
+        <?php foreach ($videos as $gif): ?>
         <div class="exercise-item">
-            <img src="../assets/gifs/<?php echo htmlspecialchars($gif['file']); ?>" 
+            <img src="../assets/gifs/<?php echo htmlspecialchars($gif['file_path']); ?>" 
                 class="video-thumb"
                 alt="Video Thumbnail">
             <div>
                 <h4><?= htmlspecialchars($gif['title']) ?></h4>
                 <p><?= htmlspecialchars($gif['target_area']) ?></p>
             </div>
-            <button>+</button>
+            <button class="add-video-btn"
+                data-id="<?= $gif['id'] ?>"
+                data-title="<?= htmlspecialchars($gif['title']) ?>"
+                data-target="<?= htmlspecialchars($gif['target_area']) ?>"
+                data-duration="<?= htmlspecialchars($gif['duration']) ?>"
+                data-rep="<?= htmlspecialchars($gif['repetition']) ?>"
+                data-sets="<?= htmlspecialchars($gif['sets']) ?>"
+                data-file="<?= htmlspecialchars($gif['file_path']) ?>"
+            >+</button>
         </div>
         <?php endforeach; ?>
-
     </div>
 </div>
 
 <script src="../scripts/customize-plans.js"></script>
+<script>
+document.querySelectorAll(".add-video-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+
+        const video = {
+            title: this.dataset.title,
+            target: this.dataset.target,
+            duration: this.dataset.duration,
+            rep: this.dataset.rep,
+            sets: this.dataset.sets,
+            file: this.dataset.file
+        };
+
+        const routineBox = document.querySelector(".routine-box");
+
+        const card = document.createElement("div");
+        card.classList.add("exercise-card");
+
+        card.dataset.duration = video.duration;
+        card.dataset.title = video.title;
+
+        card.innerHTML = `
+            <img src="../assets/gifs/${video.file}" class="video-thumb" alt="Thumbnail">
+
+            <div class="exercise-info">
+                <h3>${video.title}</h3>
+
+                <div class="set-row">
+                    <div>${video.target}</div>
+                    <input value="${video.duration} sec" readonly>
+                    <input value="10 sec rest" readonly>
+                    <input value="${video.rep} rep" readonly>
+                    <input value="${video.sets} sets" readonly>
+                </div>
+            </div>
+        `;
+
+        routineBox.appendChild(card);
+        updateEstimate();
+    });
+});
+
+function updateEstimate() {
+    const cards = document.querySelectorAll(".exercise-card");
+
+    let totalSec = 0;
+    let count = cards.length;
+
+    cards.forEach(card => {
+        let duration = card.dataset.duration;
+        totalSec += parseInt(duration);
+    });
+
+    let minutes = Math.floor(totalSec / 60);
+    let seconds = totalSec % 60;
+    let timeFormatted = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+    if (count <= 1) {
+        document.querySelector(".estimate").textContent =
+        `${timeFormatted} • ${count} exercise`;
+    } else {
+        document.querySelector(".estimate").textContent =
+        `${timeFormatted} • ${count} exercises`;
+    }
+}
+
+document.querySelector("form").addEventListener("submit", function () {
+    let cards = document.querySelectorAll(".exercise-card");
+    let videoArray = [];
+
+    let totalSec = 0;
+
+    cards.forEach(card => {
+        videoArray.push({
+            title: card.dataset.title,
+            duration: card.dataset.duration,
+            target: card.querySelector(".set-row div").textContent
+        });
+
+        totalSec += parseInt(card.dataset.duration);
+    });
+
+    document.getElementById("video_list").value = JSON.stringify(videoArray);
+    document.getElementById("total_duration").value = totalSec;
+});
+
+</script>
+
 </body>
 </html>

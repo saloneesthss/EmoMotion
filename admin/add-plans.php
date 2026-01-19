@@ -122,6 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <option>Legs</option>
                         <option>Arms</option>
                         <option>Back</option>
+                        <option>Full Body</option>
                     </select>
                 </div>
 
