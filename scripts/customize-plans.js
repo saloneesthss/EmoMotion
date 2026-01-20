@@ -12,22 +12,32 @@ function toggleSettings() {
 }
 
 // Edit day count
-document.getElementById("editDays").addEventListener("click", () => {
-    let span = document.getElementById("daysBox");
-    let current = span.textContent.trim();
+const daysBox = document.getElementById("daysBox");
+const editDays = document.getElementById("editDays");
+const daysInput = document.getElementById("daysInput");
 
+editDays.addEventListener("click", function () {
     let input = document.createElement("input");
-    input.value = current;
+    input.type = "number";
+    input.min = 1;
+    input.value = daysBox.textContent;
     input.style.width = "50px";
 
-    span.replaceWith(input);
+    daysBox.replaceWith(input);
     input.focus();
 
-    input.addEventListener("blur", () => {
-        let newSpan = document.createElement("span");
-        newSpan.id = "daysBox";
-        newSpan.textContent = input.value;
-        input.replaceWith(newSpan);
-        document.getElementById("days").value = input.value; // update hidden input
+    const saveValue = () => {
+        let newValue = input.value.trim() || "30";
+        daysBox.textContent = newValue;
+        daysInput.value = newValue;
+        input.replaceWith(daysBox);
+    };
+
+    input.addEventListener("blur", saveValue);
+    input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter"){
+            e.preventDefault();
+            saveValue();
+        } 
     });
 });

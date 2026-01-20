@@ -173,8 +173,8 @@ foreach($plans as $row){
         </div>
 
         <div class="rep-set-box">
-            <span id="repCount">Rep <?php echo $plan['repetition']; ?></span>
-            <span id="setCount">Sets <?php echo $plan['sets']; ?></span>
+            <span id="repCount">Reps: <?php echo $plan['repetition']; ?></span>
+            <span id="setCount">Sets: <?php echo $plan['sets']; ?></span>
         </div>
 
         <div class="time-details">
@@ -223,6 +223,27 @@ function openWorkoutDialog() {
     dialog.style.display = "flex";
     clearInterval(countdown); 
     startExercise(0);
+    <?php if(isset($_SESSION['user_id'])): ?>
+        fetch('../pages/track-activity.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                user_id: <?= $_SESSION['user_id']; ?>,
+                plan_id: <?= $plan['id']; ?>
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Activity tracked:', data);
+            if(data.streak){
+                const streakEl = document.getElementById('streakDisplay');
+                if(streakEl){
+                    const dayText = (data.streak == 1) ? 'day' : 'days';
+                    streakEl.textContent = `🔥 Streak: ${data.streak} ${dayText}`;
+                }
+            }
+        });
+    <?php endif; ?>
 }
 
 /* CLOSE PLAYER */
@@ -248,6 +269,7 @@ function startExercise(index) {
 
     countdown = setInterval(() => {
         if (!paused) {
+            timeLeft--;
             timerNum.textContent = timeLeft;
             updateCircle(timeLeft, totalTime);
 
@@ -261,7 +283,6 @@ function startExercise(index) {
                 showNextMessage();
                 return;
             }
-            timeLeft--;
         }
     }, 1000);
 }
@@ -281,6 +302,7 @@ function showNextMessage() {
     updateCircle(waitTime, waitTime);
 
     const waitCountdown = setInterval(() => {
+        waitTime--;
         timerNum.textContent = waitTime;
         updateCircle(waitTime, 10);
 
@@ -289,7 +311,6 @@ function showNextMessage() {
             gifImg.style.display = "block";
             goNext();
         }
-        waitTime--;
     }, 1000);
 }
 

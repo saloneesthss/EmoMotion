@@ -314,3 +314,15 @@ body {
     font-weight: 600;
     display: none;
 }
+
+.left-title {
+    display: flex;
+    align-items: center;
+}
+
+.left-title i {
+    margin-left: 30px;
+    margin-top: 20px;
+    cursor: pointer;
+    color: black;
+}

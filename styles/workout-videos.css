@@ -67,6 +67,10 @@ body {
     display: block;
 }
 
+.exercise-card {
+    cursor: pointer;
+}
+
 .small-card{
     float: right;
     position: relative;

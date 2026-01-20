@@ -62,11 +62,15 @@ if (!empty($user['height']) && !empty($user['weight'])) {
             </div>
 
             <div class="profile-card">
-                <img src="<?php echo $imagePath; ?>" class="avatar">
-                <div class="details">
-                    <h3><?php echo $user['name']; ?></h3>
-                    <p><?php echo $user['country']; ?></p>
-                </div>
+                <span>
+                    <img src="<?php echo $imagePath; ?>" class="avatar">
+                    <div class="details">
+                        <h3><?php echo $user['name']; ?></h3>
+                        <p><?php echo $user['country']; ?></p>
+                    </div>
+                </span>
+
+                <div id="streakDisplay"></div>
             </div>
 
             <div class="info-card">
@@ -97,5 +101,20 @@ if (!empty($user['height']) && !empty($user['weight'])) {
             </div>
         </div>
     </div>
+    <script>
+        fetch('../pages/get-streak.php')
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+                const streakEl = document.getElementById('streakDisplay');
+                if(streakEl && data.streak !== 0 && data.streak !== null){
+                    const dayText = (data.streak == 1) ? 'day' : 'days';
+                    streakEl.textContent = `🔥 Streak: ${data.streak} ${dayText}`;
+                }
+            } else {
+                console.error('Failed to fetch streak:', data.error);
+            }
+        });
+    </script>
 </body>
 </html>

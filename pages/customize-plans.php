@@ -70,7 +70,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="input-block">
                 <label>Plan name</label>
-                <input type="text" name="plan_name" placeholder="Enter the name of your plan">
+                <input type="text" name="plan_name" placeholder="Enter the name of your plan" required>
             </div>
 
             <!-- More Settings Toggle -->
@@ -82,8 +82,8 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- More Settings Content -->
             <div class="more-settings-content" id="moreSettings">
                 <div class="attach-row">
-                    <input type="file" id="image" name="image[]" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
-                    <label for="image" class="attach-link">+ Attach Thumbnail for Plan</label>
+                    <input type="file" id="image" name="image[]" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;" required>
+                    <label for="image" class="attach-link">+ Attach Thumbnail</label>
                 </div>
                 <div class="settings-section">
                     <h4>Target Area</h4>
@@ -130,7 +130,12 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="routine-box">
                 <div class="routine-header">
                     <span>Videos List</span>
-                    <span><span id="daysBox" name="days">30</span> Days <span id="editDays" style="cursor:pointer;">✎</span></span>
+                    <span>
+                        <span id="daysBox" name="days">30</span> Days 
+                        <span id="editDays" style="cursor:pointer;">✎</span>
+                    </span>
+                    <input type="hidden" id="daysInput" name="days" value="30">
+
                     <span class="estimate">0:00 • 0 exercise</span>
                 </div>
             </div>
@@ -199,6 +204,7 @@ document.querySelectorAll(".add-video-btn").forEach(btn => {
         card.dataset.title = video.title;
 
         card.innerHTML = `
+            <span class="close-btn">×</span>
             <img src="../assets/gifs/${video.file}" class="video-thumb" alt="Thumbnail">
 
             <div class="exercise-info">
@@ -213,6 +219,11 @@ document.querySelectorAll(".add-video-btn").forEach(btn => {
                 </div>
             </div>
         `;
+        
+        card.querySelector(".close-btn").addEventListener("click", () => {
+            card.remove();
+            updateEstimate();
+        });
 
         routineBox.appendChild(card);
         updateEstimate();
@@ -243,26 +254,19 @@ function updateEstimate() {
     }
 }
 
-document.querySelector("form").addEventListener("submit", function () {
+document.querySelector("form").addEventListener("submit", function (e) {
     let cards = document.querySelectorAll(".exercise-card");
     let videoArray = [];
-
     let totalSec = 0;
 
     cards.forEach(card => {
-        videoArray.push({
-            title: card.dataset.title,
-            duration: card.dataset.duration,
-            target: card.querySelector(".set-row div").textContent
-        });
-
+        videoArray.push(card.dataset.file);
         totalSec += parseInt(card.dataset.duration);
     });
 
     document.getElementById("video_list").value = JSON.stringify(videoArray);
     document.getElementById("total_duration").value = totalSec;
 });
-
 </script>
 
 </body>

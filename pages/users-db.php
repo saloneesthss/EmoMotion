@@ -169,7 +169,9 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" id="search-hint" placeholder="Search for plans...">
             </div>
             <a href="#recommended"><button class="filter-btn">Recommended</button></a>
-            <a href="#created-by-me"><button class="filter-btn">Created by me</button></a>
+            <?php if (!empty($customized)): ?>
+                <a href="#created-by-me"><button class="filter-btn">Created by me</button></a>
+            <?php endif; ?>
             <a href="#challenges"><button class="filter-btn">Challenges</button></a>
             <a href="#full-body"><button class="filter-btn">Full Body</button></a>
 
@@ -197,7 +199,8 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
             </a>
             <?php endforeach; ?>
         </div>
-
+    
+        <?php if (!empty($customized)): ?>
         <h2 class="section-title" id="created-by-me">Customized by you</h2>
         <div class="plans-grid">
             <?php foreach ($customized as $video): ?>
@@ -217,6 +220,7 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
             </a>
             <?php endforeach; ?>
         </div>
+        <?php endif; ?>
 
         <h2 class="section-title" id="challenges">Workout Challenges</h2>
         <div class="plans-grid">

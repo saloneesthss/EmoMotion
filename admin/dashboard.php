@@ -28,6 +28,7 @@ $totalPosts = $row['total'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmoMotion - Admin Panel</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/title-logo.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../styles/admin/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -80,8 +80,18 @@ body {
     background: white;
     padding: 20px;
     border-radius: 15px;
-    align-items: center;
     margin-bottom: 25px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.profile-card span {
+    display: flex;
+    align-items: center;
+}
+
+#streakDisplay {
+    margin-right: 20px;
 }
 
 .profile-card img {
