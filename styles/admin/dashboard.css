@@ -6,7 +6,7 @@
 }
 
 body {
-    background: #eef1f7;
+    background: rgb(254, 250, 250);
 }
 
 .header {
@@ -84,7 +84,7 @@ body {
 }
 
 .box {
-    background: linear-gradient(135deg, white, #f5f7fa);
+    background: linear-gradient(135deg, #eef1f7, #f5f9fd);
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -110,7 +110,7 @@ body {
 }
 
 .chart-box {
-    background: white;
+    background: #eef1f7;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);

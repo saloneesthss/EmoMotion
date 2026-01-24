@@ -237,7 +237,7 @@ function openWorkoutDialog() {
             console.log('Activity tracked:', data);
             if(data.streak){
                 const streakEl = document.getElementById('streakDisplay');
-                if(streakEl){
+                if(streakEl && data.streak !== 0 && data.streak !== null){
                     const dayText = (data.streak == 1) ? 'day' : 'days';
                     streakEl.textContent = `🔥 Streak: ${data.streak} ${dayText}`;
                 }

@@ -20,6 +20,68 @@ $posts = $con->prepare("SELECT COUNT(*) AS total FROM community_posts");
 $posts->execute();
 $row = $posts->fetch(PDO::FETCH_ASSOC);
 $totalPosts = $row['total'];
+
+if (isset($_GET['stats'])) {
+    header('Content-Type: application/json');
+    $today = date("Y-m-d");
+    try {
+        $totalStmt = $con->query("SELECT COUNT(*) FROM users");
+        $totalUsers = (int)$totalStmt->fetchColumn();
+        $activeStmt = $con->prepare("
+            SELECT COUNT(DISTINCT user_id)
+            FROM user_activity
+            WHERE activity_date = :today
+        ");
+        $activeStmt->execute([':today' => $today]);
+        $activeUsers = (int)$activeStmt->fetchColumn();
+        $inactiveUsers = $totalUsers - $activeUsers;
+
+        $activePercent = $totalUsers > 0 ? round(($activeUsers / $totalUsers) * 100) : 0;
+        echo json_encode([
+            'success' => true,
+            'active_users' => $activeUsers,
+            'inactive_users' => $inactiveUsers,
+            'active_percent' => $activePercent
+        ]);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    }
+    exit; 
+}
+
+if (isset($_GET['wave'])) {
+    header('Content-Type: application/json');
+    $data = [];
+    for ($i = 6; $i >= 0; $i--) {
+        $day = date('Y-m-d', strtotime("-$i days"));
+        $weekday = date("D", strtotime($day)); 
+
+        $loginStmt = $con->prepare("
+            SELECT COUNT(*) 
+            FROM user_activity 
+            WHERE activity_date = :day
+        ");
+        $loginStmt->execute([':day' => $day]);
+        $loginCount = (int)$loginStmt->fetchColumn();
+
+        $signupStmt = $con->prepare("
+            SELECT COUNT(*) 
+            FROM users 
+            WHERE DATE(joined_date) = :day
+        ");
+        $signupStmt->execute([':day' => $day]);
+        $signupCount = (int)$signupStmt->fetchColumn();
+
+        $data[] = [
+            'date' => date('D', strtotime($day)), 
+            'logins' => $loginCount,
+            'signups' => $signupCount
+        ];
+    }
+    echo json_encode(['success' => true, 'data' => $data]);
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -82,30 +144,51 @@ $totalPosts = $row['total'];
 
     <script>
         // WAVE CHART
-        new Chart(document.getElementById('waveChart'), {
-            type: 'line',
-            data: {
-                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-                datasets: [{
-                    label: 'Logged In Rate',
-                    data: [3,6,4,8,5,9,7],
-                    fill: true,
-                    backgroundColor: 'rgba(255,178,26,0.3)',
-                    borderColor: '#ffb21a',
-                    tension: 0.4
-                },{
-                    label: 'Sign Up Rate',
-                    data: [2,4,3,5,6,7,5],
-                    fill: true,
-                    backgroundColor: 'rgba(11,47,82,0.3)',
-                    borderColor: '#0b2f52',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { position: 'bottom' }}
-            }
+        fetch("dashboard.php?wave=1")
+        .then(res => res.json())
+        .then(result => {
+            if (!result.success) return;
+
+            const labels = result.data.map(row => row.date);
+            const loginData = result.data.map(row => row.logins);
+            const signupData = result.data.map(row => row.signups);
+           
+            new Chart(document.getElementById('waveChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Logged In Rate',
+                        data: loginData.map(Number),
+                        fill: true,
+                        backgroundColor: 'rgba(255,178,26,0.3)',
+                        borderColor: '#ffb21a',
+                        tension: 0.4
+                    },{
+                        label: 'Sign Up Rate',
+                        data: signupData.map(Number),
+                        fill: true,
+                        backgroundColor: 'rgba(11,47,82,0.3)',
+                        borderColor: '#0b2f52',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' }}
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            beginAtZero: true,
+                            precision: 0, 
+                            callback: function(value) {
+                                return Number.isInteger(value) ? value : '';
+                            }
+                        }
+                    }
+                }
+            });
         });
         
         // DONUT CHART
@@ -127,28 +210,40 @@ $totalPosts = $row['total'];
             }
         };
 
-        new Chart(document.getElementById('donutChart'), {
-            type: 'doughnut',
-            plugins: [centerText],
-            data: {
-                labels: ['Active Users','Inactive Users'],
-                datasets: [{
-                    data: [45,55],
-                    backgroundColor: ['#0b2f52','#ffb21a'],
-                    cutout: '70%'
-                }]
-            },
-            options: {
-                plugins: {
-                    centerText: {
-                        text: '45%',
-                        color: '#0b2f52',
-                        fontSize: 30,
-                        fontFamily: 'Poppins'
-                    },
-                    legend: { position: 'bottom' }
-                }
+        fetch('dashboard.php?stats=1')
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) {
+                console.error(data.error);
+                return;
             }
+
+            const active = data.active_users;
+            const inactive = data.inactive_users;
+            const percent = data.active_percent + '%';
+            new Chart(document.getElementById('donutChart'), {
+                type: 'doughnut',
+                plugins: [centerText],
+                data: {
+                    labels: ['Active Users','Inactive Users'],
+                    datasets: [{
+                        data: [active,inactive],
+                        backgroundColor: ['#0b2f52','#ffb21a'],
+                        cutout: '70%'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        centerText: {
+                            text: percent,
+                            color: '#0b2f52',
+                            fontSize: 30,
+                            fontFamily: 'Poppins'
+                        },
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
         });
     </script>
 </body>
