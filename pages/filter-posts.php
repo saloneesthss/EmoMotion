@@ -33,5 +33,17 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             }
         }
         ?>
+
+        <div class='post-actions'>
+            <button class='like-btn' data-post-id="<?php echo $row['id']; ?>">
+                <i class='fa-regular fa-heart'></i>
+                <span class='like-count' id="like-count-<?php echo $row['id']; ?>"></span>
+            </button>
+
+            <button class='comment-btn' data-post-id="<?php echo $row['id']; ?>">
+                <i class='fa-regular fa-comment'></i>
+                <span class='comment-count' id="comment-count-<?php echo $row['id']; ?>"></span>
+            </button>
+        </div>
     </div>
 <?php } ?>

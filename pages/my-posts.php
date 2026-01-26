@@ -83,19 +83,165 @@ $posts->execute();
                         ?>
 
                         <div class="post-actions">
-                            <button><i class="fa-regular fa-heart"></i> Like</button>
-                            <button><i class="fa-regular fa-comment"></i> Comment</button>
+                            <button class="like-btn" 
+                                    data-post-id="<?php echo $row['id']; ?>">
+                                <i class="fa-regular fa-heart"></i>
+                                <span class="like-count" id="like-count-<?php echo $row['id']; ?>">0</span>
+                            </button>
+
+                            <button class="comment-btn" 
+                                    data-post-id="<?php echo $row['id']; ?>">
+                                <i class="fa-regular fa-comment"></i>
+                                <span class="comment-count" id="comment-count-<?php echo $row['id']; ?>">0</span>
+                            </button>
                         </div>
                     </div>
                 <?php endwhile; ?>
             </div>
         </div>
+
+        <div id="commentModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+
+                <div id="commentSection"></div>
+
+                <div class="comment-input-box">
+                    <input type="text" id="newComment" placeholder="Add a comment...">
+                    <button id="postComment">Post</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- <script>
-        document.getElementById("category").addEventListener("change", function() {
-            this.form.submit();  
+    <script>
+        document.querySelectorAll('.category-btn').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.category-btn').forEach(li => li.classList.remove('active'));
+                this.classList.add('active');
+                const category = this.dataset.category;
+        
+                let text = item.innerText.trim();
+                document.querySelector(".hashtag").innerText = text;
+
+                fetch("filter-posts.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "category=" + encodeURIComponent(category)
+                })
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("post-list").innerHTML = data;
+                    refreshReactions();
+                });
+            });
         });
-    </script> -->
+
+        function refreshReactions() {
+            document.querySelectorAll(".like-btn").forEach(btn => {
+                let postId = btn.dataset.postId;
+
+                fetch("load-reactions.php?post_id=" + postId)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("like-count-" + postId).innerText = data.likes;
+                    document.getElementById("comment-count-" + postId).innerText = data.comment_count;
+
+                    if (data.liked_by_user) {
+                        btn.querySelector("i").classList.remove("fa-regular");
+                        btn.querySelector("i").classList.add("fa-solid");
+                        btn.querySelector("i").style.color = "red";
+                    }
+                });
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".like-btn").forEach(btn => {
+                let postId = btn.dataset.postId;
+                fetch("load-reactions.php?post_id=" + postId)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("like-count-" + postId).innerText = data.likes;
+                    document.getElementById("comment-count-" + postId).innerText = data.comment_count;
+
+                    if (data.liked_by_user) {
+                        btn.querySelector("i").classList.remove("fa-regular");
+                        btn.querySelector("i").classList.add("fa-solid");
+                        btn.querySelector("i").style.color = "red";
+                    }
+                });
+            });
+        });
+
+        document.addEventListener("click", function(e) {
+            if (e.target.closest(".like-btn")) {
+                let btn = e.target.closest(".like-btn");
+                let postId = btn.dataset.postId;
+
+                fetch("toggle-like.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "post_id=" + postId
+                })
+                .then(res => res.json())
+                .then(data => {
+                    let heart = btn.querySelector("i");
+                    let count = document.getElementById("like-count-" + postId);
+                    count.innerText = data.like_count;
+
+                    if (data.liked) {
+                        heart.classList.remove("fa-regular");
+                        heart.classList.add("fa-solid");
+                        heart.style.color = "red";
+                    } else {
+                        heart.classList.remove("fa-solid");
+                        heart.classList.add("fa-regular");
+                        heart.style.color = "black";
+                    }
+                });
+            }
+        });
+
+        let activePostId = null;
+        document.addEventListener("click", function(e){
+            if(e.target.closest(".comment-btn")){
+                let btn = e.target.closest(".comment-btn");
+                activePostId = btn.dataset.postId;
+                document.getElementById("commentModal").style.display = "flex";
+                loadComments(activePostId);
+            }
+        });
+
+        document.getElementById("closeModal").onclick = function(){
+            document.getElementById("commentModal").style.display = "none";
+        };
+
+        function loadComments(postId){
+            fetch("comments.php?post_id=" + postId)
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById("commentSection").innerHTML = data;
+            });
+        }
+
+        document.getElementById("postComment").onclick = function(){
+            let comment = document.getElementById("newComment").value.trim();
+
+            if(comment === "") return;
+
+            fetch("add-comment.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "post_id=" + activePostId + "&comment=" + encodeURIComponent(comment)
+            })
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById("newComment").value = "";
+                loadComments(activePostId);
+                refreshReactions(); 
+            });
+        };
+    </script>
 </body>
 </html>
