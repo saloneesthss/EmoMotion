@@ -18,6 +18,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_login'] = true;
         $_SESSION['username'] = $loginUser['email'];
         $_SESSION['user_id'] = $loginUser['id'];
+
+        $logFile = __DIR__ . "/admin/login-tracker.json";
+        $logins = json_decode(file_get_contents($logFile), true) ?? [];
+        $today = date("Y-m-d");
+        $userId = intval($loginUser['id']);  
+        if (!isset($logins[$today])) {
+            $logins[$today] = [];
+        }
+        if (!in_array($userId, $logins[$today])) {
+            $logins[$today][] = $userId;
+        }
+        file_put_contents($logFile, json_encode($logins));
+
          if(isset($_POST['remember-me'])) {
             setcookie("remember_user", $loginUser['id'], time() + (86400 * 7), "/"); // store 30 days
         }

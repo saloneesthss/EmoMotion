@@ -38,13 +38,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="subtitle">List of all registered users in the system</div>
         <table>
             <tr>
-                <!-- <th></th> -->
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email Address</th>
                 <th>BMI</th>
                 <th>Joined On</th>
-                <!-- <th></th> -->
             </tr>
 
             <?php foreach ($users as $user) { ?>
@@ -53,9 +51,24 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $user['id'] ?></td>
                 <td>
                     <div class="row">
-                        <?php if (!empty($user['image']) && file_exists('../assets/users-images/' . $user['image'])) { ?>
+                        <!-- <?php if (!empty($user['image']) && file_exists('../assets/users-images/' . $user['image'])) { ?>
                             <img width="100" src="../assets/users-images/<?php echo $user['image']; ?>" class="user-icon">
-                        <?php } ?>
+                        <?php } ?> -->
+                        <?php
+                            $hasImage = (!empty($user['image']) && file_exists("../assets/users-images/" . $user['image']));
+                            $nameParts = explode(" ", trim($user['name']));
+                            $initials = strtoupper(substr($nameParts[0], 0, 1));
+                            if (count($nameParts) > 1) {
+                                $initials .= strtoupper(substr(end($nameParts), 0, 1));
+                            }
+                        ?>
+                        <?php if ($hasImage): ?>
+                            <img src="../assets/users-images/<?php echo $user['image']; ?>" class="user-icon">
+                        <?php else: ?>
+                            <div class="user-icon">
+                                <?php echo $initials; ?>
+                            </div>
+                        <?php endif; ?>
                         <?php echo $user['name'] ?>
                     </div>
                 </td>

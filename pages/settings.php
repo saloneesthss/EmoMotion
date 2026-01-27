@@ -79,7 +79,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 
                     <div>
                         <label>Image</label>
-                        <input type="file" accept=".webp, .jpg, .jpeg, .png" name="image_name" required />
+                        <input type="file" accept=".webp, .jpg, .jpeg, .png" name="image_name" />
                         <input type="hidden" name="image_name_old" value="<?php echo $user['image']; ?>">
                         <?php if (!empty($user['image']) && file_exists('../assets/users-images/' . $user['image'])) { ?>
                             <img width="100" src="../assets/users-images/<?php echo $user['image']; ?>" name="image">
@@ -88,7 +88,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
                     
                     <div>
                         <label>Date of Birth</label>
-                        <input type="date" value="<?php echo $user['dob'] ?>" name="dob" required />
+                        <input type="date" value="<?php echo $user['dob'] ?>" name="dob" />
                     </div>
 
                     <div>
@@ -98,12 +98,12 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 
                     <div>
                         <label>Weight</label>
-                        <input type="number" value="<?php echo $user['weight'] ?>" name="weight" required />
+                        <input type="number" value="<?php echo $user['weight'] ?>" name="weight" />
                     </div>
 
                     <div>
                         <label>Height</label>
-                        <input type="number" value="<?php echo $user['height'] ?>" name="height" required />
+                        <input type="number" value="<?php echo $user['height'] ?>" name="height" />
                     </div>
 
                     <div>
@@ -113,12 +113,12 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 
                     <div>
                         <label>City</label>
-                        <input type="text" value="<?php echo $user['city'] ?>" name="city" required />
+                        <input type="text" value="<?php echo $user['city'] ?>" name="city" />
                     </div>
 
                     <div>
                         <label>Locality</label>
-                        <input type="text" value="<?php echo $user['locality'] ?>" name="locality" required />
+                        <input type="text" value="<?php echo $user['locality'] ?>" name="locality" />
                     </div>
                 </div>
 

@@ -116,6 +116,10 @@
     font-weight: 600;
 }
 
+.result-name {
+    font-weight: 500;
+}
+
 .result-type {
     font-size: 14px;
     color: #8b5cf6;

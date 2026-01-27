@@ -2,7 +2,7 @@
 require_once "../connection.php";
 
 $query = $_GET['query'] ?? '';
-$search = $query . "%";
+$search = "%" . $query . "%";
 
 $videoStmt = $con->prepare("
     SELECT id as video_id, title, 'video' AS type

@@ -113,6 +113,20 @@ body {
     margin-bottom: 25px;
 }
 
+.initials-avatar {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
 .header-row {
     display: flex;
     justify-content: space-between;

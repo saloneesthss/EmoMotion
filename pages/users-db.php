@@ -168,6 +168,7 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="search-box">
                 <input type="text" id="search-hint" placeholder="Search for plans...">
             </div>
+
             <a href="#recommended"><button class="filter-btn">Recommended</button></a>
             <?php if (!empty($customized)): ?>
                 <a href="#created-by-me"><button class="filter-btn">Created by me</button></a>
@@ -177,6 +178,8 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
 
             <button class="create-workout" onclick="location.href='../pages/customize-plans.php'">+ Create your own plan</button>
         </div>
+        
+        <div id="search-results" class="search-results"></div>
 
         <div id="plans-results"></div>
 
@@ -287,6 +290,32 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
                     location.hash = target;
                 }
             });
+        });
+
+        const searchInput = document.getElementById("search-hint");
+        const searchBox = document.getElementById("search-results");
+
+        searchInput.addEventListener("keyup", function() {
+            let query = this.value;
+
+            if (query.trim() === "") {
+                searchBox.style.display = "none";
+                searchBox.innerHTML = "";
+                return;
+            }
+
+            fetch("../pages/search-plans.php?query=" + encodeURIComponent(query))
+                .then(res => res.text())
+                .then(data => {
+                    searchBox.innerHTML = data;
+                    searchBox.style.display = "block";
+                });
+        });
+
+        document.addEventListener("click", function(e) {
+            if (!searchBox.contains(e.target) && e.target !== searchInput) {
+                searchBox.style.display = "none";
+            }
         });
     </script>
 </body>

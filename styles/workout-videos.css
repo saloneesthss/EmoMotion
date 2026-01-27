@@ -8,7 +8,8 @@ body {
 
 .collection-filter {
     position: relative;
-    display: inline-block;
+    display: flex;
+    justify-content: space-between;
 }
 
 .collection-button {
@@ -25,6 +26,21 @@ body {
     background: #663eac;
 }
 
+.filter-btn {
+    padding: 5px 15px;
+    border: none;
+    border-radius: 25px;
+    background: transparent;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-btn img {
+    width: 20px;
+}
+
 /* Dropdown menu */
 .collection-menu {
     list-style: none;
@@ -37,6 +53,10 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     display: none;
     z-index: 150;
+}
+
+.collection-menu.show-menu {
+    display: block;
 }
 
 .collection-menu li {
@@ -54,17 +74,106 @@ body {
     display: none;
     position: absolute;
     top: 0;
-    left: 100%; /* show to the right of parent */
+    left: 100%;
     list-style: none;
     margin: 0;
     padding: 0;
-    border: 1px solid #ccc;
-    background: #ecebf9;
+    border: 1px solid #ddd;
+    background: #e9e7f7;
     min-width: 180px;
 }
 
 .collection-menu li:hover .sub-menu {
     display: block;
+}
+
+/* Filter button */
+.filter-overlay {
+    display: none;
+    position: fixed;
+    top: 50; left: 0;
+    width: 100%;
+    min-height: 100vh;
+    z-index: 101;
+    overflow-y: auto;
+}
+
+.filter-dialog {
+    background: #ecebf9;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 30px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.filter-dialog h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.filter-columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.filter-column {
+    flex: 1 1 150px;
+    border-right: 1px solid #808080;
+}
+
+.filter-column h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #323d3d;
+}
+
+.filter-item {
+    margin-bottom: 10px;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+    margin-right: 15px;
+}
+
+.filter-item .check-icon {
+    display: none;
+    position: absolute;
+    right: 0;
+    color: #663eac;
+}
+
+.filter-item.selected .check-icon {
+    display: inline;
+}
+
+.filter-item.selected {
+    background-color: #e9e7f7;
+}
+
+.filter-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.filter-footer button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#clear-filters {
+    background: none;
+    color: #565656;
+}
+
+#apply-filters {
+    background: #000;
+    color: #fff;
 }
 
 .exercise-card {

@@ -33,6 +33,32 @@ body {
     background-size: 20px 20px;
 }
 
+.search-results {
+    display: none; 
+    position: absolute;
+    top: 140px; 
+    left: 220px;
+    transform: translateX(-50%);
+    width: 360px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    z-index: 100; 
+}
+
+.search-result-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background: #f7f7f7;
+}
+
 .filter-btn {
     padding: 12px 20px;
     border-radius: 30px;

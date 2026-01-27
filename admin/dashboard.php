@@ -55,14 +55,10 @@ if (isset($_GET['wave'])) {
     for ($i = 6; $i >= 0; $i--) {
         $day = date('Y-m-d', strtotime("-$i days"));
         $weekday = date("D", strtotime($day)); 
-
-        $loginStmt = $con->prepare("
-            SELECT COUNT(*) 
-            FROM user_activity 
-            WHERE activity_date = :day
-        ");
-        $loginStmt->execute([':day' => $day]);
-        $loginCount = (int)$loginStmt->fetchColumn();
+        $logFile = "../admin/login-tracker.json"; 
+        $logins = json_decode(file_get_contents($logFile), true) ?? [];
+        $today = date("Y-m-d");
+        $loginCount = isset($logins[$day]) ? count($logins[$day]) : 0;
 
         $signupStmt = $con->prepare("
             SELECT COUNT(*) 

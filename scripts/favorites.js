@@ -19,12 +19,11 @@ function toggleFavorite(id, isPlan, iconElement) {
         body: formData
     })
     .then(async res => {
-        let raw = await res.text();   // ← GET RAW RESPONSE
-        console.log("RAW RESPONSE:", raw);  // ← SHOW IT IN CONSOLE
-        return JSON.parse(raw);       // ← THEN parse JSON manually
+        let raw = await res.text(); 
+        console.log("RAW RESPONSE:", raw);
+        return JSON.parse(raw); 
     })
     .then(data => {
-
         if (data.status === "added") {
             iconElement.classList.add("favorited");
             console.log("added");

@@ -46,40 +46,94 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <ul class="collection-menu">
                 <li class="has-submenu" data-filter="">Browse By Target Area ▸
                     <ul class="sub-menu">
-                        <li>Abs</li>
-                        <li>Waist</li>
-                        <li>Hips</li>
-                        <li>Legs</li>
-                        <li>Arms</li>
-                        <li>Back</li>
-                        <li>Full Body</li>
+                        <li onclick="applyFilter('Abs')">Abs</li>
+                        <li onclick="applyFilter('Waist')">Waist</li>
+                        <li onclick="applyFilter('Hips')">Hips</li>
+                        <li onclick="applyFilter('Legs')">Legs</li>
+                        <li onclick="applyFilter('Arms')">Arms</li>
+                        <li onclick="applyFilter('Back')">Back</li>
+                        <li onclick="applyFilter('Full Body')">Full Body</li>
                     </ul>
                 </li>
                 <li class="has-submenu" data-filter="">Browse By Current Mood ▸
                     <ul class="sub-menu">
-                        <li>Happy</li>
-                        <li>Sad</li>
-                        <li>Angry</li>
-                        <li>Tired</li>
-                        <li>Energized</li>
+                        <li onclick="applyFilter('Happy')">Happy</li>
+                        <li onclick="applyFilter('Sad')">Sad</li>
+                        <li onclick="applyFilter('Angry')">Angry</li>
+                        <li onclick="applyFilter('Tired')">Tired</li>
+                        <li onclick="applyFilter('Energized')">Energized</li>
                     </ul>
                 </li>
                 <li class="has-submenu" data-filter="">Browse By Intensity ▸
                     <ul class="sub-menu">
-                        <li>Low</li>
-                        <li>Medium</li>
-                        <li>High</li>
+                        <li onclick="applyFilter('Low')">Low</li>
+                        <li onclick="applyFilter('Medium')">Medium</li>
+                        <li onclick="applyFilter('High')">High</li>
                     </ul>
                 </li>
                 <li class="has-submenu" data-filter="">Browse By Fitness Level ▸
                     <ul class="sub-menu">
-                        <li>Beginner</li>
-                        <li>Intermediate</li>
-                        <li>Advanced</li>
+                        <li onclick="applyFilter('Beginner')">Beginner</li>
+                        <li onclick="applyFilter('Intermediate')">Intermediate</li>
+                        <li onclick="applyFilter('Advanced')">Advanced</li>
                     </ul>
                 </li>
             </ul>
+            <button class="filter-btn"><img src="../assets/icons/filter-icon.png">Filter</button>
+            <div id="filter-overlay" class="filter-overlay">
+                <div class="filter-dialog">
+                    <div class="filter-columns">
+                        <div class="filter-column" data-filter="Focus Area">
+                            <h4>FOCUS AREA</h4>
+                            <div class="filter-item">Abs <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Arms <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Back <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Waist <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Hips <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Legs <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Full Body <span class="check-icon">✔</span></div>
+                        </div>
+
+                        <div class="filter-column" data-filter="Workout Type">
+                            <h4>CURRENT MOOD</h4>
+                            <div class="filter-item">Happy <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Sad <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Angry <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Tired <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Energized <span class="check-icon">✔</span></div>
+                        </div>
+
+                        <div class="filter-column" data-filter="Preference">
+                            <h4>INTENSITY</h4>
+                            <div class="filter-item">Low Intensity <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Medium Intensity <span class="check-icon">✔</span></div>
+                            <div class="filter-item">High Intensity <span class="check-icon">✔</span></div>
+                        </div>
+
+                        <div class="filter-column" data-filter="Duration">
+                            <h4>Duration</h4>
+                            <div class="filter-item">&#60;10 Days <span class="check-icon">✔</span></div>
+                            <div class="filter-item">10-20 Days <span class="check-icon">✔</span></div>
+                            <div class="filter-item">20-30 Days <span class="check-icon">✔</span></div>
+                            <div class="filter-item">30+ Days <span class="check-icon">✔</span></div>
+                        </div>
+
+                        <div class="filter-column" data-filter="fitness-level" style="border-right:none;">
+                            <h4>FITNESS LEVEL</h4>
+                            <div class="filter-item">Beginner <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Intermediate <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Advanced <span class="check-icon">✔</span></div>
+                        </div>
+                    </div>
+
+                    <div class="filter-footer">
+                        <button id="clear-filters">Clear Filters</button>
+                        <button id="apply-filters">Apply</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div class="exercise-grid">
             <?php foreach ($videos as $video): ?>
                 <div class="exercise-card"
@@ -87,8 +141,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     data-name="<?= htmlspecialchars($video['title']); ?>"
                     data-duration="<?= $video['duration']; ?>"
                     data-rep="<?= $video['repetition']; ?>"
-                    data-sets="<?= $video['sets']; ?>"
-                >
+                    data-sets="<?= $video['sets']; ?>">
                     <div class="exercise-image-container">
                         <img class="exercise-image" src="../assets/gifs/<?php echo $video['file_path']; ?>" alt="Workout Video">
                     </div>
@@ -199,15 +252,63 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         let countdown = null;
         let paused = false;
 
+        // Collection button
+        function applyFilter(value) {
+            window.location.href = "?filter=" + encodeURIComponent(value);
+        }
+
+        document.querySelector(".collection-button").addEventListener("click", function() {
+            document.querySelector(".collection-menu").classList.toggle("show-menu");
+        });
+
+        // Filter button
+        const filterBtn = document.querySelector(".filter-btn");
+        const filterOverlay = document.getElementById("filter-overlay");
+        const applyBtn = document.getElementById("apply-filters");
+        const clearBtn = document.getElementById("clear-filters");
+
+        let overlayVisible = false;
+        filterBtn.addEventListener("click", () => {
+            overlayVisible = !overlayVisible;
+            filterOverlay.style.display = overlayVisible ? "block" : "none";
+        });
+
+        filterOverlay.addEventListener("click", (e) => {
+            if (e.target === filterOverlay) {
+                overlayVisible = false;
+                filterOverlay.style.display = "none";
+            }
+        });
+
+        document.querySelectorAll(".filter-item").forEach(item => {
+            item.addEventListener("click", () => {
+                item.classList.toggle("selected");
+            });
+        });
+
+        applyBtn.addEventListener("click", () => {
+            const selectedFilters = {};
+            document.querySelectorAll(".filter-column").forEach(col => {
+                const colName = col.getAttribute("data-filter");
+                selectedFilters[colName] = Array.from(col.querySelectorAll(".filter-item.selected")).map(i => i.textContent.trim());
+            });
+            console.log("Filters applied:", selectedFilters);
+            overlayVisible = false;
+            filterOverlay.style.display = "none";
+        });
+
+        clearBtn.addEventListener("click", () => {
+            document.querySelectorAll(".filter-item.selected").forEach(i => i.classList.remove("selected"));
+        });
+
+        // Exercise dialog box
         document.querySelectorAll(".exercise-card").forEach(card => {
             card.addEventListener("click", function(e) {
                 if (e.target.classList.contains("fa-heart")) return;
-
                 const filePath = this.querySelector(".exercise-image").src;
                 const duration = parseInt(this.dataset.duration);
                 const rep = this.dataset.rep;
                 const sets = this.dataset.sets;
-
                 exercises = [
                     { file: filePath.split("/").pop(), time: duration, repetition: rep, sets: sets }
                 ];
@@ -247,12 +348,9 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         function startExercise(totalTime) {
             clearInterval(countdown);
             paused = false;
-
             let timeLeft = totalTime;
             timerNum.textContent = timeLeft;
-
             updateCircle(timeLeft, totalTime);
-
             countdown = setInterval(() => {
                 if (!paused) {
                     timeLeft--;

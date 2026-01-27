@@ -187,7 +187,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <?php foreach ($videos as $gif): ?>
-        <div class="exercise-item">
+        <div class="exercise-item"
+            data-target="<?= htmlspecialchars($gif['target_area']) ?>">
             <img src="../assets/gifs/<?php echo htmlspecialchars($gif['file_path']); ?>" 
                 class="video-thumb"
                 alt="Video Thumbnail">
@@ -211,19 +212,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <script src="../scripts/customize-plans.js"></script>
 <script>
+const searchInput = document.querySelector(".library-header input");
+const exerciseItems = document.querySelectorAll(".exercise-item");
+const filters = {
+    target: document.getElementsByName("target")
+};
+
+function getSelectedValue(radioNodeList) {
+    for (let radio of radioNodeList) {
+        if (radio.checked) return radio.value.toLowerCase();
+    }
+    return "";
+}
+
+function filterExercises() {
+    const selectedTarget = getSelectedValue(filters.target);
+
+    exerciseItems.forEach(item => {
+        const title = item.querySelector("h4").textContent.toLowerCase();
+        const target = item.querySelector("p").textContent.toLowerCase();
+        const itemTarget = item.dataset.target?.toLowerCase() || "";
+        if (
+            itemTarget.includes(selectedTarget) 
+        ) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+for (let group in filters) {
+    filters[group].forEach(radio => {
+        radio.addEventListener("change", filterExercises);
+    });
+}
+filterExercises();
+
+searchInput.addEventListener("keyup", function() {
+    const query = this.value.toLowerCase().trim();
+
+    exerciseItems.forEach(item => {
+        const title = item.querySelector("h4").textContent.toLowerCase();
+
+        if (title.includes(query)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+});
+
 let existingVideos = <?= json_encode($video_list) ?>;
 window.addEventListener("DOMContentLoaded", () => {
     const routineBox = document.querySelector(".routine-box");
-
-    // Insert all existing videos into cards
     existingVideos.forEach(file => {
-        // We need metadata for each file
         let video = window.allVideos.find(v => v.file_path === file);
         if (!video) return;
-
         createCard(video);
     });
-
     updateEstimate();
 });
 
@@ -306,8 +352,6 @@ document.querySelector("form").addEventListener("submit", () => {
     document.getElementById("video_list").value = JSON.stringify(files);
     document.getElementById("total_duration").value = totalSec;
 });
-
 </script>
-
 </body>
 </html>

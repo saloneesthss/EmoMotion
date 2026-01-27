@@ -45,36 +45,36 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <ul class="collection-menu">
                 <li class="has-submenu" data-filter="">Browse By Target Area ▸
                     <ul class="sub-menu">
-                        <li>Abs</li>
-                        <li>Waist</li>
-                        <li>Hips</li>
-                        <li>Legs</li>
-                        <li>Arms</li>
-                        <li>Back</li>
-                        <li>Full Body</li>
+                        <li onclick="applyFilter('Abs')">Abs</li>
+                        <li onclick="applyFilter('Waist')">Waist</li>
+                        <li onclick="applyFilter('Hips')">Hips</li>
+                        <li onclick="applyFilter('Legs')">Legs</li>
+                        <li onclick="applyFilter('Arms')">Arms</li>
+                        <li onclick="applyFilter('Back')">Back</li>
+                        <li onclick="applyFilter('Full Body')">Full Body</li>
                     </ul>
                 </li>
                 <li class="has-submenu" data-filter="">Browse By Current Mood ▸
                     <ul class="sub-menu">
-                        <li>Happy</li>
-                        <li>Sad</li>
-                        <li>Angry</li>
-                        <li>Tired</li>
-                        <li>Energized</li>
+                        <li onclick="applyFilter('Happy')">Happy</li>
+                        <li onclick="applyFilter('Sad')">Sad</li>
+                        <li onclick="applyFilter('Angry')">Angry</li>
+                        <li onclick="applyFilter('Tired')">Tired</li>
+                        <li onclick="applyFilter('Energized')">Energized</li>
                     </ul>
                 </li>
                 <li class="has-submenu" data-filter="">Browse By Intensity ▸
                     <ul class="sub-menu">
-                        <li>Low</li>
-                        <li>Medium</li>
-                        <li>High</li>
+                        <li onclick="applyFilter('Low')">Low</li>
+                        <li onclick="applyFilter('Medium')">Medium</li>
+                        <li onclick="applyFilter('High')">High</li>
                     </ul>
                 </li>
                 <li class="has-submenu" data-filter="">Browse By Fitness Level ▸
                     <ul class="sub-menu">
-                        <li>Beginner</li>
-                        <li>Intermediate</li>
-                        <li>Advanced</li>
+                        <li onclick="applyFilter('Beginner')">Beginner</li>
+                        <li onclick="applyFilter('Intermediate')">Intermediate</li>
+                        <li onclick="applyFilter('Advanced')">Advanced</li>
                     </ul>
                 </li>
             </ul>
@@ -120,5 +120,14 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script src="../scripts/favorites.js"></script>
+    <script>
+        function applyFilter(value) {
+            window.location.href = "?filter=" + encodeURIComponent(value);
+        }
+
+        document.querySelector(".collection-button").addEventListener("click", function() {
+            document.querySelector(".collection-menu").classList.toggle("show-menu");
+        });
+    </script>
 </body>
 </html>

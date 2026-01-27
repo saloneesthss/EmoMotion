@@ -63,7 +63,21 @@ if (!empty($user['height']) && !empty($user['weight'])) {
 
             <div class="profile-card">
                 <span>
-                    <img src="<?php echo $imagePath; ?>" class="avatar">
+                    <?php
+                        $hasImage = (!empty($user['image']) && file_exists("../assets/users-images/" . $user['image']));
+                        $nameParts = explode(" ", trim($user['name']));
+                        $initials = strtoupper(substr($nameParts[0], 0, 1));
+                        if (count($nameParts) > 1) {
+                            $initials .= strtoupper(substr(end($nameParts), 0, 1));
+                        }
+                    ?>
+                    <?php if ($hasImage): ?>
+                        <img src="<?php echo $imagePath; ?>" class="avatar">
+                    <?php else: ?>
+                        <div class="avatar initials-avatar">
+                            <?php echo $initials; ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="details">
                         <h3><?php echo $user['name']; ?></h3>
                         <p><?php echo $user['country']; ?></p>
