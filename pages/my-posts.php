@@ -28,6 +28,7 @@ $posts->execute();
     <div class="layout">
         <div class="sidebar">
             <a href="user-profile.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+            <a href="my-history.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-clock-rotate-left"></i> My History</a>
             <a href="my-plans.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-dumbbell"></i> My Plans</a>
             <a href="my-workouts.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-video"></i> My Workouts</a>
             <a href="my-posts.php?id=<?php echo $user['id'];?>"><i class="fa-solid fa-comments"></i> My Posts</a>
@@ -38,17 +39,6 @@ $posts->execute();
 
     <div class="main-part">
         <div class="main my-posts">
-            <!-- <div class="tag-header">
-                <select class="hashtag" name="category" id="category">
-                    <option class="category-tag" value="#all-posts">#all-posts</option>
-                    <option class="category-tag" value="#fitness">#fitness</option>
-                    <option class="category-tag" value="#before-after-results">#before-after-results</option>
-                    <option class="category-tag" value="#fitness-journeys">#fitness-journeys</option>
-                    <option class="category-tag" value="#off-topic">#off-topic</option>
-                    <option class="category-tag" value="#feedback">#feedback</option>
-                    <option class="category-tag" value="#tech-support">#tech-support</option>
-                </select>
-            </div> -->
             <div id="post-list">
                 <?php while($row = $posts->fetch(PDO::FETCH_ASSOC)): ?>
                     <div class="post-card">

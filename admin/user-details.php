@@ -51,9 +51,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $user['id'] ?></td>
                 <td>
                     <div class="row">
-                        <!-- <?php if (!empty($user['image']) && file_exists('../assets/users-images/' . $user['image'])) { ?>
-                            <img width="100" src="../assets/users-images/<?php echo $user['image']; ?>" class="user-icon">
-                        <?php } ?> -->
                         <?php
                             $hasImage = (!empty($user['image']) && file_exists("../assets/users-images/" . $user['image']));
                             $nameParts = explode(" ", trim($user['name']));

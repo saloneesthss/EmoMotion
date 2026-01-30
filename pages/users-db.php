@@ -22,7 +22,7 @@ $bmiStmt -> execute([$user_id]);
 $bmi = $bmiStmt->fetch(PDO::FETCH_ASSOC);
 
 if (count($favorites) === 0) {
-    $sql = "SELECT * FROM workout_plans ORDER BY RAND() LIMIT 12";
+    $sql = "SELECT * FROM workout_plans ORDER BY RAND() LIMIT 8";
     $stmt = $con->prepare($sql);
     $stmt->execute();
     $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -30,7 +30,7 @@ if (count($favorites) === 0) {
         $p['score'] = bmiScore($p, $bmi);
     }
     usort($plans, fn($a, $b) => $b['score'] <=> $a['score']);
-    $recommended = array_slice($plans, 0, 12);
+    $recommended = array_slice($plans, 0, 8);
 } else {
     $stmt = $con->prepare("
         SELECT *
@@ -227,7 +227,8 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
 
         <h2 class="section-title" id="challenges">Workout Challenges</h2>
         <div class="plans-grid">
-            <?php foreach ($plansChallenge as $video): ?>
+            <?php $latestFour = array_slice($plansChallenge, 0, 4); ?>
+            <?php foreach ($latestFour as $video): ?>
             <?php if (stripos($video['plan_name'], 'Challenge') !== false): ?>
             <a href="plan-details.php?id=<?= $video['id'] ?>" class="plan-link">
                 <div class="plans-card">
@@ -249,7 +250,8 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
 
         <h2 class="section-title" id="full-body">Full Body Workouts</h2>
         <div class="plans-grid">
-            <?php foreach ($plansChallenge as $video): ?>
+            <?php $latestFour = array_slice($plansChallenge, 0, 4); ?>
+            <?php foreach ($latestFour as $video): ?>
             <?php if ($video['target_area'] === 'Full Body'): ?>
             <a href="plan-details.php?id=<?= $video['id'] ?>" class="plan-link">
                 <div class="plans-card">

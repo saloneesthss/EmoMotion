@@ -36,23 +36,79 @@ try {
                 ':plans' => json_encode($plans),
                 ':id' => $activity['id']
             ]);
+
+        }
+
+        $checkHistory = $con->prepare("
+            SELECT id FROM user_history
+            WHERE user_id = :uid AND activity_id = :act_id
+            LIMIT 1
+        ");
+        $checkHistory->execute([
+            ':uid' => $user_id,
+            ':act_id' => $activity['id']
+        ]);
+        $existingHistory = $checkHistory->fetch(PDO::FETCH_ASSOC);
+       
+        if ($existingHistory) {
+            $updateHistory = $con->prepare("
+                UPDATE user_history 
+                SET plan_id = :plans, clicked_at = :created 
+                WHERE id = :id
+            ");
+            $updateHistory->execute([
+                ':plans' => json_encode($plans),
+                ':created' => date('Y-m-d H:i:s'),
+                ':id' => $existingHistory['id']
+            ]);
+        } else {
+            $insertHistory = $con->prepare("
+                INSERT INTO user_history (user_id, activity_id, plan_id, video_id, clicked_at)
+                VALUES (:uid, :act_id, :plan_id, NULL, :created)
+            ");
+            $insertHistory->execute([
+                ':uid' => $user_id,
+                ':act_id' => $activity['id'],
+                ':plan_id' => json_encode($plans), 
+                ':created' => date('Y-m-d H:i:s')
+            ]);
         }
     } else {
         $plans = [$plan_id];
-        $insert = $con->prepare("INSERT INTO user_activity (user_id, plan_id, activity_date) VALUES (:uid, :plans, :today)");
+        $insert = $con->prepare("
+            INSERT INTO user_activity (user_id, plan_id, activity_date)
+            VALUES (:uid, :plans, :today)
+        ");
         $insert->execute([
             ':uid'=>$user_id,
             ':plans'=>json_encode($plans),
             ':today'=>$today
         ]);
+
+        $newActivityId = $con->lastInsertId();
+        $history = $con->prepare("
+            INSERT INTO user_history (user_id, plan_id, activity_id)
+            VALUES (:uid, :plans, :act_id)
+        ");
+        $history->execute([
+            ':uid' => $user_id,
+            ':plans'=>json_encode($plans),
+            ':act_id' => $newActivityId,
+        ]);
     }
 
-    $stmt = $con->prepare("SELECT activity_date FROM user_activity WHERE user_id=:uid ORDER BY activity_date DESC");
+    $stmt = $con->prepare("
+        SELECT activity_date 
+        FROM user_activity 
+        WHERE user_id=:uid 
+        ORDER BY activity_date DESC
+    ");
     $stmt->execute([':uid'=>$user_id]);
     $dates = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $streak = 0;
     $prevDate = null;
+
     foreach ($dates as $date) {
         if (!$prevDate) {
             $streak = 1;
@@ -72,6 +128,7 @@ try {
         'streak' => $streak,
         'todayPlans' => $plans
     ]);
+
 } catch (Exception $e) {
     echo json_encode([
         'success'=>false,

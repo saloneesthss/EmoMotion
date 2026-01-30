@@ -7,7 +7,7 @@ if (!empty($userid)) {
     $where="WHERE u.id=$userid";
 }
 
-$sql="SELECT u.name as username, p.* FROM community_posts p INNER JOIN users u ON u.id=p.user_id $where";
+$sql="SELECT u.name as username, u.image as user_image, p.* FROM community_posts p INNER JOIN users u ON u.id=p.user_id $where";
 $stmt = $con->prepare($sql);
 $stmt->execute();
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -46,20 +46,36 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="subtitle">List of all community posts made by registered users in the system</div>
         <table>
             <tr>
-                <!-- <th></th> -->
                 <th>Name</th>
                 <th>Title</th>
                 <th>Body</th>
                 <th>Image</th>
                 <th>Category</th>
                 <th>Created at</th>
-                <!-- <th></th> -->
             </tr>
 
             <?php foreach ($posts as $post) { ?>
             <tr>
-                <!-- <td><input type="checkbox"></td> -->
-                <td><?php echo $post['username'];?></td>
+                <td>
+                    <div id="user-row">
+                    <?php
+                        $hasImage = (!empty($post['user_image']) && file_exists("../assets/users-images/" . $post['user_image']));
+                        $nameParts = explode(" ", trim($post['username']));
+                        $initials = strtoupper(substr($nameParts[0], 0, 1));
+                        if (count($nameParts) > 1) {
+                            $initials .= strtoupper(substr(end($nameParts), 0, 1));
+                        }
+                    ?>
+                    <?php if ($hasImage): ?>
+                        <img src="../assets/users-images/<?php echo $post['user_image']; ?>" class="user-icon">
+                    <?php else: ?>
+                        <div class="user-icon">
+                            <?php echo $initials; ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php echo explode(' ', trim($post['username']))[0]; ?>
+                    </div>
+                </td>
                 <td><?php echo $post['title'] ?></td>
                 <td><?php echo $post['body'] ?></td>
                 <td>
@@ -74,7 +90,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </td>
                 <td><?php echo $post['category'] ?></td>
                 <td><?php echo $post['created_at'] ?></td>
-                <!-- <td><span class="trash">🗑</span></td> -->
             </tr>
             <?php } ?>
         </table>

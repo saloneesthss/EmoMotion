@@ -8,22 +8,65 @@ if (isset($_SESSION['user_id'])) {
     require_once '../components/navbar.php';
 }
 
-$filter = "";
-$whereClause = "";
+$filters = [];
+$whereParts = [];
 
-if (isset($_GET['filter']) && !empty($_GET['filter'])) {
-    $filter = $_GET['filter'];
-    $whereClause = " WHERE target_area = :filter OR mood = :filter OR fitness_level = :filter OR intensity = :filter ";
+if (isset($_GET['filter'])) {
+    $singleFilter = $_GET['filter'];
+    $whereParts[] = "target_area = ? OR mood = ? OR intensity = ? OR fitness_level = ?";
+    $bindValues = [$singleFilter, $singleFilter, $singleFilter, $singleFilter];
 }
 
-$sql = "SELECT * FROM workout_videos $whereClause ORDER BY id DESC";
+elseif (isset($_GET['filters'])) {
+    $filters = json_decode($_GET['filters'], true);
+
+    $bindValues = [];
+    if (!empty($filters['focus'])) {
+        $in = str_repeat('?,', count($filters['focus']) - 1) . '?';
+        $whereParts[] = "target_area IN ($in)";
+        $bindValues = array_merge($bindValues, $filters['focus']);
+    }
+
+    if (!empty($filters['mood'])) {
+        $in = str_repeat('?,', count($filters['mood']) - 1) . '?';
+        $whereParts[] = "mood IN ($in)";
+        $bindValues = array_merge($bindValues, $filters['mood']);
+    }
+
+    if (!empty($filters['intensity'])) {
+        $in = str_repeat('?,', count($filters['intensity']) - 1) . '?';
+        $whereParts[] = "intensity IN ($in)";
+        $bindValues = array_merge($bindValues, $filters['intensity']);
+    }
+
+    if (!empty($filters['fitness'])) {
+        $in = str_repeat('?,', count($filters['fitness']) - 1) . '?';
+        $whereParts[] = "fitness_level IN ($in)";
+        $bindValues = array_merge($bindValues, $filters['fitness']);
+    }
+
+    if (!empty($filters['reps'])) {
+        $repConditions = [];
+        foreach ($filters['reps'] as $repRange) {
+            if ($repRange === "30+") {
+                $repConditions[] = "repetition >= 30";
+            } else {
+                list($minRep, $maxRep) = explode("-", $repRange);
+                $repConditions[] = "(repetition BETWEEN $minRep AND $maxRep)";
+            }
+        }
+        $whereParts[] = "(" . implode(" OR ", $repConditions) . ")";
+    }
+}
+
+$whereSQL = "";
+if (!empty($whereParts)) {
+    $whereSQL = "WHERE " . implode(" AND ", $whereParts);
+}
+
+$sql = "SELECT * FROM workout_videos $whereSQL ORDER BY id DESC";
 $stmt = $con->prepare($sql);
-
-if (!empty($filter)) {
-    $stmt->bindParam(':filter', $filter);
-}
-
-$stmt->execute();
+$stmt->execute($bindValues ?? []);
 $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -79,6 +122,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </li>
             </ul>
+            
             <button class="filter-btn"><img src="../assets/icons/filter-icon.png">Filter</button>
             <div id="filter-overlay" class="filter-overlay">
                 <div class="filter-dialog">
@@ -94,7 +138,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="filter-item">Full Body <span class="check-icon">✔</span></div>
                         </div>
 
-                        <div class="filter-column" data-filter="Workout Type">
+                        <div class="filter-column" data-filter="Current Mood">
                             <h4>CURRENT MOOD</h4>
                             <div class="filter-item">Happy <span class="check-icon">✔</span></div>
                             <div class="filter-item">Sad <span class="check-icon">✔</span></div>
@@ -103,22 +147,22 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="filter-item">Energized <span class="check-icon">✔</span></div>
                         </div>
 
-                        <div class="filter-column" data-filter="Preference">
+                        <div class="filter-column" data-filter="Intensity">
                             <h4>INTENSITY</h4>
-                            <div class="filter-item">Low Intensity <span class="check-icon">✔</span></div>
-                            <div class="filter-item">Medium Intensity <span class="check-icon">✔</span></div>
-                            <div class="filter-item">High Intensity <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Low <span class="check-icon">✔</span></div>
+                            <div class="filter-item">Medium <span class="check-icon">✔</span></div>
+                            <div class="filter-item">High <span class="check-icon">✔</span></div>
                         </div>
 
-                        <div class="filter-column" data-filter="Duration">
-                            <h4>Duration</h4>
-                            <div class="filter-item">&#60;10 Days <span class="check-icon">✔</span></div>
-                            <div class="filter-item">10-20 Days <span class="check-icon">✔</span></div>
-                            <div class="filter-item">20-30 Days <span class="check-icon">✔</span></div>
-                            <div class="filter-item">30+ Days <span class="check-icon">✔</span></div>
+                        <div class="filter-column" data-filter="Repetitions">
+                            <h4>REPETITIONS</h4>
+                            <div class="filter-item" data-rep="1-10">1-10 Reps <span class="check-icon">✔</span></div>
+                            <div class="filter-item" data-rep="10-20">10-20 Reps <span class="check-icon">✔</span></div>
+                            <div class="filter-item" data-rep="20-30">20-30 Reps <span class="check-icon">✔</span></div>
+                            <div class="filter-item" data-rep="30+">30+ Reps <span class="check-icon">✔</span></div>
                         </div>
 
-                        <div class="filter-column" data-filter="fitness-level" style="border-right:none;">
+                        <div class="filter-column" data-filter="Fitness Level" style="border-right:none;">
                             <h4>FITNESS LEVEL</h4>
                             <div class="filter-item">Beginner <span class="check-icon">✔</span></div>
                             <div class="filter-item">Intermediate <span class="check-icon">✔</span></div>
@@ -136,7 +180,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="exercise-grid">
             <?php foreach ($videos as $video): ?>
-                <div class="exercise-card"
+                <div class="exercise-card" onclick="trackVideo(<?= $video['id']?>)"
                     data-id="<?= $video['id']; ?>"
                     data-name="<?= htmlspecialchars($video['title']); ?>"
                     data-duration="<?= $video['duration']; ?>"
@@ -243,12 +287,10 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const repText = document.getElementById("repCount");
         const setText = document.getElementById("setCount");
         const titleText = document.getElementById("playerTitle");
-
         const circle = document.querySelector(".progress-ring__circle");
         const radius = circle.r.baseVal.value;
         const circumference = 2 * Math.PI * radius;
         circle.style.strokeDasharray = `${circumference} ${circumference}`;
-
         let countdown = null;
         let paused = false;
 
@@ -257,8 +299,16 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             window.location.href = "?filter=" + encodeURIComponent(value);
         }
 
-        document.querySelector(".collection-button").addEventListener("click", function() {
-            document.querySelector(".collection-menu").classList.toggle("show-menu");
+        const collectionButton = document.querySelector(".collection-button");
+        const collectionMenu = document.querySelector(".collection-menu");
+        collectionButton.addEventListener("click", function(e) {
+            e.stopPropagation(); 
+            collectionMenu.classList.toggle("show-menu");
+        });
+        document.addEventListener("click", function(e) {
+            if (!collectionButton.contains(e.target) && !collectionMenu.contains(e.target)) {
+                collectionMenu.classList.remove("show-menu");
+            }
         });
 
         // Filter button
@@ -266,7 +316,6 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const filterOverlay = document.getElementById("filter-overlay");
         const applyBtn = document.getElementById("apply-filters");
         const clearBtn = document.getElementById("clear-filters");
-
         let overlayVisible = false;
         filterBtn.addEventListener("click", () => {
             overlayVisible = !overlayVisible;
@@ -286,15 +335,40 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             });
         });
 
+        function trackVideo(videoId) {
+            fetch("../pages/track-video.php", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({video_id: videoId})
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+            .catch(err => console.error(err));
+        }
+
         applyBtn.addEventListener("click", () => {
-            const selectedFilters = {};
+            const selected = {focus: [], mood: [], intensity: [], reps: [], fitness: []};
             document.querySelectorAll(".filter-column").forEach(col => {
-                const colName = col.getAttribute("data-filter");
-                selectedFilters[colName] = Array.from(col.querySelectorAll(".filter-item.selected")).map(i => i.textContent.trim());
+                const type = col.getAttribute("data-filter");
+                let values;
+                if (type === "Repetitions") {
+                    values = Array.from(col.querySelectorAll(".filter-item.selected"))
+                        .map(i => i.getAttribute("data-rep"));
+                } else {
+                    values = Array.from(col.querySelectorAll(".filter-item.selected"))
+                        .map(i => i.childNodes[0].nodeValue.trim());
+                }
+                if (type === "Focus Area") selected.focus = values;
+                if (type === "Current Mood") selected.mood = values;
+                if (type === "Intensity") selected.intensity = values;
+                if (type === "Repetitions") selected.reps = values;
+                if (type === "Fitness Level") selected.fitness = values;
             });
-            console.log("Filters applied:", selectedFilters);
+            console.log("Filters applied:", selected);
             overlayVisible = false;
             filterOverlay.style.display = "none";
+            const query = encodeURIComponent(JSON.stringify(selected));
+            window.location.href = "?filters=" + query;
         });
 
         clearBtn.addEventListener("click", () => {
