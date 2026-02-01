@@ -22,91 +22,122 @@ $bmiStmt -> execute([$user_id]);
 $bmi = $bmiStmt->fetch(PDO::FETCH_ASSOC);
 
 if (count($favorites) === 0) {
-    $sql = "SELECT * FROM workout_plans ORDER BY RAND() LIMIT 8";
-    $stmt = $con->prepare($sql);
-    $stmt->execute();
-    $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $plans = $planStmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($plans as &$p) {
         $p['score'] = bmiScore($p, $bmi);
     }
     usort($plans, fn($a, $b) => $b['score'] <=> $a['score']);
     $recommended = array_slice($plans, 0, 8);
 } else {
-    $stmt = $con->prepare("
-        SELECT *
-        FROM workout_plans
-        WHERE id NOT IN (SELECT plan_id FROM favorites WHERE user_id = ?)
-    ");
-    $stmt->execute([$user_id]);
-    $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $fitness_map = ["Beginner"=>1, "Intermediate"=>2, "Advanced"=>3];
-    $intensity_map = ["Low"=>1, "Medium"=>2, "High"=>3];
-
-    $unique_targets = [];
-    $unique_moods = [];
-
-    foreach ($plans as $p) {
-        if (!in_array($p['target_area'], $unique_targets)) $unique_targets[] = $p['target_area'];
-        if (!in_array($p['mood'], $unique_moods)) $unique_moods[] = $p['mood'];
-    }
-    $user_vector_sum = [];
-    $favorite_vectors = [];
-
+    $tagWeights = [
+        'target_area' => [],
+        'mood' => [],
+        'fitness_level' => [],
+        'intensity' => []
+    ];
     foreach ($favorites as $fav) {
-        $vec = [];
-        $vec[] = $fitness_map[$fav['fitness_level']] ?? 1;
+        $tagWeights['target_area'][$fav['target_area']] = 
+            ($tagWeights['target_area'][$fav['target_area']] ?? 0) + 1;
 
-        foreach ($unique_targets as $t) {
-            $vec[] = ($fav['target_area'] === $t) ? 1 : 0;
-        }
+        $tagWeights['mood'][$fav['mood']] = 
+            ($tagWeights['mood'][$fav['mood']] ?? 0) + 1;
 
-        foreach ($unique_moods as $m) {
-            $vec[] = ($fav['mood'] === $m) ? 1 : 0;
-        }
+        $tagWeights['fitness_level'][$fav['fitness_level']] = 
+            ($tagWeights['fitness_level'][$fav['fitness_level']] ?? 0) + 1;
 
-        $vec[] = $intensity_map[$fav['intensity']] ?? 1;
-        $favorite_vectors[] = $vec;
+        $tagWeights['intensity'][$fav['intensity']] = 
+            ($tagWeights['intensity'][$fav['intensity']] ?? 0) + 1;
     }
-    $vector_length = count($favorite_vectors[0]);
-    $user_profile = array_fill(0, $vector_length, 0);
+    // $stmt = $con->prepare("
+    //     SELECT *
+    //     FROM workout_plans
+    //     WHERE id NOT IN (SELECT plan_id FROM favorites WHERE user_id = ?)
+    // ");
+    // $stmt->execute([$user_id]);
+    // $plans = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($favorite_vectors as $vec) {
-        foreach ($vec as $i => $v) {
-            $user_profile[$i] += $v;
-        }
-    }
+    // $fitness_map = ["Beginner"=>1, "Intermediate"=>2, "Advanced"=>3];
+    // $intensity_map = ["Low"=>1, "Medium"=>2, "High"=>3];
 
-    foreach ($user_profile as $i => $value) {
-        $user_profile[$i] = $value / count($favorite_vectors);
-    }
+    // $unique_targets = [];
+    // $unique_moods = [];
+
+    // foreach ($plans as $p) {
+    //     if (!in_array($p['target_area'], $unique_targets)) $unique_targets[] = $p['target_area'];
+    //     if (!in_array($p['mood'], $unique_moods)) $unique_moods[] = $p['mood'];
+    // }
+    // $user_vector_sum = [];
+    // $favorite_vectors = [];
+
+    // foreach ($favorites as $fav) {
+    //     $vec = [];
+    //     $vec[] = $fitness_map[$fav['fitness_level']] ?? 1;
+
+    //     foreach ($unique_targets as $t) {
+    //         $vec[] = ($fav['target_area'] === $t) ? 1 : 0;
+    //     }
+
+    //     foreach ($unique_moods as $m) {
+    //         $vec[] = ($fav['mood'] === $m) ? 1 : 0;
+    //     }
+
+    //     $vec[] = $intensity_map[$fav['intensity']] ?? 1;
+    //     $favorite_vectors[] = $vec;
+    // }
+    // $vector_length = count($favorite_vectors[0]);
+    // $user_profile = array_fill(0, $vector_length, 0);
+
+    // foreach ($favorite_vectors as $vec) {
+    //     foreach ($vec as $i => $v) {
+    //         $user_profile[$i] += $v;
+    //     }
+    // }
+
+    // foreach ($user_profile as $i => $value) {
+    //     $user_profile[$i] = $value / count($favorite_vectors);
+    // }
 
     $recommended = [];
-    foreach ($plans as $p) {
-        $vec = [];
-        $vec[] = $fitness_map[$p['fitness_level']] ?? 1;
-
-        foreach ($unique_targets as $t) {
-            $vec[] = ($p['target_area'] === $t) ? 1 : 0;
+    foreach ($plansChallenge as $p) {
+        $planId = $p['id'];
+        $isFavorite = false;
+        foreach ($favorites as $f) {
+            if ($f['id'] == $planId) { $isFavorite = true; break; }
         }
+        if ($isFavorite) continue;
 
-        foreach ($unique_moods as $m) {
-            $vec[] = ($p['mood'] === $m) ? 1 : 0;
-        }
+        // $vec = [];
+        // $vec[] = $fitness_map[$p['fitness_level']] ?? 1;
 
-        $vec[] = $intensity_map[$p['intensity']] ?? 1;
-        $dot = 0; $magA = 0; $magB = 0;
-        foreach ($vec as $i => $v) {
-            $dot += $v * $user_profile[$i];
-            $magA += $v * $v;
-            $magB += $user_profile[$i] * $user_profile[$i];
-        }
-        $magA = sqrt($magA);
-        $magB = sqrt($magB);
-        $similarity = ($magA > 0 && $magB > 0) ? ($dot / ($magA * $magB)) : 0;
+        // foreach ($unique_targets as $t) {
+        //     $vec[] = ($p['target_area'] === $t) ? 1 : 0;
+        // }
 
-        $bmi = bmiScore($p, $bmi);
-        $p['score'] = $similarity * 0.7 + $bmi * 0.3;
+        // foreach ($unique_moods as $m) {
+        //     $vec[] = ($p['mood'] === $m) ? 1 : 0;
+        // }
+
+        // $vec[] = $intensity_map[$p['intensity']] ?? 1;
+        // $dot = 0; $magA = 0; $magB = 0;
+        // foreach ($vec as $i => $v) {
+        //     $dot += $v * $user_profile[$i];
+        //     $magA += $v * $v;
+        //     $magB += $user_profile[$i] * $user_profile[$i];
+        // }
+        // $magA = sqrt($magA);
+        // $magB = sqrt($magB);
+        // $similarity = ($magA > 0 && $magB > 0) ? ($dot / ($magA * $magB)) : 0;
+
+        $contentScore = 0;
+        $contentScore += $tagWeights['target_area'][$p['target_area']] ?? 0;
+        $contentScore += $tagWeights['mood'][$p['mood']] ?? 0;
+        $contentScore += $tagWeights['fitness_level'][$p['fitness_level']] ?? 0;
+        $contentScore += $tagWeights['intensity'][$p['intensity']] ?? 0;
+
+        if ($contentScore > 10) $contentScore = 10;
+
+        $bmiScoreValue = bmiScore($p, $bmi);
+        $p['score'] = ($contentScore * 0.7) + ($bmiScoreValue * 0.3);
         $recommended[] = $p;
     }
 

@@ -25,7 +25,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="videos-list.php"><i class="fa-solid fa-video"></i> Workout Videos</a>
         <a href="plans-list.php"><i class="fa-solid fa-dumbbell"></i> Workout Plans</a>
         <a href="community-posts.php"><i class="fa-solid fa-comment-dots"></i> Community Posts</a>
-        <a href="report.php"><i class="fa-solid fa-file-lines"></i> User Report</a>
+        <a href="report.php"><i class="fa-solid fa-file-lines"></i> Sign-up Report</a>
     </div>
 
     <div class="header">
