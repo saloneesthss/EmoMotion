@@ -302,14 +302,14 @@ $customized = $customizeStmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </div>
 
-        <h2 class="section-title">Browse by your current mood</h2>
+        <!-- <h2 class="section-title">Browse by your current mood</h2>
         <div class="horizontal-scroll">
             <div class="long-card">Happy</div>
             <div class="long-card">Sad</div>
             <div class="long-card">Angry</div>
             <div class="long-card">Tired</div>
             <div class="long-card">Energized</div>
-        </div>
+        </div> -->
     </div>
 
     <script>

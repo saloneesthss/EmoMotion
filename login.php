@@ -84,7 +84,7 @@ if(isset($_SESSION['user_login']) === true) {
                         <input type="checkbox" name="remember-me" id="remember-me">
                         Remember Me
                     </div>
-                    <a class="forgot-password">
+                    <a class="forgot-password" href="pages/reset-password.php">
                         Forgot your password?
                     </a>
                 </div>

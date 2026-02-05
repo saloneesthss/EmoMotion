@@ -173,3 +173,7 @@ body {
     box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     cursor: pointer;
 }
+
+.plans-results {
+    z-index: 500;
+}

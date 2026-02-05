@@ -24,7 +24,7 @@ $posts->execute();
             <div class="title-tag">
                 <div class="hashtag">#all_posts</div>
                 <div class="right">
-                    <div class="search-tag"><i class="fa-solid fa-magnifying-glass"></i>Search</div>
+                    <!-- <div class="search-tag"><i class="fa-solid fa-magnifying-glass"></i>Search</div> -->
                     <button class="create-post" onclick="location.href='add-post.php'">Create Post</button>
                 </div>
             </div>

@@ -248,7 +248,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div class="gif-card">
-                <img id="playerGif" src="">
+                <img id="playerGif" src="" style="width:350px; object-fit:contain;">
             </div>
 
             <div class="rep-set-box">

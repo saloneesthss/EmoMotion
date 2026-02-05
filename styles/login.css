@@ -107,6 +107,7 @@ body {
 
 .additional-info a {
     text-decoration: underline;
+    color: #062541;
     cursor: pointer;
 }
 

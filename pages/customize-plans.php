@@ -160,7 +160,10 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php foreach ($videos as $gif): ?>
         <div class="exercise-item"
-            data-target="<?= htmlspecialchars($gif['target_area']) ?>">
+            data-target="<?= htmlspecialchars($gif['target_area']) ?>"
+            data-mood="<?= htmlspecialchars($gif['mood']) ?>"
+            data-intensity="<?= htmlspecialchars($gif['intensity']) ?>"
+            data-level="<?= htmlspecialchars($gif['fitness_level']) ?>">
             <img src="../assets/gifs/<?php echo htmlspecialchars($gif['file_path']); ?>" 
                 class="video-thumb"
                 alt="Video Thumbnail">
@@ -187,7 +190,10 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 const searchInput = document.querySelector(".library-header input");
 const exerciseItems = document.querySelectorAll(".exercise-item");
 const filters = {
-    target: document.getElementsByName("target")
+    target: document.getElementsByName("target"),
+    mood: document.getElementsByName("mood"),
+    intensity: document.getElementsByName("intensity"),
+    level: document.getElementsByName("level")
 };
 
 function getSelectedValue(radioNodeList) {
@@ -199,23 +205,23 @@ function getSelectedValue(radioNodeList) {
 
 function filterExercises() {
     const selectedTarget = getSelectedValue(filters.target);
-    // const selectedMood = getSelectedValue(filters.mood);
-    // const selectedIntensity = getSelectedValue(filters.intensity);
-    // const selectedLevel = getSelectedValue(filters.level);
+    const selectedMood = getSelectedValue(filters.mood);
+    const selectedIntensity = getSelectedValue(filters.intensity);
+    const selectedLevel = getSelectedValue(filters.level);
 
     exerciseItems.forEach(item => {
         const title = item.querySelector("h4").textContent.toLowerCase();
         const target = item.querySelector("p").textContent.toLowerCase();
         const itemTarget = item.dataset.target?.toLowerCase() || "";
-        // const itemMood = item.dataset.mood?.toLowerCase() || "";
-        // const itemIntensity = item.dataset.intensity?.toLowerCase() || "";
-        // const itemLevel = item.dataset.level?.toLowerCase() || "";
+        const itemMood = item.dataset.mood?.toLowerCase() || "";
+        const itemIntensity = item.dataset.intensity?.toLowerCase() || "";
+        const itemLevel = item.dataset.level?.toLowerCase() || "";
 
         if (
-            itemTarget.includes(selectedTarget) 
-            // itemMood.includes(selectedMood) &&
-            // itemIntensity.includes(selectedIntensity) &&
-            // itemLevel.includes(selectedLevel)
+            itemTarget.includes(selectedTarget) ||
+            itemMood.includes(selectedMood) ||
+            itemIntensity.includes(selectedIntensity) ||
+            itemLevel.includes(selectedLevel)
         ) {
             item.style.display = "flex";
         } else {
@@ -260,10 +266,11 @@ document.querySelectorAll(".add-video-btn").forEach(btn => {
 
         card.dataset.duration = video.duration;
         card.dataset.title = video.title;
+        card.dataset.file = video.file; 
 
         card.innerHTML = `
             <span class="close-btn">×</span>
-            <img src="../assets/gifs/${video.file}" class="video-thumb" alt="Thumbnail">
+            <img src="../assets/gifs/${video.file}" class="video-thumb">
 
             <div class="exercise-info">
                 <h3>${video.title}</h3>
@@ -277,7 +284,7 @@ document.querySelectorAll(".add-video-btn").forEach(btn => {
                 </div>
             </div>
         `;
-        
+
         card.querySelector(".close-btn").addEventListener("click", () => {
             card.remove();
             updateEstimate();

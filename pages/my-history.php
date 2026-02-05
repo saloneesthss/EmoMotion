@@ -91,7 +91,7 @@ foreach ($rows as $row) {
     </div>
     <div class="page-container">
         <h3>Watch history</h3>
-        <div class="date-filters">
+        <!-- <div class="date-filters">
             <div>
                 <label>From:</label>
                 <input type="date" id="fromDate">
@@ -101,7 +101,7 @@ foreach ($rows as $row) {
                 <input type="date" id="toDate">
             </div>
             <button id="filter-btn"><img src="../assets/icons/filter-icon.png">Filter</button>
-        </div>
+        </div> -->
 
         <h3 style="font-size:18px; margin-bottom:10px;">Videos History</h3>
 
