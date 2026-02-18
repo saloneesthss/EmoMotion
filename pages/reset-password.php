@@ -2,17 +2,38 @@
 session_start();
 require_once "../connection.php";
 
-// if($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     $password = $_POST['password'];
-//     $confirm = $_POST['confirm_password'];
-//     $sql = "update users set password = :password";
-//     $stmt = $con->prepare($sql);
-//     $stmt->bindParam(':password', $password);
-//     if($stmt->execute()) {
-//         header("Location: login.php?success=Password updated successfully.");
-//         die;
-//     }
-// }
+$serverError = '';
+if (empty($_SESSION['reset_email'])) {
+    if (!empty($_GET['email'])) {
+        $_SESSION['reset_email'] = $_GET['email'];
+    } else {
+        header("Location: forgot-password.php");
+        die;
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $password = $_POST['password'] ?? '';
+    $confirm = $_POST['confirm_password'] ?? '';
+    if ($password !== $confirm) {
+        $serverError = 'Passwords do not match.';
+    } elseif (strlen($password) < 8) {
+        $serverError = 'Password must be at least 8 characters.';
+    } else {
+        $hash = md5($password);
+        $sql = "UPDATE users SET password = :password WHERE email = :email";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(':password', $hash);
+        $stmt->bindParam(':email', $_SESSION['reset_email']);
+        if ($stmt->execute()) {
+            unset($_SESSION['reset_email']);
+            header("Location: ../login.php?success=Password updated successfully.");
+            die;
+        } else {
+            $serverError = 'Unable to update password. Please try again later.';
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -162,7 +183,7 @@ require_once "../connection.php";
             <div class="label">Confirm password</div>
             <input type="password" name="confirm_password" id="confirm_password" required placeholder="••••••••">
 
-            <div class="error" id="errorMsg">Passwords do not match.</div>
+            <div class="error" id="errorMsg" style="<?php echo $serverError ? 'display:block;' : 'display:none;'; ?>"><?php echo htmlspecialchars($serverError ?: 'Passwords do not match.'); ?></div>
 
             <button type="submit">Reset password</button>
 
