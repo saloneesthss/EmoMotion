@@ -84,12 +84,12 @@ foreach($plans as $row){
                 $remainingSeconds = $seconds % 60;
                 if ($minutes > 0) {
                     if ($remainingSeconds > 0) {
-                        $readable = $minutes . " Minute" . ($minutes > 1 ? "s " : " ") . $remainingSeconds . " Second" . ($remainingSeconds > 1 ? "s" : "");
+                        $readable = $minutes . " Min " . $remainingSeconds . " Sec";
                     } else {
-                        $readable = $minutes . " Minute" . ($minutes > 1 ? "s" : "");
+                        $readable = $minutes . " Min";
                     }
                 } else {
-                    $readable = $remainingSeconds . " Second" . ($remainingSeconds > 1 ? "s" : "");
+                    $readable = $remainingSeconds . " Sec";
                 }
             ?>
             <span><i class="fa-solid fa-stopwatch"></i> <?= $readable ?>/Day</span>

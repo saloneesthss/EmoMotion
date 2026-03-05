@@ -43,10 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!empty($_FILES['image']['name'][0])) {
         $uploadDir = "../assets/userplan-thumbnail/";
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
         $fileName = basename($_FILES['image']['name'][0]);
         $targetPath = $uploadDir . $fileName;
 
         if (move_uploaded_file($_FILES['image']['tmp_name'][0], $targetPath)) {
+            // If there was a previous thumbnail and it's different, delete it
+            if (!empty($plan['file_path']) && $plan['file_path'] !== $fileName) {
+                $oldPath = $uploadDir . $plan['file_path'];
+                if (is_file($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
             $thumbnailPath = $fileName;
         }
     }
@@ -97,12 +108,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- More Settings Content -->
             <div class="more-settings-content" id="moreSettings">
                 <div class="attach-row">
-                    <?php if ($plan['file_path']) : ?>
-                        <img src="../assets/userplan-thumbnail/<?= $plan['file_path'] ?>" style="width:120px;">
-                    <?php endif; ?>
-                    
-                    <input type="file" id="image" name="image[]" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;" required>
-                    <label for="image" class="attach-link">+ Change Thumbnail</label> 
+                    <input type="file" id="image" name="image[]" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
+                    <label for="image" class="attach-link">+ Change Thumbnail</label>
+                    <div id="thumbnail-preview-container" style="margin-top:8px;">
+                        <img id="thumbnailPreview" src="<?= $plan['file_path'] ? ('../assets/userplan-thumbnail/' . htmlspecialchars($plan['file_path'])) : '' ?>" style="width:120px;<?= $plan['file_path'] ? '' : 'display:none;' ?>" alt="Current thumbnail">
+                    </div>
                 </div>
                 <div class="settings-section">
                     <h4>Target Area</h4>
@@ -212,6 +222,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <script src="../scripts/customize-plans.js"></script>
 <script>
+// Toast helper
+function showToast(message) {
+    let toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.style.display = 'block';
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+}
+
+const imageInput = document.getElementById("image");
+
+if (imageInput) {
+    imageInput.addEventListener('change', function () {
+        const file = this.files && this.files[0];
+        const preview = document.getElementById('thumbnailPreview');
+        if (file && preview) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+const _formEl = document.querySelector("form");
+if (_formEl) _formEl.setAttribute('novalidate', 'novalidate');
+
+const __existingThumbnail = <?= json_encode(!empty($plan['file_path'])) ?>;
 const searchInput = document.querySelector(".library-header input");
 const exerciseItems = document.querySelectorAll(".exercise-item");
 const filters = {
@@ -339,7 +380,22 @@ function updateEstimate() {
         `${min}:${sec.toString().padStart(2, "0")} • ${count} exercise${count > 1 ? "s" : ""}`;
 }
 
-document.querySelector("form").addEventListener("submit", () => {
+document.querySelector("form").addEventListener("submit", (e) => {
+    const planNameEl = document.querySelector('input[name="plan_name"]');
+    const planName = planNameEl ? planNameEl.value.trim() : '';
+    if (!planName) {
+        e.preventDefault();
+        showToast('Add a plan name');
+        return;
+    }
+
+    if (!__existingThumbnail) {
+        if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+            e.preventDefault();
+            showToast('Add image for thumbnail');
+            return;
+        }
+    }
     let cards = document.querySelectorAll(".exercise-card");
     let files = [];
     let totalSec = 0;
@@ -353,5 +409,7 @@ document.querySelector("form").addEventListener("submit", () => {
     document.getElementById("total_duration").value = totalSec;
 });
 </script>
+<!-- Toast element -->
+<div id="toast" style="display:none;position:fixed;bottom:30px;left:500px;background:rgba(0,0,0,0.55);color:#fff;padding:10px 14px;border-radius:6px;z-index:9999;font-family:Arial,Helvetica,sans-serif;font-size:14px;"></div>
 </body>
 </html>

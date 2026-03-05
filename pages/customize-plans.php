@@ -187,6 +187,21 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script src="../scripts/customize-plans.js"></script>
 <script>
+// Toast helper
+function showToast(message) {
+    let toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.style.display = 'block';
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+}
+
+const imageInput = document.getElementById("image");
+
+const _formEl = document.querySelector("form");
+if (_formEl) _formEl.setAttribute('novalidate', 'novalidate');
+
 const searchInput = document.querySelector(".library-header input");
 const exerciseItems = document.querySelectorAll(".exercise-item");
 const filters = {
@@ -320,6 +335,21 @@ function updateEstimate() {
 }
 
 document.querySelector("form").addEventListener("submit", function (e) {
+    // Ensure plan name is present first
+    const planNameEl = document.querySelector('input[name="plan_name"]');
+    const planName = planNameEl ? planNameEl.value.trim() : '';
+    if (!planName) {
+        e.preventDefault();
+        showToast('Add a plan name');
+        return;
+    }
+
+    if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+        e.preventDefault();
+        showToast('Add image for thumbnail');
+        return;
+    }
+
     let cards = document.querySelectorAll(".exercise-card");
     let videoArray = [];
     let totalSec = 0;
@@ -333,5 +363,7 @@ document.querySelector("form").addEventListener("submit", function (e) {
     document.getElementById("total_duration").value = totalSec;
 });
 </script>
+<!-- Toast element -->
+<div id="toast" style="display:none;position:fixed;bottom:30px;left:500px;background:rgba(0,0,0,0.55);color:#fff;padding:10px 14px;border-radius:6px;z-index:9999;font-family:Arial,Helvetica,sans-serif;font-size:14px;"></div>
 </body>
 </html>
