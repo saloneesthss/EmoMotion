@@ -19,7 +19,16 @@ $plansChallenge = $planStmt->fetchAll(PDO::FETCH_ASSOC);
 
 $bmiStmt = $con->prepare("SELECT bmi from users where id=?");
 $bmiStmt -> execute([$user_id]);
-$bmi = $bmiStmt->fetch(PDO::FETCH_ASSOC);
+$bmiData = $bmiStmt->fetch(PDO::FETCH_ASSOC);
+$bmiValue = isset($bmiData['bmi']) ? floatval($bmiData['bmi']) : 0;
+$bmi = $bmiValue; // backwards compatibility for existing BMI-score branch
+
+$popStmt = $con->prepare("SELECT plan_id, COUNT(*) AS fav_count FROM favorites GROUP BY plan_id");
+$popStmt->execute();
+$popMap = [];
+foreach ($popStmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+    $popMap[$row['plan_id']] = intval($row['fav_count']);
+}
 
 if (count($favorites) === 0) {
     $plans = $planStmt->fetchAll(PDO::FETCH_ASSOC);
@@ -147,6 +156,62 @@ if (count($favorites) === 0) {
 
     $recommended = array_slice($recommended, 0, 8);
 }
+
+// Final hybrid recommendation enforcement (overrides previous block)
+$recommended = [];
+$favoriteIds = array_column($favorites, 'id');
+
+if (count($favorites) > 0 && $bmiValue > 0) {
+    $tagWeights = [
+        'target_area' => [],
+        'mood' => [],
+        'fitness_level' => [],
+        'intensity' => []
+    ];
+    foreach ($favorites as $fav) {
+        $tagWeights['target_area'][$fav['target_area']] = ($tagWeights['target_area'][$fav['target_area']] ?? 0) + 1;
+        $tagWeights['mood'][$fav['mood']] = ($tagWeights['mood'][$fav['mood']] ?? 0) + 1;
+        $tagWeights['fitness_level'][$fav['fitness_level']] = ($tagWeights['fitness_level'][$fav['fitness_level']] ?? 0) + 1;
+        $tagWeights['intensity'][$fav['intensity']] = ($tagWeights['intensity'][$fav['intensity']] ?? 0) + 1;
+    }
+
+    foreach ($plansChallenge as $p) {
+        if (in_array($p['id'], $favoriteIds, true)) continue;
+
+        $contentScore = 0;
+        $contentScore += $tagWeights['target_area'][$p['target_area']] ?? 0;
+        $contentScore += $tagWeights['mood'][$p['mood']] ?? 0;
+        $contentScore += $tagWeights['fitness_level'][$p['fitness_level']] ?? 0;
+        $contentScore += $tagWeights['intensity'][$p['intensity']] ?? 0;
+        $contentScore = min($contentScore, 10);
+
+        $bmiScoreValue = bmiScore($p, $bmiValue);
+        $popScore = ($popMap[$p['id']] ?? 0) * 0.2;
+        $p['score'] = ($contentScore * 0.6) + ($bmiScoreValue * 0.3) + $popScore;
+        $recommended[] = $p;
+    }
+} elseif (count($favorites) === 0 && $bmiValue > 0) {
+    foreach ($plansChallenge as $p) {
+        $bmiScoreValue = bmiScore($p, $bmiValue);
+        $popScore = ($popMap[$p['id']] ?? 0);
+        $p['score'] = ($bmiScoreValue * 0.7) + ($popScore * 0.3);
+        $recommended[] = $p;
+    }
+} else {
+    foreach ($plansChallenge as $p) {
+        $p['score'] = ($popMap[$p['id']] ?? 0);
+        $recommended[] = $p;
+    }
+    if (empty($recommended)) {
+        $recommended = $plansChallenge;
+        foreach ($recommended as &$p) {
+            $p['score'] = 0;
+        }
+    }
+}
+
+usort($recommended, fn($a, $b) => $b['score'] <=> $a['score']);
+$recommended = array_slice($recommended, 0, 8);
 
 function bmiScore($plan, $bmi) {
     $score = 0;

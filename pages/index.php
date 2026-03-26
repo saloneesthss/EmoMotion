@@ -67,7 +67,7 @@ $plans = $plan_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img class="exercise-image" src="../assets/gifs/<?php echo $video['file_path']; ?>" alt="Workout Video">
                     </div>
 
-                    <a href="" style="color:#232b2b;"><div class="small-card">
+                    <a href="../login.php" style="color:#232b2b;"><div class="small-card">
                         <i class="fa fa-heart"></i>
                     </div></a>
 

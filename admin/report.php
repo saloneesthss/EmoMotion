@@ -92,9 +92,21 @@ if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
                         <td><?= $user['id']; ?></td>
                         <td>
                             <div class="row">
-                                <?php if (!empty($user['image']) && file_exists('../assets/users-images/' . $user['image'])) { ?>
-                                    <img width="100" src="../assets/users-images/<?php echo $user['image']; ?>" class="user-icon">
-                                <?php } ?>
+                                <?php
+                                    $hasImage = (!empty($user['image']) && file_exists("../assets/users-images/" . $user['image']));
+                                    $nameParts = explode(" ", trim($user['name']));
+                                    $initials = strtoupper(substr($nameParts[0], 0, 1));
+                                    if (count($nameParts) > 1) {
+                                        $initials .= strtoupper(substr(end($nameParts), 0, 1));
+                                    }
+                                ?>
+                                <?php if ($hasImage): ?>
+                                    <img src="../assets/users-images/<?php echo $user['image']; ?>" class="user-icon">
+                                <?php else: ?>
+                                    <div class="user-icon">
+                                        <?php echo $initials; ?>
+                                    </div>
+                                <?php endif; ?>
                                 <?php echo $user['name'] ?>
                             </div>
                         </td>
